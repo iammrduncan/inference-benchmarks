@@ -1,4 +1,13 @@
-# typesafe-ai-benchmark
+# inference-benchmarks
+
+> **What changed (October 2026).** This repo was `typesafe-ai-benchmark`; the old URL
+> redirects here. It is becoming a general benchmark for **model × version × engine**:
+> the same weights can score differently at another quant or in another engine, so
+> every result names the exact checkpoint, quant and engine that produced it, and one
+> harness measures them all. The Qwen-vs-Jev decisions comparison below stays, and it
+> grows into a suite for System One decision models. The plan and its progress are in
+> [docs/organize/](docs/organize/README.md). Everything below this note describes the
+> original comparison, which still runs as before.
 
 **LLM-native structured output vs. TypeSafe Jev: latency, cost, and judgment quality.**
 
