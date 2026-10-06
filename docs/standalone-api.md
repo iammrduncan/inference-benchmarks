@@ -86,9 +86,9 @@ changing an environment variable alone will not configure another provider.
 Copy this prompt and replace the bracketed provider name:
 
 > Replace Cerebras with [provider and model] as the inference backend. Read
-> AGENTS.md and CONVENTIONS.md first. Trace packages/api/src/cerebras.ts and its callers in
-> packages/api/src/evaluate.ts, then inspect model validation in packages/api/src/contracts.ts, startup
-> configuration in packages/api/src/index.ts, and pricing in packages/api/src/metrics.ts. Verify the target
+> AGENTS.md and CONVENTIONS.md first. Trace packages/gateway/src/cerebras.ts and its callers in
+> packages/gateway/src/evaluate.ts, then inspect model validation in packages/gateway/src/contracts.ts, startup
+> configuration in packages/gateway/src/index.ts, and pricing in packages/gateway/src/metrics.ts. Verify the target
 > provider's official structured-output support, tuple schemas, reasoning controls,
 > usage fields and cancellation behavior. Adapt the compact numeric schema if
 > necessary while preserving local type/range/length/distribution checks and both

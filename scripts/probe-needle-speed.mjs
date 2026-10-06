@@ -10,9 +10,9 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import { setTimeout as delay } from 'node:timers/promises';
-import { installedNeedle } from '../packages/demos/scripts/needle-paths.mjs';
-import { needlePlan } from '../packages/demos/lib/needle-plan.ts';
-import { decodeNeedle } from '../packages/demos/lib/needle.ts';
+import { installedNeedle } from '../apps/theater/scripts/needle-paths.mjs';
+import { needlePlan } from '../apps/theater/lib/needle-plan.ts';
+import { decodeNeedle } from '../apps/theater/lib/needle.ts';
 
 const [scene = 'screen', countText = '20'] = process.argv.slice(2);
 assert.ok(['dispatch', 'screen', 'approve', 'judge'].includes(scene));

@@ -146,7 +146,7 @@ performance. **Single model** retains individual runs and the seven-scene slides
 Static scenes share shuffled inputs and use two concurrent requests per model.
 Stateful scenes start from matching setup and follow each model's own decisions.
 Driving needs WebGPU on localhost or HTTPS. No real devices or external commands
-are operated. [Runner guide](packages/demos/README.md).
+are operated. [Runner guide](apps/theater/README.md).
 
 ## Interpreting the benchmark
 
@@ -165,8 +165,8 @@ Raw exports preserve mistakes and native Jev probabilities. See the
 ## Repository and development
 
 ```text
-packages/demos/   Side-by-side benchmark UI, workloads and native Jev adapter
-packages/api/     Cerebras structured-output adapter, validation and supporting API
+apps/theater/   Side-by-side benchmark UI, workloads and native Jev adapter
+packages/gateway/     Cerebras structured-output adapter, validation and supporting API
 scripts/          Offline benchmark summarizers and media tooling
 docs/benchmarks/  Raw exports, source hashes, metrics and quality comparisons
 ```
@@ -177,9 +177,9 @@ remain available for compatibility experiments; their separate benchmark command
 do not regenerate the paired theater report.
 
 - [Benchmark results, methodology and reproduction](docs/benchmarks/README.md)
-- [Add or inspect a workload](packages/demos/README.md#add-a-scene)
+- [Add or inspect a workload](apps/theater/README.md#add-a-scene)
 - [Architecture and delivery record](docs/plan.md)
 - [Supporting API setup and examples](docs/standalone-api.md)
-- [API workspace](packages/api/README.md) and [HTTP contract](docs/context/api_reference.txt)
-- [CLI examples and separate microbenchmarks](packages/api/examples/README.md)
+- [API workspace](packages/gateway/README.md) and [HTTP contract](docs/context/api_reference.txt)
+- [CLI examples and separate microbenchmarks](packages/gateway/examples/README.md)
 - [Engineering conventions](CONVENTIONS.md)

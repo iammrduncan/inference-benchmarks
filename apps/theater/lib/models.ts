@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { modelIds, models as cerebrasModels } from '@decision/api/models';
+import { modelIds, models as cerebrasModels } from '@decision/gateway/models';
 // Jev price supplied by the account owner on 2026-09-17: $0.04/M input, free output.
 export const models = { ...cerebrasModels, 'jev-latest': { label: 'Jev · TypeSafe', input: 0.04, output: 0 },
   'needle-3': { label: 'Needle 3 · Local', input: 0, output: 0 },

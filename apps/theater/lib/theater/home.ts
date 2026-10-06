@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { parseJson } from '@decision/api/json';
+import { parseJson } from '@decision/gateway/json';
 
 export const rooms = ['kitchen', 'living', 'bedroom', 'hall'] as const;
 const light = z.enum(['off', 'dim', 'bright']);

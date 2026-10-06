@@ -1,6 +1,6 @@
 import { homeInput, homeDecision, homeProperties, homeFixture } from './home';
 import { z } from 'zod';
-import { parseJson } from '@decision/api/json';
+import { parseJson } from '@decision/gateway/json';
 import { workItem, fixtureValues, type SceneId } from './data';
 import { navigationInput, navigationContext, navigationMoves, fixtureNext } from './navigation';
 import { driveInput, driveDecision, drivingContext, roadCenter } from './driving';

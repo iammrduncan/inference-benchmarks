@@ -61,7 +61,7 @@ Click a sorted ticket, allow/block tile, score or home command to pin its matchi
 input and output. Keyboard Enter/Space works too; **Follow live** follows actual
 completion order. **Export session** saves every scene in the latest play sequence.
 The retired `/labs` and `/demos/[id]` pages and their separate UI have been removed.
-The standalone API examples remain in `packages/api/examples`.
+The standalone API examples remain in `packages/gateway/examples`.
 
 Scoring starts at **accuracy > 90%** (90 itself does not pass). Adjust the slider
 without another inference call; both the valid count and green tiles update. The
@@ -87,7 +87,7 @@ npm run dev:live  # real inference; uses provider keys from root .env
 
 For production timing: `npm run build`, then `npm run start:demos:live`.
 The root dev command builds the API first. When editing API code, rebuild it with
-`npm run build -w @decision/api`, or run its TypeScript build in watch mode.
+`npm run build -w @decision/gateway`, or run its TypeScript build in watch mode.
 The standalone proxy remains available through `npm run dev:api`.
 
 ## Tailscale and WebGPU
@@ -120,7 +120,7 @@ not a multi-user public deployment and has no account system.
 
 ## Runtime and measurements
 
-The Next server imports `@decision/api` through a `server-only` runtime and calls
+The Next server imports `@decision/gateway` through a `server-only` runtime and calls
 its actual authenticated HTTP routes over loopback. Provider and proxy credentials
 never enter browser bundles. Cerebras output passes the numeric codec/type gate;
 native Jev answers pass their own probability/answer checks and the same final

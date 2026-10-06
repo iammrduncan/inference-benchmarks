@@ -263,7 +263,7 @@ Reports include p50/p95/p99, successful latency separately from failures, sample
 counts, concurrency, warmup, provider/queue timings, tokens/s definitions, input/
 output usage and dated estimated USD. Warmup is excluded from measured latency
 and included in whole-run cost. Missing usage makes cost incomplete, not zero.
-See ../benchmarks/README.md and ../../packages/api/examples/README.md for exact methodology.
+See ../benchmarks/README.md and ../../packages/gateway/examples/README.md for exact methodology.
 
 Qwen first live verification: seven examples passed structural gates; twelve
 measured benchmark calls succeeded. Some example judgments were wrong. GPT OSS
@@ -291,6 +291,6 @@ Cerebras:
  https://inference-docs.cerebras.ai/models/qwen-3.8-27b
  https://inference-docs.cerebras.ai/models/openai-oss
 
-MONOREPO NOTE: implementation now lives in packages/api. The separate Next.js
-packages/demos app adds local-only /api/config and /api/decide handlers for demos;
+MONOREPO NOTE: implementation now lives in packages/gateway. The separate Next.js
+apps/theater app adds local-only /api/config and /api/decide handlers for demos;
 these are not part of the public TypeSafe/OpenAI compatibility surface.

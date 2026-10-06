@@ -9,7 +9,7 @@ Changing a model clears that lane's results; selections are locked during a run.
 Install the [Hugging Face CLI](https://huggingface.co/docs/huggingface_hub/guides/cli),
 then run `npm run setup:needle` from the repository root. This downloads the official
 native executable and full 20-layer CQ2 weights into ignored `.artifacts/needle/`.
-The repository and revision are pinned in `packages/demos/needle-release.json`.
+The repository and revision are pinned in `apps/theater/needle-release.json`.
 No API key, Python runtime package, training dependencies, or cloud endpoint is used
 for inference. Restart `npm run start:demos:live` after installation.
 

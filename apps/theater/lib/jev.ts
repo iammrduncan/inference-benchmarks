@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { boundedText, parseJson, limits } from '@decision/api/json';
-import { Fault } from '@decision/api/errors';
+import { boundedText, parseJson, limits } from '@decision/gateway/json';
+import { Fault } from '@decision/gateway/errors';
 import { prepare, type DemoInput } from './contracts';
 
 // Native TypeSafe API checked 2026-09-17: https://docs.typesafe.ai/api.

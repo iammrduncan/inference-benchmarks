@@ -1,14 +1,14 @@
 # Supporting API examples
 
 For the project’s main LLM-native Qwen / Jev comparison, see the
-[benchmark runner](../packages/demos/README.md) and [results](benchmarks/README.md).
+[benchmark runner](../apps/theater/README.md) and [results](benchmarks/README.md).
 The examples below document the separate compatibility API.
 
 Checked 2026-09-16. Seven synthetic workflows run through the actual proxy and
 shared validation gate. The two public interfaces are demonstrated directly;
 OpenAI messages do not contain a hidden TypeSafe request. Run instructions are
-in [CLI instructions](../packages/api/examples/README.md); fixtures and policies live in
-[fixtures.ts](../packages/api/src/examples/fixtures.ts) and [policies.ts](../packages/api/src/examples/policies.ts).
+in [CLI instructions](../packages/gateway/examples/README.md); fixtures and policies live in
+[fixtures.ts](../packages/gateway/src/examples/fixtures.ts) and [policies.ts](../packages/gateway/src/examples/policies.ts).
 
 ## Official source mapping
 
@@ -117,9 +117,9 @@ work. None is claimed by these examples or required to run the proxy.
 
 ## Interactive Next.js application
 
-The seven-scene reel lives in `packages/demos`: ticket dispatch, street routing,
+The seven-scene reel lives in `apps/theater`: ticket dispatch, street routing,
 WebGPU driving, guardrails, approvals, scoring and home automation. Home automation
 runs 24 shuffled commands against current simulated device state. Scoring has an
 adjustable strict >90% default validity threshold. Click scene items to inspect their
 input/output. The original gallery routes have been removed. Run `npm run dev` for fixtures or
-`npm run dev:live` for Cerebras. [Extension guide](../packages/demos/README.md).
+`npm run dev:live` for Cerebras. [Extension guide](../apps/theater/README.md).

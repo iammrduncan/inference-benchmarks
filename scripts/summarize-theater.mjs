@@ -3,11 +3,11 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { URL } from 'node:url';
 import { z } from 'zod';
-import { percentiles, estimatedCost } from '../packages/api/src/metrics.ts';
-import { demoModel } from '../packages/demos/lib/models.ts';
-import { scenes, fixtureValues } from '../packages/demos/lib/theater/data.ts';
-import { fixtureDispatch, teams, priorities, actions } from '../packages/demos/lib/traffic.ts';
-import { homeCases, homeDecision, applyHome, initialHome } from '../packages/demos/lib/theater/home.ts';
+import { percentiles, estimatedCost } from '../packages/gateway/src/metrics.ts';
+import { demoModel } from '../apps/theater/lib/models.ts';
+import { scenes, fixtureValues } from '../apps/theater/lib/theater/data.ts';
+import { fixtureDispatch, teams, priorities, actions } from '../apps/theater/lib/traffic.ts';
+import { homeCases, homeDecision, applyHome, initialHome } from '../apps/theater/lib/theater/home.ts';
 
 // Offline only: recompute the published summary from untouched browser exports.
 const number = z.number().finite().nonnegative();

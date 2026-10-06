@@ -8,13 +8,13 @@ import os from 'node:os';
 import process from 'node:process';
 import { performance } from 'node:perf_hooks';
 import { setTimeout, clearTimeout, setInterval, clearInterval } from 'node:timers';
-import { createDemoRuntime } from '../packages/demos/lib/runtime.ts';
-import { installedRlcd } from '../packages/demos/scripts/rlcd-paths.mjs';
-import release from '../packages/demos/rlcd-release.json' with { type: 'json' };
-import { scenes } from '../packages/demos/lib/theater/data.ts';
-import { requestTotals } from '../packages/demos/lib/theater/workload.ts';
-import { initialHome, homeDecision, applyHome } from '../packages/demos/lib/theater/home.ts';
-import { DrivingEngine, driveDecision } from '../packages/demos/lib/theater/driving.ts';
+import { createDemoRuntime } from '../apps/theater/lib/runtime.ts';
+import { installedRlcd } from '../apps/theater/scripts/rlcd-paths.mjs';
+import release from '../apps/theater/rlcd-release.json' with { type: 'json' };
+import { scenes } from '../apps/theater/lib/theater/data.ts';
+import { requestTotals } from '../apps/theater/lib/theater/workload.ts';
+import { initialHome, homeDecision, applyHome } from '../apps/theater/lib/theater/home.ts';
+import { DrivingEngine, driveDecision } from '../apps/theater/lib/theater/driving.ts';
 
 // Live local inference only. Replay the published input order, never expected answers.
 // Direct timing includes queueing, cold load where encountered, inference and validation.
@@ -28,13 +28,13 @@ const hash = async file => {
   for await (const chunk of createReadStream(file)) digest.update(chunk);
   return digest.digest('hex');
 };
-const sourceFiles = new Set(execFileSync('git', ['ls-files', 'packages/demos/lib',
-  'packages/demos/rlcd-release.json', 'packages/demos/rlcd-requirements.lock',
-  'packages/demos/python/rlcd_worker.py', 'scripts/benchmark-rlcd.mjs', 'package-lock.json'],
+const sourceFiles = new Set(execFileSync('git', ['ls-files', 'apps/theater/lib',
+  'apps/theater/rlcd-release.json', 'apps/theater/rlcd-requirements.lock',
+  'apps/theater/python/rlcd_worker.py', 'scripts/benchmark-rlcd.mjs', 'package-lock.json'],
 { encoding: 'utf8' }).trim().split('\n').filter(Boolean));
-for (const file of ['packages/demos/lib/rlcd.ts', 'packages/demos/lib/rlcd-plan.ts',
-  'packages/demos/python/rlcd_worker.py', 'packages/demos/rlcd-release.json',
-  'packages/demos/rlcd-requirements.lock', 'scripts/benchmark-rlcd.mjs']) sourceFiles.add(file);
+for (const file of ['apps/theater/lib/rlcd.ts', 'apps/theater/lib/rlcd-plan.ts',
+  'apps/theater/python/rlcd_worker.py', 'apps/theater/rlcd-release.json',
+  'apps/theater/rlcd-requirements.lock', 'scripts/benchmark-rlcd.mjs']) sourceFiles.add(file);
 const sourceSha256 = {};
 for (const file of sourceFiles) sourceSha256[file] = await hash(file);
 writeFileSync(`${directory}/environment.json`, JSON.stringify({

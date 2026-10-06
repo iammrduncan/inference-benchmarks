@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { theaterId, theaterPlan, theaterDecision } from './theater/contracts';
-import { parseJson } from '@decision/api/json';
+import { parseJson } from '@decision/gateway/json';
 import { teams, priorities, actions, dispatchDecision, ticketSchema } from './traffic';
 import { demoModel, defaultModel, type DemoModel } from './models';
 

@@ -1,6 +1,6 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { z } from 'zod';
-import { Fault } from '@decision/api/errors';
+import { Fault } from '@decision/gateway/errors';
 import { applyDecision, type DemoInput } from './contracts';
 import { rlcdWorkerSchema, type RlcdPlan } from './rlcd-plan';
 

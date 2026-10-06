@@ -27,7 +27,7 @@ FONT = ImageFont.truetype(FONT_PATH, 21)
 SMALL = ImageFont.truetype(FONT_PATH, 17)
 TITLE = ImageFont.truetype(FONT_PATH, 30)
 BG, PANEL, TEXT, MUTED, GREEN = '#0b1220', '#131f31', '#e5edf8', '#9baec7', '#79e2b3'
-COMMAND = ['node', '--env-file=.env', '--import', 'tsx', 'packages/api/examples/record-request.ts']
+COMMAND = ['node', '--env-file=.env', '--import', 'tsx', 'packages/gateway/examples/record-request.ts']
 
 
 def draw_frame(lines):

@@ -5,12 +5,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { URL } from 'node:url';
 import { z } from 'zod';
-import { percentiles } from '../packages/api/src/metrics.ts';
-import { demoModel } from '../packages/demos/lib/models.ts';
-import { scenes } from '../packages/demos/lib/theater/data.ts';
+import { percentiles } from '../packages/gateway/src/metrics.ts';
+import { demoModel } from '../apps/theater/lib/models.ts';
+import { scenes } from '../apps/theater/lib/theater/data.ts';
 import { quality } from './benchmark-quality.mjs';
 
-import { models } from '../packages/demos/lib/models.ts';
+import { models } from '../apps/theater/lib/models.ts';
 
 // Offline only: validate and summarize unchanged paired browser exports.
 const number = z.number().finite().nonnegative();

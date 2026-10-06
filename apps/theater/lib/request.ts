@@ -1,4 +1,4 @@
-import { parseJson } from '@decision/api/json';
+import { parseJson } from '@decision/gateway/json';
 export function localRequest(request: Request, mutation = false, configuredHost = process.env.DEMO_HOST ?? '127.0.0.1', hostname = process.env.DEMO_HOSTNAME) {
   const host = request.headers.get('host') ?? '';
   const secureAlias = Boolean(hostname) && (host === hostname || host === `${hostname}:443`);

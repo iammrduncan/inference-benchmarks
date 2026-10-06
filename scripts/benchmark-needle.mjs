@@ -7,13 +7,13 @@ import os from 'node:os';
 import process from 'node:process';
 import { performance } from 'node:perf_hooks';
 import { setTimeout, clearTimeout, setInterval, clearInterval } from 'node:timers';
-import { createDemoRuntime } from '../packages/demos/lib/runtime.ts';
-import { needleMaxNewTokens } from '../packages/demos/lib/needle-plan.ts';
-import { installedNeedle } from '../packages/demos/scripts/needle-paths.mjs';
-import { scenes } from '../packages/demos/lib/theater/data.ts';
-import { requestTotals } from '../packages/demos/lib/theater/workload.ts';
-import { initialHome, homeDecision, applyHome } from '../packages/demos/lib/theater/home.ts';
-import { DrivingEngine, driveDecision } from '../packages/demos/lib/theater/driving.ts';
+import { createDemoRuntime } from '../apps/theater/lib/runtime.ts';
+import { needleMaxNewTokens } from '../apps/theater/lib/needle-plan.ts';
+import { installedNeedle } from '../apps/theater/scripts/needle-paths.mjs';
+import { scenes } from '../apps/theater/lib/theater/data.ts';
+import { requestTotals } from '../apps/theater/lib/theater/workload.ts';
+import { initialHome, homeDecision, applyHome } from '../apps/theater/lib/theater/home.ts';
+import { DrivingEngine, driveDecision } from '../apps/theater/lib/theater/driving.ts';
 
 // Live local inference only. Replay the published input order, never expected answers.
 // Direct runtime timing includes validation/process startup/inference/cleanup, but no browser or HTTP.
@@ -23,9 +23,9 @@ mkdirSync(directory, { recursive: false });
 const needle = installedNeedle();
 assert.ok(needle, 'Run npm run setup:needle first');
 const hash = path => createHash('sha256').update(readFileSync(path)).digest('hex');
-const sourceFiles = new Set(execFileSync('git', ['ls-files', 'packages/demos/lib', 'packages/demos/needle-release.json', 'scripts/benchmark-needle.mjs', 'package-lock.json'], {encoding:'utf8'}).trim().split('\n'));
+const sourceFiles = new Set(execFileSync('git', ['ls-files', 'apps/theater/lib', 'apps/theater/needle-release.json', 'scripts/benchmark-needle.mjs', 'package-lock.json'], {encoding:'utf8'}).trim().split('\n'));
 sourceFiles.add('scripts/benchmark-needle.mjs');
-sourceFiles.add('packages/demos/lib/needle-worker.ts');
+sourceFiles.add('apps/theater/lib/needle-worker.ts');
 writeFileSync(`${directory}/environment.json`, JSON.stringify({ measuredAtUtc:new Date().toISOString(),baseCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),environment:{os:os.release(),platform:process.platform,architecture:process.arch,cpu:os.cpus()[0].model,cores:os.cpus().length,memoryBytes:os.totalmem(),node:process.version},configuration:{model:'needle-3',warmupRequests:0,automaticRetries:0,staticConcurrency:2,statefulConcurrency:1,depth:20,maxNewTokensByScene:needleMaxNewTokens,staticWorkersPerSchema:2,workerIdleMs:5000,navigationProcessPerRequest:true,browser:false,http:false},binarySha256:hash(needle.executable),weightsSha256:hash(needle.weights),sourceSha256:Object.fromEntries([...sourceFiles].map(p=>[p,hash(p)]))},null,2)+'\n');
 const runtime = await createDemoRuntime({needle});
 let nextId=1;

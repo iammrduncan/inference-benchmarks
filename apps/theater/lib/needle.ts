@@ -4,8 +4,8 @@ import { mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { z } from 'zod';
-import { Fault } from '@decision/api/errors';
-import { parseJson } from '@decision/api/json';
+import { Fault } from '@decision/gateway/errors';
+import { parseJson } from '@decision/gateway/json';
 import { applyDecision, type DemoInput } from './contracts';
 import type { NeedlePlan } from './needle-plan';
 

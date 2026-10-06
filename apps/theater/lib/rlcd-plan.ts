@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { parseJson } from '@decision/api/json';
+import { parseJson } from '@decision/gateway/json';
 import { prepare, type DemoInput } from './contracts';
 import { defaultModel } from './models';
 import { ticketSchema } from './traffic';

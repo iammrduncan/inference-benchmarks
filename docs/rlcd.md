@@ -18,7 +18,7 @@ engine and demo source, not model weights. Its model card loads the separate
 - weight revision `8b403126fc14f14cfc99bb4cfa72ecbc129ea677`.
 
 The product label says 1.5B so it does not repeat the engine repository's misleading
-1B shorthand. `packages/demos/rlcd-release.json` is the source of both pins.
+1B shorthand. `apps/theater/rlcd-release.json` is the source of both pins.
 
 ## Local setup
 
@@ -32,7 +32,7 @@ npm run start:demos:live
 
 The setup script creates an isolated environment and downloads source and weights
 under ignored `.artifacts/rlcd/`. Python packages are exact-pinned in
-`packages/demos/rlcd-requirements.lock`. Restart the live server after setup so the
+`apps/theater/rlcd-requirements.lock`. Restart the live server after setup so the
 launcher discovers the artifacts. No model files or credentials are committed.
 
 ## Mapping and execution

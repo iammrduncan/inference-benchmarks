@@ -1,4 +1,4 @@
-# @decision/api
+# @decision/gateway
 
 The Cerebras structured-output and validation layer supporting
 [typesafe-ai-benchmark](../../README.md). The paired runner uses one joint-schema
@@ -16,7 +16,7 @@ From the repository root:
 
 ```sh
 npm run dev:api        # API watch mode, 127.0.0.1:3000
-npm run build -w @decision/api
+npm run build -w @decision/gateway
 npm start             # compiled API
 npm run examples      # offline fixtures
 npm run benchmark     # local HTTP baseline

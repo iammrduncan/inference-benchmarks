@@ -6,7 +6,7 @@ import { prepare } from '../lib/contracts';
 import { workItem, type SceneId } from '../lib/theater/data';
 import { DrivingEngine } from '../lib/theater/driving';
 import { navigationMoves } from '../lib/theater/navigation';
-import { record } from '@decision/api/json';
+import { record } from '@decision/gateway/json';
 
 test('all scene previews use the actual request builder and expose every output field', () => {
   const model = 'qwen-3.8-27b';
