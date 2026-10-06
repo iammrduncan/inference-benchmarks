@@ -18,7 +18,7 @@ Sparks", "on the ESP32"). You end with:
 - benchmark results, or a precise handoff if something blocks you.
 
 Read first:
-- the plan in [`docs/organize/`](../../../docs/organize/README.md): `core-set.md`, `subjects-and-results.md`, `benchmarks.md`, `harness.md`;
+- the plan in [`docs/design/`](../../../docs/design/README.md): `core-set.md`, `subjects-and-results.md`, `benchmarks.md`, `harness.md`;
 - [references/hardware-fit.md](references/hardware-fit.md) for sizing;
 - [references/records.md](references/records.md) for the files you write.
 
@@ -218,7 +218,7 @@ Create `subjects/<subject-key>/subject.yaml` and `INTAKE.md`, as described in
    locks.
 
 **Runner status.** The `bench` CLI (`bench plan` / `bench run` / `bench summarize`) is
-specified in `docs/organize/repo-shift.md` and built in milestone M2. Check
+specified in `docs/design/repo-shift.md` and built in milestone M2. Check
 `npm run bench -- --help` first. If it doesn't exist:
 - For recipes, run what exists today:
   `npm run launcher -- bench <id> --suite perf|tool-calls|fidelity --tier smoke` in

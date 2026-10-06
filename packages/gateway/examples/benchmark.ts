@@ -119,8 +119,8 @@ try {
     limitations: ['Small samples do not establish a p99 SLA.', 'End-to-end tokens/s includes network and input processing; provider decode rate uses reported completion_time.',
       'Local-and-loopback time includes HTTP/client work; this is not an isolated CPU benchmark.', 'Only synthetic one-question workloads; no TypeSafe performance or calibration parity claim.'],
     warmupRows, warmupMetrics, rows: enriched, providerMetrics: metrics };
-  await mkdir(new URL('../../../docs/benchmarks/', import.meta.url), { recursive: true });
-  const path = new URL(`../../../docs/benchmarks/${live ? 'live' : 'local-stub'}.json`, import.meta.url);
+  await mkdir(new URL('../../../.artifacts/gateway/', import.meta.url), { recursive: true });
+  const path = new URL(`../../../.artifacts/gateway/${live ? 'live' : 'local-stub'}.json`, import.meta.url);
   await writeFile(path, JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify({ report: path, results: report.results, budget: report.budget }, null, 2));
   if (good.length !== rows.length || warmupRows.some(row => row.status !== 200)) process.exitCode = 1;

@@ -17,7 +17,7 @@ measuring it. We vary and measure the first three, and hold the harness constant
   repair or a fallback.
 
 The plan, its decisions and the M0–M8 build order are in
-[docs/organize/](docs/organize/README.md); read `build-plan.md` before structural
+[docs/design/](docs/design/README.md); read `build-plan.md` before structural
 work. Benchmark API keys come from 1Password through `op run` (see the Secrets
 section of `build-plan.md`); never write a resolved key to disk.
 

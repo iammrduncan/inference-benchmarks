@@ -1,9 +1,0 @@
-[x] readme - note the why: "waitlist for TypeSafe", "for fun and giggles", "because we can"
-[x] readme - note the inefficiency of this compared to TypeSafe.ai (no unmeasured ratio)
-[x] readme - add how-to / quick start, including requests for both endpoints
-[x] readme - add why Cerebras (fast), with measured results
-[x] readme - add how-to: ask an agent to replace Cerebras with the backend of your choice
-[x] make video demo and convert to GIF (original README embed since replaced)
-    Captures now stay local in .artifacts/demo-verification/; regenerate with scripts/make-demo.py
-    Actual-speed capture of one live Cerebras request; no inserted holds or speed changes.
-[x] readme - benchmark outcomes: latency, tokens/s, input/output usage and cost

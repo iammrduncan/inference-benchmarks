@@ -4,7 +4,7 @@
 
 This repository is **inference-benchmarks**: benchmarks for **model × version ×
 engine**, measured with one harness held constant. The plan, and the reasons for it,
-are in [docs/organize/](docs/organize/README.md).
+are in [docs/design/](docs/design/README.md).
 
 - **Subjects, not models.** A score belongs to a subject: model, checkpoint, quant
   and engine (plus hardware for speed). The subject's identity is resolved and

@@ -2,7 +2,7 @@
 
 This package (`@decision/gateway`) is the compatibility proxy that speaks TypeSafe's
 `/v1/systemone` decision protocol. In the benchmark it is the adapter that lets a
-chat LLM answer decision suites (see `docs/organize/harness.md`). These rules
+chat LLM answer decision suites (see `docs/design/harness.md`). These rules
 apply to work in this package, in addition to the repository's
 [CONVENTIONS.md](../../CONVENTIONS.md).
 

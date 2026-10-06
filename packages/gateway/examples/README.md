@@ -1,6 +1,6 @@
 # Supporting API examples and microbenchmarks
 
-The primary [Qwen / Jev benchmark](../../../docs/benchmarks/README.md) runs through
+The primary [Qwen / Jev benchmark](https://github.com/iammrduncan/inference-benchmarks/blob/typesafe-v1/docs/benchmarks/README.md) runs through
 the browser comparison UI. The commands below exercise the supporting Cerebras
 API separately; their results do not constitute a paired Jev comparison.
 
@@ -17,8 +17,8 @@ guardrail decisions, and a local chart preview. `run.ts` prints only validated
 results and policy decisions. Errors produce no action. Thresholds are illustrative,
 not calibrated safety guarantees. Live judgments can differ from fixture labels.
 
-Sources and adaptations are recorded in [the example catalog](../../../docs/examples.md).
-The live report at `docs/live-results.json` contains actual outputs, including
+Sources and adaptations are recorded in [the example catalog](../docs/examples.md).
+The live report at `.artifacts/gateway/live-results.json` (not committed) contains actual outputs, including
 wrong judgments; it is not a quality certification.
 
 ## Benchmarks
@@ -35,7 +35,7 @@ The local-stub default measures 100 requests. Optional `--model=gpt-oss-120b`
 selects that model explicitly; it is not an automatic fallback. Live sample plus
 warmup count cannot exceed 32 and the conservative price estimate must stay <= $1.
 
-Reports: `docs/benchmarks/local-stub.json` and `docs/benchmarks/live.json`. These
+Reports: `.artifacts/gateway/local-stub.json` and `.artifacts/gateway/live.json` (not committed). These
 fixed paths are overwritten on another run; archive reports before comparing runs.
 They contain sample rows, p50/p95/p99, successful request throughput, failures,
 upstream/queue timing, tokens, estimated cost, environment, settings, and pricing.

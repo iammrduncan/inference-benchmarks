@@ -13,8 +13,3 @@ coverage/
 
 # Generated demo verification output stays local.
 .artifacts/
-docs/media/*
-!docs/media/README.md
-!docs/media/theater.png
-!docs/media/theater-demo.gif
-!docs/media/theater-demo.mp4

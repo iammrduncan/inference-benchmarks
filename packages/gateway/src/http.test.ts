@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import OpenAI from 'openai';
 import { harness, headers, proxyKey, noulRequest, chatBody, completion } from './test-support.js';
 
-// Official contract sources checked 2026-09-16; local limitations are in docs/context/api_reference.txt.
+// Official contract sources checked 2026-09-16; local limitations are in packages/gateway/docs/context/api_reference.txt.
 test('TypeSafe mixed answer round-trip, usage and model transparency', async () => {
   let call = 0;
   const h = await harness(() => completion(JSON.stringify({ p: [[0.2, 0.8], [0.1, 0.7, 0.2], [0.9]][call++] })));

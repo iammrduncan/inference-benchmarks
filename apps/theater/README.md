@@ -1,10 +1,15 @@
-# TypeSafe AI Benchmark · comparison runner
+# Decisions theater
 
-The interactive runner compares **LLM-native structured output from Qwen 3.8 27B
+A live, local side-by-side view of decision models working on seven synthetic
+scenes: tickets, routing, driving, guardrails, approvals, scoring and home. It is a
+demo, not the benchmark. Ranked results come from `bench` and the decision suites
+(see the [repo README](../../README.md)).
+
+By default it compares **LLM-native structured output from Qwen 3.8 27B
 on Cerebras** with **native TypeSafe Jev**. Each workload launches both providers
 from one Run demo action and reports separate latency, cost and validated results.
 The default home page presents both model panels; Single model retains the original
-input/visual/output layout. [Published results and method](../../docs/benchmarks/README.md).
+input/visual/output layout. The original paired results and method are preserved at [tag `typesafe-v1`](https://github.com/iammrduncan/inference-benchmarks/blob/typesafe-v1/docs/benchmarks/README.md).
 
 | Scene | Workload | Result |
 | --- | --- | --- |
@@ -36,11 +41,11 @@ RLCD Local** option. The linked `Qwen-2.5-1B-RLCD` repository contains the decod
 engine rather than weights; the adapter therefore identifies its actual pinned
 `mlx-community/Qwen2.5-1.5B-Instruct-4bit` weights separately. It batches the fields
 inside one structured decision, while independent inputs queue through one MLX
-worker. See [setup, execution semantics and limitations](../../docs/rlcd.md).
+worker. See [setup, execution semantics and limitations](docs/rlcd.md).
 
 **Jev · TypeSafe** uses the real native TypeSafe API when `JEV_KEY` (or
 `TYPESAFE_API_KEY`) is configured. Unconfigured models are disabled. Jev-only
-setups default to Jev. [Native mapping, response validation and cost limits](../../docs/jev.md).
+setups default to Jev. [Native mapping, response validation and cost limits](../../packages/decisions/docs/jev.md).
 Exports include native probabilities, actual model revision and mapping version;
 the contract dialog shows the TypeSafe request. Jev pricing is $0.04/M input with free output, supplied by the account owner.
 
@@ -48,7 +53,7 @@ Set `CEREBRAS_API_KEY` in the root `.env`. The key stays server-side. Fixture mo
 uses synthetic outputs and zero billed cost. GPT OSS can use internal reasoning
 tokens; these count in usage but reasoning is never returned. Both models use
 strict upstream schema mode and the same local output gate, without repair or
-fallback. [Current Qwen / Jev paired benchmark](../../docs/benchmarks/README.md).
+fallback. [Current Qwen / Jev paired benchmark](https://github.com/iammrduncan/inference-benchmarks/blob/typesafe-v1/docs/benchmarks/README.md).
 
 Each bulk run shuffles all 100 inputs before dispatch. Exports retain the actual
 request order and input/output pairing. Guardrails and approvals each contain 20
@@ -179,8 +184,8 @@ The 3D world lives in `components/theater/city.tsx`; deterministic vehicle state
 physics live in `lib/theater/driving.ts`. The navigation graph is in
 `lib/theater/navigation.ts`. No provider plugin framework is required.
 
-See [verification and design choices](../../docs/theater-verification.md) and
-[research notes](../../docs/showcase-research.md).
+See [verification and design choices](https://github.com/iammrduncan/inference-benchmarks/blob/typesafe-v1/docs/theater-verification.md) and
+[research notes](https://github.com/iammrduncan/inference-benchmarks/blob/typesafe-v1/docs/showcase-research.md).
 # Model selection and local Needle
 
 Both comparison lanes have independent model selectors. Any available model can
@@ -192,5 +197,5 @@ Needle 3 native runtime and weights using the `hf` CLI. Restart the live demo to
 enable **Needle 3 · Local**. Static inputs use up to two reset native workers;
 navigation retains a fresh process because its schema changes by junction. It needs no cloud key. Actual startup/inference time is
 included; zero API fees exclude local compute, and unreported token counts remain
-unknown. See [the adapter notes](../../docs/needle.md) for forced structured selection,
+unknown. See [the adapter notes](docs/needle.md) for forced structured selection,
 validation, cancellation, setup and differences from the cloud models.

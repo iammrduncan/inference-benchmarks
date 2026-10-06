@@ -1,6 +1,6 @@
 # bench
 
-`bench` is the measuring harness for inference-benchmarks. It resolves a **subject** (model × checkpoint × quant × engine), sends every request to it, records every byte, and scores the captured outputs. One harness for every subject is the point: see [docs/organize/harness.md](../docs/organize/harness.md).
+`bench` is the measuring harness for inference-benchmarks. It resolves a **subject** (model × checkpoint × quant × engine), sends every request to it, records every byte, and scores the captured outputs. One harness for every subject is the point: see [docs/design/harness.md](../docs/design/harness.md).
 
 Node 24 runs the TypeScript sources directly; there is no build step.
 

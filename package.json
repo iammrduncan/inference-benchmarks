@@ -32,8 +32,6 @@
     "examples:live": "npm run examples:live -w @decision/gateway --",
     "benchmark": "npm run benchmark -w @decision/gateway --",
     "benchmark:live": "npm run benchmark:live -w @decision/gateway --",
-    "benchmark:rlcd": "node --import tsx scripts/benchmark-rlcd.mjs",
-    "summarize:rlcd": "node --import tsx scripts/summarize-rlcd.mjs",
     "showcase": "npm run dev",
     "showcase:live": "npm run dev:live",
     "start:demos:live": "npm run start:live -w @decision/theater",

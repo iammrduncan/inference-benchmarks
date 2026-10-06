@@ -77,7 +77,7 @@ try {
     console.log(JSON.stringify({ id: example.id, mode: report.mode, status: response.statusCode, elapsedMs, result, decision }));
     if (response.statusCode !== 200) process.exitCode = 1;
   }
-  const reportPath = live ? new URL('../../../docs/live-results.json', import.meta.url) : '/tmp/typesafe-examples-stub-results.json';
+  const reportPath = live ? new URL('../../../.artifacts/gateway/live-results.json', import.meta.url) : '/tmp/typesafe-examples-stub-results.json';
   await writeFile(reportPath, JSON.stringify(report, null, 2) + '\n');
   console.log(`Report: ${reportPath}. Planned provider calls: ${plannedCalls}; conservative cost ceiling: $${conservativeCostUsd.toFixed(3)}.`);
 } finally { await server.close(); await upstream?.close(); }

@@ -1,5 +1,5 @@
 // Subject identity: model x checkpoint x quant x engine. The runner resolves every
-// field; nobody types a subject key by hand. See docs/organize/subjects-and-results.md.
+// field; nobody types a subject key by hand. See docs/design/subjects-and-results.md.
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 
