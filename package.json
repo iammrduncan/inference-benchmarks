@@ -6,10 +6,10 @@
   "license": "MIT",
   "type": "module",
   "engines": {
-    "node": ">=22.15.0 <23",
-    "npm": ">=10 <11"
+    "node": ">=24",
+    "npm": ">=10"
   },
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.19.0",
   "workspaces": [
     "packages/*"
   ],
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@types/node": "22.20.3",
+    "@types/node": "24.19.1",
     "eslint": "10.10.0",
     "tsx": "4.23.13",
     "typescript": "5.9.3",
