@@ -1,5 +1,7 @@
 # @decision/gateway
 
+Compatibility rules for this package: [CONVENTIONS.md](CONVENTIONS.md).
+
 The Cerebras structured-output and validation layer supporting
 [typesafe-ai-benchmark](../../README.md). The paired runner uses one joint-schema
 Qwen response per application decision; the Jev lane calls TypeSafe directly from

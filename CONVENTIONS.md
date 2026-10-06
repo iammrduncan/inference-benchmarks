@@ -2,44 +2,34 @@
 
 ## Product contract
 
-Use **TypeScript** to benchmark LLM-native structured judgments from Qwen 3.8 on
-Cerebras against native TypeSafe Jev. Keep matched workloads, reproducible evidence
-and transparent latency/cost/quality accounting central. The supporting API retains
-its documented compatibility surface. Minimize harness overhead without weakening
-validation, failure handling or measurement integrity.
+This repository is **inference-benchmarks**: benchmarks for **model × version ×
+engine**, measured with one harness held constant. The plan, and the reasons for it,
+are in [docs/organize/](docs/organize/README.md).
 
-The following upstream reference was checked on **2026-09-16**. It is a starting
-contract, not a claim that this scaffold already implements it.
+- **Subjects, not models.** A score belongs to a subject: model, checkpoint, quant
+  and engine (plus hardware for speed). The subject's identity is resolved and
+  pinned by the runner, never typed by hand.
+- **One harness.** `bench` builds every request, records every byte and extracts
+  answers identically for every subject. External packages only score captured
+  outputs offline. Agentic suites run in one frozen agent harness behind the `bench`
+  recording proxy.
+- **Use TypeScript** (Node 24). Python appears only in pinned offline scorers.
+  Keep matched workloads, reproducible evidence, and transparent latency, cost and
+  quality accounting central. Keep harness overhead small, without weakening
+  validation, failure handling or measurement integrity.
 
-| Surface | Compatibility target | Source |
-| --- | --- | --- |
-| HTTP | `POST /v1/systemone`, bearer authentication, JSON; request contains `state`, `model`, `questions`; response contains `model`, `answers`, `usage` | [API](https://docs.typesafe.ai/api) |
-| Questions | `choice`, `score`, `noul`; return answers under the caller's IDs; IDs are not inference context; questions share state and are evaluated independently | [Primitives](https://docs.typesafe.ai/primitives) |
-| Choice | Option map; answer includes `type`, `choice`, `probabilities`, `confidence`; selection is a maximum-probability option; distribution covers every option; documented maximum is 255 options | [Choice](https://docs.typesafe.ai/primitives/choice) |
-| Score | Ordered criteria with 2–10 levels; answer includes `type`, `score`, `legend`, `probabilities`, `confidence`; zero-based level indices become string keys in JSON; score is the probability-weighted mean | [Score](https://docs.typesafe.ai/primitives/score) |
-| Noul | Optional `true`/`false` criteria descriptions; answer contains `type` and `noul`, a probability in `[0, 1]`; no separate confidence | [Noul](https://docs.typesafe.ai/primitives/noul) |
-| Confidence | Derived from the distribution; the referenced page does not specify the exact formula | [Confidence](https://docs.typesafe.ai/confidence) |
+Keep **four claims** separate. Evidence for one is never evidence for another:
 
-### Resolve uncertainty explicitly
-
-- The API reference and primitive guides differ on accepted criteria value shapes:
-  the guides allow structured descriptions, while the API lists narrower types in
-  places. Record the accepted subset and evidence before freezing a schema. Do not
-  accidentally restrict `instructions` to strings; the API also allows objects and
-  arrays. State accepts strings, objects, or arrays.
-- The API documents `401`, `422`, `429`, and `529`, but does not fully define the
-  error body. Define and test our stable error contract and mark deviations. Do not
-  claim byte-for-byte error compatibility without evidence.
-- Do not invent TypeSafe's confidence formula. Choose and document a deterministic
-  approximation if needed, with edge cases and fixtures, and label the difference
-  in compatibility documentation. Never substitute the winning probability without
-  recording that decision.
-- Define model alias resolution explicitly. A TypeSafe model name cannot silently
-  imply that its proprietary model is running. Document aliases, actual provider
-  models, and the response `model` policy; reject unknown names.
-- Record unknown rules such as tie-breaking, unknown fields, empty maps, size limits,
-  and partial failures as local decisions until verified. Keep extensions out of
-  the compatibility payload unless explicitly designed and documented.
+1. **Wire compatibility.** A response has the shape a protocol promises (for
+   example, the gateway's TypeSafe compatibility; see
+   [packages/gateway/CONVENTIONS.md](packages/gateway/CONVENTIONS.md)).
+2. **Quality.** Judgment and answer quality on pinned items against pinned scorers,
+   with intervals, and next to the reference subject.
+3. **Performance.** Latency, throughput and cost, measured with a stated method on
+   stated hardware.
+4. **Subject identity.** Exactly what ran: checkpoint revision, quant and file
+   hashes, engine version and output-changing flags, harness and suite version. A
+   result without full identity is not published.
 
 ## TypeScript and code structure
 

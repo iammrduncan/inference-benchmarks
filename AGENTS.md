@@ -2,16 +2,29 @@
 
 ## Mission
 
-Maintain **typesafe-ai-benchmark**, a reproducible comparison of LLM-native
-structured output from Qwen 3.8 on Cerebras and TypeSafe's native Jev judgment API.
-Compare latency, cost and judgment outcomes on shared synthetic application tasks.
-Preserve raw results, failures and mapping differences; distinguish type validity,
-quality and performance. The standalone compatibility proxy supports the benchmark
-and remains documented, but API imitation is not the project's primary goal.
+Maintain **inference-benchmarks** (renamed from typesafe-ai-benchmark): benchmarks
+for **model × version × engine**. A score is never just the model's. It depends on
+the checkpoint and quant being run, on the engine running it, and on the harness
+measuring it. We vary and measure the first three, and hold the harness constant.
 
-The repository uses TypeScript, Node 22, npm workspaces, Fastify, Next.js and Zod.
-Inspect existing code before adding tooling. Preserve validation and cancellation
-on both provider paths. Do not claim universal speed rankings from this benchmark.
+- Subjects come from three kinds of target: an `inference-engines` recipe, a hosted
+  cloud model, or a Hugging Face link served by a standard engine.
+- The `bench` runner sends every request and records every byte; pinned scorers
+  grade the captured outputs offline.
+- The flagship decisions comparison (Qwen 3.8 on Cerebras vs. TypeSafe Jev, now
+  extended to System One decision models) and its theater remain central.
+- Preserve raw results, failures and mapping differences. Never hide a retry, a
+  repair or a fallback.
+
+The plan, its decisions and the M0–M8 build order are in
+[docs/organize/](docs/organize/README.md); read `build-plan.md` before structural
+work. Benchmark API keys come from 1Password through `op run` (see the Secrets
+section of `build-plan.md`); never write a resolved key to disk.
+
+The repository uses TypeScript, Node 24, npm workspaces (`packages/*`, `apps/*`),
+Fastify, Next.js and Zod. Inspect existing code before adding tooling. Preserve
+validation and cancellation on every provider path. Do not claim universal rankings:
+every result is for a stated subject, suite version, settings profile and tier.
 
 ## Read first
 
@@ -68,12 +81,12 @@ If guidance conflicts, state the conflict and resolve it explicitly.
 ## Compatibility discipline
 
 Treat the public contract as a product feature. Consult the linked official sources
-in `CONVENTIONS.md` when implementing an endpoint, and record the source date and
+in `packages/gateway/CONVENTIONS.md` when implementing a gateway endpoint, and record the source date and
 supported behavior in tests or compatibility documentation. Upstream docs can change
 or disagree. Never infer a missing rule from a plausible example and call it exact.
 
-Keep three claims separate: wire compatibility, judgment quality, and performance.
-A valid JSON response proves neither calibrated probabilities nor equivalent model
+Keep the four claims in `CONVENTIONS.md` separate: wire compatibility, quality,
+performance, and subject identity. A valid JSON response proves neither calibrated probabilities nor equivalent model
 behavior. A benchmark of local validation proves neither provider latency nor total
 request latency. Unsupported behavior must be rejected or documented as a deliberate
 compatibility limitation, never silently approximated.
