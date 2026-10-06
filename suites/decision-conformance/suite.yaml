@@ -1,0 +1,22 @@
+name: decision-conformance
+status: ready
+description: >-
+  Protocol checks for System One decision answers, re-implemented from finnhll/jev-eval
+  (MIT): structural invariants, batched vs. separate questions, repeat stability,
+  option-order sensitivity and monotonicity across ordered states.
+protocol: decision
+category: decisions
+probes: probes.json
+tiers:
+  quick: {note: every probe once; repeats as listed in probes.json}
+  core: {note: same as quick; the probe set is small by design}
+checks:
+  invariants: >-
+    Every answer has its question's type. Choice and score distributions cover exactly
+    their options, values lie in [0, 1] and sum to within 0.01 of 1. A choice equals an
+    argmax of its distribution. A score equals the probability-weighted mean of level
+    indices within 0.01. A noul is a probability in [0, 1].
+  batched_vs_separate: max |p_batched - p_separate| <= 0.05 for every option of every question
+  repeat_stability: max standard deviation of any probability across repeats <= 0.02
+  option_order: reversing a choice's option order keeps the same choice (the confidence change is reported)
+  monotonic: the expected score does not decrease across states ordered by severity

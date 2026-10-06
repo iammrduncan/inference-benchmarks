@@ -1,0 +1,79 @@
+{
+  "note": "Synthetic probes for the decision protocol. Checks follow finnhll/jev-eval: invariants, batched vs separate, repeat stability, option order, monotonicity.",
+  "repeats": 3,
+  "batched": [
+    {
+      "id": "support",
+      "state": {
+        "account": { "tier": "business", "seats": 40, "tenure_months": 26 },
+        "thread": [
+          { "role": "customer", "text": "Since this morning none of our 40 seats can log in. We get 'session expired' right after the password step. Payroll runs today." }
+        ]
+      },
+      "questions": {
+        "team": {
+          "type": "choice",
+          "instructions": "Which team should own this conversation?",
+          "criteria": {
+            "billing": "Charges, invoices and refunds.",
+            "sales": "Buying more, plan changes and quotes.",
+            "technical": "The product is not working as expected.",
+            "trust": "Unauthorized access, fraud or compromised accounts."
+          }
+        },
+        "urgency": {
+          "type": "score",
+          "instructions": "How urgent is this for the customer's business?",
+          "criteria": ["Can wait indefinitely.", "Routine; today or tomorrow.", "Soon; work is blocked for some people.", "Immediate; business-critical work is stopped."]
+        },
+        "needs_human": {
+          "type": "noul",
+          "instructions": "A human engineer must get involved rather than automated help.",
+          "criteria": { "true": "Needs an engineer.", "false": "Automation can resolve it." }
+        }
+      }
+    },
+    {
+      "id": "invoice",
+      "state": {
+        "invoice": { "vendor": "Acme Parts", "number": "INV-2207", "amount_usd": 18400, "po": "PO-5531" },
+        "purchase_order": { "number": "PO-5531", "amount_usd": 18400, "received": true },
+        "history": [{ "invoice": "INV-2207", "paid_on": "2026-09-02", "amount_usd": 18400 }]
+      },
+      "questions": {
+        "disposition": {
+          "type": "choice",
+          "instructions": "What should accounts payable do with this invoice?",
+          "criteria": {
+            "hold": "Pause payment until a person checks something.",
+            "pay": "Pay it as submitted.",
+            "reject": "Reject it and notify the vendor."
+          }
+        },
+        "duplicate": {
+          "type": "noul",
+          "instructions": "This invoice has already been paid.",
+          "criteria": { "true": "Already paid.", "false": "Not paid before." }
+        },
+        "severity": {
+          "type": "score",
+          "instructions": "How serious is the discrepancy, if any?",
+          "criteria": ["None.", "Minor; a rounding or formatting issue.", "Material; amounts or items differ.", "Severe; likely duplicate payment or fraud."]
+        }
+      }
+    }
+  ],
+  "monotonic": {
+    "id": "outage",
+    "question": {
+      "type": "score",
+      "instructions": "How severe is this service incident?",
+      "criteria": ["No impact.", "Minor; a few users notice.", "Major; many users are affected.", "Critical; the whole service is down."]
+    },
+    "states": [
+      { "alert": "One user reports a typo on the settings page.", "error_rate": 0.0 },
+      { "alert": "Checkout errors for about 15% of users in one region.", "error_rate": 0.15 },
+      { "alert": "All regions return HTTP 503 for every request; status page is down.", "error_rate": 1.0 }
+    ]
+  }
+}

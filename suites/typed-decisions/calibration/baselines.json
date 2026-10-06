@@ -1,0 +1,37 @@
+{
+  "dataset_revision": "(see suite.yaml)",
+  "decisions": 2000,
+  "card": {
+    "uniform": {
+      "accuracy": 0.308,
+      "kl_from_gold": 0.444,
+      "brier": 0.238,
+      "ece": 0.169
+    },
+    "prior": {
+      "accuracy": 0.47,
+      "kl_from_gold": 0.347,
+      "brier": 0.189,
+      "ece": 0.088
+    }
+  },
+  "ours": {
+    "uniform": {
+      "accuracy": 0.269,
+      "kl_from_gold": 0.444463,
+      "brier": 0.238188,
+      "ece": 0.0485
+    },
+    "prior": {
+      "accuracy": 0.4675,
+      "kl_from_gold": 0.347397,
+      "brier": 0.188704,
+      "ece": 0.038659
+    }
+  },
+  "kl_and_brier_match_card_to_3dp": true,
+  "notes": [
+    "Accuracy: the card does not state its tie rule; Uniform ties on every decision, so its accuracy is not a useful check. Prior has no ties and differs by 5 of 2000 decisions.",
+    "ECE: the card does not define its ECE and says submitters compute it differently; ours is 10-bin top-label ECE and is not comparable."
+  ]
+}

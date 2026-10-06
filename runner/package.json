@@ -1,0 +1,21 @@
+{
+  "name": "@decision/bench",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "bench: the measuring harness. Resolves subjects, sends every request, records every byte, scores offline.",
+  "bin": {
+    "bench": "src/cli.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test 'test/*.test.ts'"
+  },
+  "dependencies": {
+    "@decision/decisions": "0.0.0",
+    "@decision/gateway": "0.0.0",
+    "hyparquet": "1.31.2",
+    "yaml": "2.9.1"
+  }
+}

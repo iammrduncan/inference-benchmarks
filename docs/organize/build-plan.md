@@ -89,6 +89,15 @@ updated, and the link fixes are committed.
 
 ## M1 · Restructure without changing behavior
 
+> **Status: done (2026-10-06)**, on local branch `reorg/m1-m3`, not pushed.
+> - `npm run check` passes on Node 24.21: theater 39, gateway 32 and decisions 3
+>   tests, plus types, lint and builds.
+> - The summarize scripts reproduce every committed `docs/benchmarks/**/summary.json`
+>   byte for byte.
+> - The theater ran live under `op run` and answered through both Qwen on Cerebras
+>   and Jev.
+> - Historical records keep the paths they were measured with.
+
 **Repo:** inference-benchmarks
 
 1. `.nvmrc` = `24`; set `engines.node` to `>=24`; regenerate the lockfile.
@@ -147,6 +156,17 @@ bench summarize results/**/typed-decisions/*   # reproduces summary.json byte fo
   `bench` gets fixed before anything else is built.
 
 ## M3 · Launcher interface and private catalog
+
+> **Status: done (2026-10-06)**, on local branch `reorg/m3` in inference-engines, not
+> pushed.
+> - `npm test` passes **34/34** on Linux (`node:24` with `flock`, under Podman): the
+>   original 28 plus 6 new tests for `describe`, `--json`, identity and private
+>   catalogs. On macOS without `flock`, the same 8 lock tests fail as before.
+> - `validate` reports 0 problems.
+> - `describe needle3/esp32-s3/8-layer --json` prints the identity; `--param layers=4`
+>   fills the quant scheme.
+> - Private recipes never print or record their source; a test asserts this on
+>   stdout and in `run.json`.
 
 **Repo:** inference-engines. *Can run in parallel with M2.*
 
