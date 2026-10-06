@@ -142,6 +142,19 @@ suites through the gateway.
 | --- | --- | --- | --- | --- | --- |
 | P1 | **taste**: `simple`, `detailed`, `makebetter` | 3 | 16,000 | 0.25 | Cheap, and the gallery is the fun part of the site. Ranked only by the owner's personal ranking (below) |
 
+### 9. Embeddings (embedding models only)
+
+Details and rationale are in [embeddings.md](embeddings.md). Embedding subjects run
+health (perf-embed, plus embedding-fidelity as P0) and this category instead of
+categories 1–8.
+
+| Pri | Benchmark | Core items | Why |
+| --- | --- | --- | --- |
+| P0 | **embedding-fidelity** | 2,000 texts (+ images, audio) | Cosine and top-10 neighbor overlap vs. the reference; catches broken quants and engines |
+| P0 | **MTEB(eng, v2)** | official 41-task set | The standard text comparison |
+| P1 | **MTEB(Code, v1)**, **MTEB(Multilingual, v2)** | official sets | Code search; multilingual |
+| P1 *(by modality)* | **MIEB(lite)** for vision, **MAEB** for audio | official sets | Only when the subject has those encoders |
+
 ### The `think` slice (thinking models only; ranked separately)
 
 | Benchmark | Items | Thinking cap | Est. h |
