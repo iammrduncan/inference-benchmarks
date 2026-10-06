@@ -2,14 +2,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import { createDemoRuntime } from '../lib/runtime';
-import { scenes, workItem, fixtureValues } from '../lib/theater/data';
-import { theaterPlan, theaterDecision } from '../lib/theater/contracts';
-import { navigationContext, exits, fixtureNext } from '../lib/theater/navigation';
-import { DrivingEngine, drivingContext } from '../lib/theater/driving';
+import { scenes, workItem, fixtureValues } from '@decision/decisions/scenes/data';
+import { theaterPlan, theaterDecision } from '@decision/decisions/scenes/contracts';
+import { navigationContext, exits, fixtureNext } from '@decision/decisions/scenes/navigation';
+import { DrivingEngine, drivingContext } from '@decision/decisions/scenes/driving';
 import { localRequest } from '../lib/request';
-import { shuffledWorkload, requestTotals } from '../lib/theater/workload';
-import { demoModel } from '../lib/models';
-import { homeWorkItem } from '../lib/theater/home';
+import { shuffledWorkload, requestTotals } from '@decision/decisions/scenes/workload';
+import { demoModel } from '@decision/decisions/models';
+import { homeWorkItem } from '@decision/decisions/scenes/home';
 
 test('selected model survives every demo path and unknown models never reach inference',async()=>{
   const runtime=await createDemoRuntime({stub:true});

@@ -6,11 +6,11 @@ import { createHash } from 'node:crypto';
 import { URL } from 'node:url';
 import { z } from 'zod';
 import { percentiles } from '../packages/gateway/src/metrics.ts';
-import { demoModel } from '../apps/theater/lib/models.ts';
-import { scenes } from '../apps/theater/lib/theater/data.ts';
+import { demoModel } from '../packages/decisions/src/models.ts';
+import { scenes } from '../packages/decisions/src/scenes/data.ts';
 import { quality } from './benchmark-quality.mjs';
 
-import { models } from '../apps/theater/lib/models.ts';
+import { models } from '../packages/decisions/src/models.ts';
 
 // Offline only: validate and summarize unchanged paired browser exports.
 const number = z.number().finite().nonnegative();

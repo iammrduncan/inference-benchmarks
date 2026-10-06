@@ -9,8 +9,8 @@ import { createDemoRuntime } from '../lib/runtime';
 import { decodeRlcd } from '../lib/rlcd';
 import { rlcdPlan } from '../lib/rlcd-plan';
 import { contractSnapshot, readContract, readRlcdContract } from '../lib/theater/contract-view';
-import { workItem, type SceneId } from '../lib/theater/data';
-import { DrivingEngine } from '../lib/theater/driving';
+import { workItem, type SceneId } from '@decision/decisions/scenes/data';
+import { DrivingEngine } from '@decision/decisions/scenes/driving';
 
 const input = (id: SceneId) => ({ id, model: 'qwen-2.5-1.5b-rlcd' as const,
   text: JSON.stringify(id === 'navigate' ? { position: 20, target: 4, visited: [20] }

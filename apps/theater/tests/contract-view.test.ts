@@ -2,10 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { contractSnapshot, readContract } from '../lib/theater/contract-view';
 import { createDemoRuntime } from '../lib/runtime';
-import { prepare } from '../lib/contracts';
-import { workItem, type SceneId } from '../lib/theater/data';
-import { DrivingEngine } from '../lib/theater/driving';
-import { navigationMoves } from '../lib/theater/navigation';
+import { prepare } from '@decision/decisions/contracts';
+import { workItem, type SceneId } from '@decision/decisions/scenes/data';
+import { DrivingEngine } from '@decision/decisions/scenes/driving';
+import { navigationMoves } from '@decision/decisions/scenes/navigation';
 import { record } from '@decision/gateway/json';
 
 test('all scene previews use the actual request builder and expose every output field', () => {

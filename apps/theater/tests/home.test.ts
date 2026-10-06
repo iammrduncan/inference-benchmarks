@@ -2,10 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import { createDemoRuntime } from '../lib/runtime';
-import { homeCases, homeDecision, homeInput, homeWorkItem, initialHome, applyHome } from '../lib/theater/home';
-import { theaterPlan, theaterDecision } from '../lib/theater/contracts';
-import { shuffledWorkload } from '../lib/theater/workload';
-import { passesThreshold } from '../lib/theater/judge';
+import { homeCases, homeDecision, homeInput, homeWorkItem, initialHome, applyHome } from '@decision/decisions/scenes/home';
+import { theaterPlan, theaterDecision } from '@decision/decisions/scenes/contracts';
+import { shuffledWorkload } from '@decision/decisions/scenes/workload';
+import { passesThreshold } from '@decision/decisions/scenes/judge';
 
 test('judge validity threshold uses a strict comparison, independently of model completeness', () => {
   const answers = [{ accuracy: 80, valid: true }, { accuracy: 90, valid: true }, { accuracy: 91, valid: false }, { accuracy: 100, valid: true }];

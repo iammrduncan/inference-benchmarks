@@ -1,4 +1,4 @@
-import { prepare, type DemoInput } from './contracts';
+import { prepare, type DemoInput } from '@decision/decisions/contracts';
 import release from '../needle-release.json';
 
 export const needleRevision = release.revision;

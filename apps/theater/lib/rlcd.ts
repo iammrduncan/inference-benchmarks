@@ -1,7 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import { z } from 'zod';
 import { Fault } from '@decision/gateway/errors';
-import { applyDecision, type DemoInput } from './contracts';
+import { applyDecision, type DemoInput } from '@decision/decisions/contracts';
 import { rlcdWorkerSchema, type RlcdPlan } from './rlcd-plan';
 
 export type RlcdConfig = { python: string; worker: string; source: string; weights: string };

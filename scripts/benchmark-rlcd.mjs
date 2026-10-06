@@ -11,10 +11,10 @@ import { setTimeout, clearTimeout, setInterval, clearInterval } from 'node:timer
 import { createDemoRuntime } from '../apps/theater/lib/runtime.ts';
 import { installedRlcd } from '../apps/theater/scripts/rlcd-paths.mjs';
 import release from '../apps/theater/rlcd-release.json' with { type: 'json' };
-import { scenes } from '../apps/theater/lib/theater/data.ts';
-import { requestTotals } from '../apps/theater/lib/theater/workload.ts';
-import { initialHome, homeDecision, applyHome } from '../apps/theater/lib/theater/home.ts';
-import { DrivingEngine, driveDecision } from '../apps/theater/lib/theater/driving.ts';
+import { scenes } from '../packages/decisions/src/scenes/data.ts';
+import { requestTotals } from '../packages/decisions/src/scenes/workload.ts';
+import { initialHome, homeDecision, applyHome } from '../packages/decisions/src/scenes/home.ts';
+import { DrivingEngine, driveDecision } from '../packages/decisions/src/scenes/driving.ts';
 
 // Live local inference only. Replay the published input order, never expected answers.
 // Direct timing includes queueing, cold load where encountered, inference and validation.
@@ -28,7 +28,7 @@ const hash = async file => {
   for await (const chunk of createReadStream(file)) digest.update(chunk);
   return digest.digest('hex');
 };
-const sourceFiles = new Set(execFileSync('git', ['ls-files', 'apps/theater/lib',
+const sourceFiles = new Set(execFileSync('git', ['ls-files', 'apps/theater/lib', 'packages/decisions/src',
   'apps/theater/rlcd-release.json', 'apps/theater/rlcd-requirements.lock',
   'apps/theater/python/rlcd_worker.py', 'scripts/benchmark-rlcd.mjs', 'package-lock.json'],
 { encoding: 'utf8' }).trim().split('\n').filter(Boolean));

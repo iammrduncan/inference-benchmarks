@@ -6,7 +6,7 @@ import path from 'node:path';
 import { z } from 'zod';
 import { Fault } from '@decision/gateway/errors';
 import { parseJson } from '@decision/gateway/json';
-import { applyDecision, type DemoInput } from './contracts';
+import { applyDecision, type DemoInput } from '@decision/decisions/contracts';
 import type { NeedlePlan } from './needle-plan';
 
 export type NeedleConfig = { executable: string; weights: string };

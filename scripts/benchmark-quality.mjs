@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { fixtureValues } from '../apps/theater/lib/theater/data.ts';
-import { fixtureDispatch, teams, priorities, actions } from '../apps/theater/lib/traffic.ts';
-import { homeCases, homeDecision, applyHome, initialHome } from '../apps/theater/lib/theater/home.ts';
+import { fixtureValues } from '../packages/decisions/src/scenes/data.ts';
+import { fixtureDispatch, teams, priorities, actions } from '../packages/decisions/src/traffic.ts';
+import { homeCases, homeDecision, applyHome, initialHome } from '../packages/decisions/src/scenes/home.ts';
 
 export function quality(run) {
   const accepted = run.events.filter(e => e.data);

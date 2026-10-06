@@ -1,8 +1,8 @@
 'use client';
 import { useRef, useState } from 'react';
-import { scenes, workItem, type SceneId } from '../../lib/theater/data';
-import { requestTotals, shuffledWorkload } from '../../lib/theater/workload';
-import { models, demoModel, providerName, priceLabel } from '../../lib/models';
+import { scenes, workItem, type SceneId } from '@decision/decisions/scenes/data';
+import { requestTotals, shuffledWorkload } from '@decision/decisions/scenes/workload';
+import { models, demoModel, providerName, priceLabel } from '@decision/decisions/models';
 import { contractSnapshot, type ContractSnapshot } from '../../lib/theater/contract-view';
 import { usePlayer, type PlayerState } from './use-player';
 import { SceneVisual } from './visuals';

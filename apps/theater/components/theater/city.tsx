@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { DrivingEngine, roadCenter, obstacles } from '../../lib/theater/driving';
+import { DrivingEngine, roadCenter, obstacles } from '@decision/decisions/scenes/driving';
 export function City({ engine, onReady }: { engine: DrivingEngine; onReady: (status: string) => void }) {
   const host=useRef<HTMLDivElement>(null);
   useEffect(()=>{

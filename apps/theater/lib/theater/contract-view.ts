@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { prepare } from '../contracts';
-import type { DemoModel } from '../models';
-import { scenes, type SceneId } from './data';
-import { jevPlan } from '../jev';
+import { prepare } from '@decision/decisions/contracts';
+import type { DemoModel } from '@decision/decisions/models';
+import { scenes, type SceneId } from '@decision/decisions/scenes/data';
+import { jevPlan } from '@decision/decisions/jev';
 import { needlePlan } from '../needle-plan';
 import { rlcdPlan } from '../rlcd-plan';
 

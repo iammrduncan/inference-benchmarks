@@ -6,7 +6,7 @@ import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { Fault } from '@decision/gateway/errors';
 import { parseJson } from '@decision/gateway/json';
-import type { DemoInput } from './contracts';
+import type { DemoInput } from '@decision/decisions/contracts';
 import { decodeNeedle, requestNeedle, type NeedleConfig } from './needle';
 import type { NeedlePlan } from './needle-plan';
 

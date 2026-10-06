@@ -1,11 +1,11 @@
 'use client';
 import { useId, useMemo } from 'react';
-import { sceneColors } from '../../lib/theater/data';
-import { teams } from '../../lib/traffic';
-import { junctions, exits, closedRoads } from '../../lib/theater/navigation';
+import { sceneColors } from '@decision/decisions/scenes/data';
+import { teams } from '@decision/decisions/traffic';
+import { junctions, exits, closedRoads } from '@decision/decisions/scenes/navigation';
 import type { PlayerState } from './use-player';
 import { HomeScene } from './home-scene';
-import { passesThreshold } from '../../lib/theater/judge';
+import { passesThreshold } from '@decision/decisions/scenes/judge';
 import { City } from './city';
 export function SceneVisual({player:p,selectedId,onSelect,inspectionId='theater-input theater-output'}:{player:PlayerState;selectedId:number|undefined;onSelect:(id:number)=>void;inspectionId?:string}){
   const mapId=useId();

@@ -1,0 +1,23 @@
+{
+  "name": "@decision/decisions",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Decision scenes, contracts and the Jev mapping shared by the theater and the bench runner.",
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --import tsx --test 'src/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@decision/gateway": "0.0.0",
+    "zod": "4.6.5"
+  }
+}

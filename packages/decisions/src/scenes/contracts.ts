@@ -1,10 +1,10 @@
-import { homeInput, homeDecision, homeProperties, homeFixture } from './home';
+import { homeInput, homeDecision, homeProperties, homeFixture } from './home.js';
 import { z } from 'zod';
 import { parseJson } from '@decision/gateway/json';
-import { workItem, fixtureValues, type SceneId } from './data';
-import { navigationInput, navigationContext, navigationMoves, fixtureNext } from './navigation';
-import { driveInput, driveDecision, drivingContext, roadCenter } from './driving';
-import { defaultModel, type DemoModel } from '../models';
+import { workItem, fixtureValues, type SceneId } from './data.js';
+import { navigationInput, navigationContext, navigationMoves, fixtureNext } from './navigation.js';
+import { driveInput, driveDecision, drivingContext, roadCenter } from './driving.js';
+import { defaultModel, type DemoModel } from '../models.js';
 const verdict=z.strictObject({decision:z.enum(['allow','block'])});
 const score=z.strictObject({accuracy:z.number().int().min(0).max(100),valid:z.boolean()});
 const guardInput=z.strictObject({requestId:z.string(),source:z.string(),trust:z.literal('untrusted'),request:z.string().max(1800),protectedResources:z.array(z.string()).max(10)});

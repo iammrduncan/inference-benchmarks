@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { z } from 'zod';
 import { createDemoRuntime } from '../lib/runtime';
-import { applyDecision, prepare } from '../lib/contracts';
-import { homeWorkItem } from '../lib/theater/home';
+import { applyDecision, prepare } from '@decision/decisions/contracts';
+import { homeWorkItem } from '@decision/decisions/scenes/home';
 import { localRequest, readInput } from '../lib/request';
 test('Next request boundary rejects foreign origins, rebinding, duplicate JSON and oversized bodies', async () => {
   const make = (body = '{}', headers: Record<string, string> = {}) => new Request('http://127.0.0.1:3001/api/decide', { method: 'POST', body,
@@ -46,7 +46,7 @@ test('demo sessions continue past the former 80-call cutoff; aborted requests re
 });
 
 test('dispatch feed uses rich context and a single validated request per ticket', async () => {
-  const { trafficTicket, fixtureDispatch, dispatchDecision, teams, priorities, actions } = await import('../lib/traffic');
+  const { trafficTicket, fixtureDispatch, dispatchDecision, teams, priorities, actions } = await import('@decision/decisions/traffic');
   const demo = await createDemoRuntime({ stub: true });
   try {
     for (let offset = 0; offset < 24; offset += 3) {

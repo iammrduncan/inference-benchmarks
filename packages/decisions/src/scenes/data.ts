@@ -1,6 +1,6 @@
-import { homeCases, homeWorkItem } from './home';
-import { trafficTicket } from '../traffic';
-import { evaluationCase } from './evaluations';
+import { homeCases, homeWorkItem } from './home.js';
+import { trafficTicket } from '../traffic.js';
+import { evaluationCase } from './evaluations.js';
 export const scenes = [
   { id: 'dispatch', name: 'Ticket switchboard', short: 'Tickets', kicker: '01 / OPERATIONS', detail: '100 customer stories. Four destinations. Every ticket gets a typed decision.', count: 100 },
   { id: 'navigate', name: 'Find a way through.', short: 'Routing', kicker: '02 / SPATIAL REASONING', detail: 'A street graph, live closures, travel costs and a destination. The model chooses each hop.', count: 24 },

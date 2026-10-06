@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { theaterId, theaterPlan, theaterDecision } from './theater/contracts';
+import { theaterId, theaterPlan, theaterDecision } from './scenes/contracts.js';
 import { parseJson } from '@decision/gateway/json';
-import { teams, priorities, actions, dispatchDecision, ticketSchema } from './traffic';
-import { demoModel, defaultModel, type DemoModel } from './models';
+import { teams, priorities, actions, dispatchDecision, ticketSchema } from './traffic.js';
+import { demoModel, defaultModel, type DemoModel } from './models.js';
 
 export const demoInput = z.strictObject({
   id: z.enum(['dispatch', 'navigate', 'drive', 'screen', 'approve', 'judge', 'home']),

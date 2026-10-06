@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { scenes, workItem } from '../../lib/theater/data';
-import { requestTotals } from '../../lib/theater/workload';
+import { scenes, workItem } from '@decision/decisions/scenes/data';
+import { requestTotals } from '@decision/decisions/scenes/workload';
 import { usePlayer } from './use-player';
 import { SceneVisual } from './visuals';
 import { JsonCode } from './json-code';
-import { demoModel, models, providerName, priceLabel } from '../../lib/models';
+import { demoModel, models, providerName, priceLabel } from '@decision/decisions/models';
 import { ContractDialog } from './contract-dialog';
 import { contractSnapshot, type ContractSnapshot } from '../../lib/theater/contract-view';
 import './theater.css';

@@ -1,4 +1,4 @@
-import { scenes, workItem, type SceneId, type WorkItem } from './data';
+import { scenes, workItem, type SceneId, type WorkItem } from './data.js';
 
 // Shuffle before dispatch, not after receiving results. Exported events retain
 // this exact order and every input, so an observed run can be inspected/replayed.

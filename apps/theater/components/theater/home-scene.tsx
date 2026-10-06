@@ -1,5 +1,5 @@
 'use client';
-import { applyHome, homeInput, rooms } from '../../lib/theater/home';
+import { applyHome, homeInput, rooms } from '@decision/decisions/scenes/home';
 import type { PlayerState } from './use-player';
 
 export function HomeScene({ player: p, selectedId, onSelect, inspectionId = 'theater-input theater-output' }: { player: PlayerState; selectedId: number | undefined; onSelect: (id: number) => void; inspectionId?: string }) {

@@ -8,10 +8,10 @@ import { z } from 'zod';
 import { needlePlan } from '../lib/needle-plan';
 import { decodeNeedle, requestNeedle } from '../lib/needle';
 import { createDemoRuntime } from '../lib/runtime';
-import { workItem, type SceneId } from '../lib/theater/data';
-import { DrivingEngine } from '../lib/theater/driving';
+import { workItem, type SceneId } from '@decision/decisions/scenes/data';
+import { DrivingEngine } from '@decision/decisions/scenes/driving';
 import { contractSnapshot, readContract, readNeedleContract } from '../lib/theater/contract-view';
-import { requestTotals } from '../lib/theater/workload';
+import { requestTotals } from '@decision/decisions/scenes/workload';
 
 const input = (id: SceneId) => ({ id, model: 'needle-3' as const, text: JSON.stringify(id === 'navigate'
   ? { position: 20, target: 4, visited: [20] } : id === 'drive' ? new DrivingEngine().state : workItem(id, 0).context) });

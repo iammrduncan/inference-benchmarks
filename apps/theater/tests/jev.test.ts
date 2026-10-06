@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import Fastify from 'fastify';
-import { jevPlan, decodeJev, requestJev } from '../lib/jev';
+import { jevPlan, decodeJev, requestJev } from '@decision/decisions/jev';
 import { createDemoRuntime } from '../lib/runtime';
-import { workItem, type SceneId } from '../lib/theater/data';
-import { DrivingEngine } from '../lib/theater/driving';
-import { requestTotals } from '../lib/theater/workload';
+import { workItem, type SceneId } from '@decision/decisions/scenes/data';
+import { DrivingEngine } from '@decision/decisions/scenes/driving';
+import { requestTotals } from '@decision/decisions/scenes/workload';
 import { contractSnapshot, readNativeContract } from '../lib/theater/contract-view';
 import { z } from 'zod';
 

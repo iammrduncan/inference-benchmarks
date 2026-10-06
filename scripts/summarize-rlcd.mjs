@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import process from 'node:process';
 import { z } from 'zod';
-import { scenes } from '../apps/theater/lib/theater/data.ts';
+import { scenes } from '../packages/decisions/src/scenes/data.ts';
 import { percentiles } from '../packages/gateway/src/metrics.ts';
 import { quality } from './benchmark-quality.mjs';
 

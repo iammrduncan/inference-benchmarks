@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 import path from 'node:path';
 const config: NextConfig = {
   allowedDevOrigins: process.env.DEMO_HOSTNAME ? [process.env.DEMO_HOSTNAME] : [],
-  transpilePackages: ['@decision/gateway'],
+  transpilePackages: ['@decision/gateway', '@decision/decisions'],
   serverExternalPackages: ['fastify', '@fastify/bearer-auth'],
   turbopack: { root: path.resolve('../..') },
   poweredByHeader: false,

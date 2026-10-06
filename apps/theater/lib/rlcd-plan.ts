@@ -1,11 +1,11 @@
 import { z } from 'zod';
 import { parseJson } from '@decision/gateway/json';
-import { prepare, type DemoInput } from './contracts';
-import { defaultModel } from './models';
-import { ticketSchema } from './traffic';
-import { driveInput, drivingContext } from './theater/driving';
-import { homeInput, rooms } from './theater/home';
-import { exits, junctions, navigationInput, navigationMoves } from './theater/navigation';
+import { prepare, type DemoInput } from '@decision/decisions/contracts';
+import { defaultModel } from '@decision/decisions/models';
+import { ticketSchema } from '@decision/decisions/traffic';
+import { driveInput, drivingContext } from '@decision/decisions/scenes/driving';
+import { homeInput, rooms } from '@decision/decisions/scenes/home';
+import { exits, junctions, navigationInput, navigationMoves } from '@decision/decisions/scenes/navigation';
 import release from '../rlcd-release.json';
 
 const objectSchema = z.strictObject({

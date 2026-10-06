@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { boundedText, parseJson, limits } from '@decision/gateway/json';
 import { Fault } from '@decision/gateway/errors';
-import { prepare, type DemoInput } from './contracts';
+import { prepare, type DemoInput } from './contracts.js';
 
 // Native TypeSafe API checked 2026-09-17: https://docs.typesafe.ai/api.
 // One joint request per scene item. No OpenAI emulation or Cerebras fallback.
