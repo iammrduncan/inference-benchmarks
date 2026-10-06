@@ -1,0 +1,17 @@
+key: qwen-3.8-27b/cerebras-2026-10/opaque/cerebras
+target: cloud
+model: qwen-3.8-27b
+checkpoint:
+  provider: cerebras
+  model_id: qwen-3.8-27b
+  month: 2026-10
+quant:
+  format: opaque
+engine:
+  name: cerebras
+  version: cerebras
+engine_visibility: public
+verified_identity: true
+label: provider-opaque
+trained_on: []
+overlap: []

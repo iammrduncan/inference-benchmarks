@@ -1,0 +1,102 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-06-quick-greedy-nothink-gateway-json-schema-414e03",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "typed-decisions",
+    "tier": "quick",
+    "suite_hash": "5995f56de30d9a5e5b8ab8d8342a24025e75a52464b4861e2c1d16ca1fc5c7b7",
+    "ids": 100
+  },
+  "subject": {
+    "model": "qwen-3.8-27b",
+    "checkpoint": {
+      "provider": "cerebras",
+      "model_id": "qwen-3.8-27b",
+      "month": "2026-10"
+    },
+    "quant": {
+      "format": "opaque"
+    },
+    "engine": {
+      "name": "cerebras",
+      "version": "cerebras"
+    },
+    "key": "qwen-3.8-27b/cerebras-2026-10/opaque/cerebras",
+    "target": "cloud",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": "provider-opaque"
+  },
+  "mode": "gateway:json-schema",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "3b03788ee817d9494d9a7d057b62241bab669eae",
+    "dirty": true,
+    "suite_hash": "5995f56de30d9a5e5b8ab8d8342a24025e75a52464b4861e2c1d16ca1fc5c7b7",
+    "scorer": {
+      "name": "bench/typed-decisions",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "in-process packages/gateway -> https://api.cerebras.ai",
+  "dataset": {
+    "repo": "LocalLLaMA/typed-decisions",
+    "revision": "d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18",
+    "workflows": [
+      "agent_trace_observability",
+      "customer_service",
+      "invoice_processing",
+      "security_incidents"
+    ],
+    "files": {
+      "agent_trace_observability/test-00000-of-00001.parquet": "833ad1364237b9a3fe05be2c62e632f0cb34ba372284b975140d362ab246f70d",
+      "customer_service/test-00000-of-00001.parquet": "b4e6e23b3c2add197dda74008f2ce42ff996511ff1bf9c93e8b0e6d84ac9c275",
+      "invoice_processing/test-00000-of-00001.parquet": "ce2adfb5201dba910b23bda6ab9678c385b580edaabbf8348b4e024c120d4b75",
+      "security_incidents/test-00000-of-00001.parquet": "4d8bc1879a0b67e5d275edea21a694b06136ca2a2c3355215a7d8adea6b0c75f"
+    },
+    "train_files": {
+      "agent_trace_observability/train-00000-of-00001.parquet": "e7b2f78fe539517c6a66a90c68ed671c6133194a88d27dbff5d84713af46b901",
+      "customer_service/train-00000-of-00001.parquet": "3e3abc2a9307bc641f60a6f9042627897ca01c145c3206211dfa9c926ba8721c",
+      "invoice_processing/train-00000-of-00001.parquet": "6a5cfcd12e77e707cd9861107868a5adbb7df566ced3162bb9472cd3e348a598",
+      "security_incidents/train-00000-of-00001.parquet": "3aae379ac25fc6434d5f5675f04b06f4310d1aac3056a0e30bb0f779aa2f0a99"
+    }
+  },
+  "request_settings": {
+    "gateway": "packages/gateway json-schema mode",
+    "per_question_request": true,
+    "temperature": 0,
+    "reasoning_effort": "none",
+    "source": "packages/gateway/src/cerebras.ts"
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": 12,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": 2,
+    "spent_usd": 0.302959,
+    "price": {
+      "input": 0.99,
+      "output": 1.49,
+      "source": "packages/gateway/src/models.ts (Cerebras, 2026-09-16)"
+    }
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 100,
+  "completed": 99,
+  "started_at": "2026-10-06T06:27:54.029Z",
+  "finished_at": "2026-10-06T06:36:09.554Z",
+  "observed_models": {
+    "qwen-3.8-27b": 99
+  }
+}

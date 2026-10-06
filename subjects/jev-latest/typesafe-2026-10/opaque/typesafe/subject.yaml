@@ -1,0 +1,17 @@
+key: jev-latest/typesafe-2026-10/opaque/typesafe
+target: cloud
+model: jev-latest
+checkpoint:
+  provider: typesafe
+  model_id: jev-latest
+  month: 2026-10
+quant:
+  format: opaque
+engine:
+  name: typesafe
+  version: typesafe
+engine_visibility: public
+verified_identity: true
+label: provider-opaque
+trained_on: []
+overlap: []

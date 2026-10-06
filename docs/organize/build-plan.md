@@ -117,6 +117,28 @@ the theater unchanged against both providers.
 
 ## M2 · `bench` core: identity, records, one cloud suite (the first vertical slice)
 
+> **Status: done (2026-10-06)**, on local branch `reorg/m1-m3`, not pushed. Every
+> done-when check passed:
+> - **Records.** Jev (quick and core) and Qwen 3.8 27B through the gateway (quick)
+>   wrote complete records. Qwen had 1 of 100 cases fail as `invalid_provider_output`
+>   (HTTP 502), recorded and not retried.
+> - **Reproducible.** `bench summarize results/ --check` reproduces all 4 summaries
+>   byte for byte.
+> - **Calibration.** Jev on the card's exact 400 cases: accuracy 0.738 (95% CI
+>   0.718–0.757) vs. 0.727 on the card, KL 1.524 (1.421–1.633) vs. 1.442, Brier
+>   0.148 vs. 0.148. Offline, the scorer reproduces the card's Uniform and Prior KL
+>   and Brier exactly.
+> - **Same 100 cases, Qwen vs. Jev:** accuracy 0.722 vs. 0.748, KL 3.93 vs. 1.78,
+>   Brier 0.247 vs. 0.146, p50 572 vs. 171 ms, $0.30 vs. $0.0037.
+> - **Conformance (Jev):** 48/49 checks. Jev reported score 0.05 where its own
+>   probabilities give 0.03.
+> - **Lessons applied during the build:**
+>   - Jev rounds probabilities to 2 decimals, so tolerances were made inclusive at
+>     the boundary, with a regression test.
+>   - A first Qwen attempt hit Cerebras rate limits (40 of 100 cases got HTTP 429),
+>     because each case is 5 provider calls. `--rpm` pacing was added: it never
+>     retries, and it is recorded in `run.json`.
+
 **Repo:** inference-benchmarks
 
 This is the smallest change that produces a real, publishable record end to end.

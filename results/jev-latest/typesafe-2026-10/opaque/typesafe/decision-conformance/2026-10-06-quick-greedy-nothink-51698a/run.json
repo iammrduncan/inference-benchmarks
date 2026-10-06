@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-06-quick-greedy-nothink-51698a",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "decision-conformance",
+    "tier": "quick",
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "ids": 17
+  },
+  "subject": {
+    "model": "jev-latest",
+    "checkpoint": {
+      "provider": "typesafe",
+      "model_id": "jev-latest",
+      "month": "2026-10"
+    },
+    "quant": {
+      "format": "opaque"
+    },
+    "engine": {
+      "name": "typesafe",
+      "version": "typesafe"
+    },
+    "key": "jev-latest/typesafe-2026-10/opaque/typesafe",
+    "target": "cloud",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": "provider-opaque"
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "3b03788ee817d9494d9a7d057b62241bab669eae",
+    "dirty": true,
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "scorer": {
+      "name": "bench/decision-conformance",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "https://api.typesafe.ai/v1/systemone",
+  "dataset": null,
+  "request_settings": {
+    "note": "native decision API; the protocol has no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": 2,
+    "spent_usd": 0.000331,
+    "price": {
+      "input": 0.04,
+      "output": 0,
+      "source": "packages/decisions/src/models.ts (TypeSafe, 2026-09-17)"
+    }
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 17,
+  "completed": 17,
+  "started_at": "2026-10-06T06:26:57.252Z",
+  "finished_at": "2026-10-06T06:26:58.915Z",
+  "observed_models": {
+    "jev-1.13.0": 17
+  }
+}
