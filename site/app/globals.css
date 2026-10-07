@@ -262,3 +262,4 @@ th.empty-col, td.empty-col { opacity: 0.45; }
 .tab-on { color: var(--text); border-bottom-color: var(--accent); }
 .tab-count { margin-left: 7px; font-size: 12px; padding: 0 7px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
 .tab-desc { margin-bottom: 4px; }
+.empty-state { border: 1px dashed var(--border); border-radius: 10px; padding: 28px 20px; text-align: center; color: var(--muted); font-size: 14px; background: var(--surface); }

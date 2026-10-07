@@ -21,7 +21,10 @@ function value(r: OverallRow, key: SortKey): number | null {
 const lowerIsBetter = (g: OverallGroup, key: SortKey) => key.startsWith('speed:') && g.speed.find((s) => `speed:${s.id}` === key)?.lower_is_better === true;
 
 function formatSpeed(id: string, v: number): string {
-  return id === 'ttft' || id === 'latency' ? `${Math.round(v)} ms` : Math.round(v).toLocaleString('en-US');
+  if (id === 'ttft' || id === 'latency') return `${Math.round(v)} ms`;
+  if (id === 'cost') return v < 0.1 ? `$${v.toFixed(4)}` : `$${v.toFixed(2)}`;
+  if (id === 'per_image') return `${v.toFixed(1)} s`;
+  return Math.round(v).toLocaleString('en-US');
 }
 
 export function OverallTables({ groups, labels, limit = 10 }: { groups: OverallGroup[]; labels: Labels; limit?: number }) {
@@ -39,7 +42,9 @@ export function OverallTables({ groups, labels, limit = 10 }: { groups: OverallG
         ))}
       </div>
       <p className="muted small tab-desc">{g.description} The Index compares only subjects in this table.</p>
-      <OverallTable key={g.id} g={g} labels={labels} limit={limit} />
+      {g.rows.length > 0
+        ? <OverallTable key={g.id} g={g} labels={labels} limit={limit} />
+        : <div className="empty-state">No {g.label.toLowerCase()} results yet. Planned categories: {g.buckets.map((b) => b.label).join(', ')}.</div>}
     </>
   );
 }
@@ -119,7 +124,7 @@ function OverallTable({ g, labels, limit }: { g: OverallGroup; labels: Labels; l
                     return (
                       <td key={s.id} className="num">
                         {x
-                          ? <span title={`${x.what}${x.hardware ? `, ${x.hardware}` : ''}`}>{formatSpeed(s.id, x.value)}{s.id === 'latency' && x.what !== 'per request' ? '*' : ''}{s.id !== 'latency' && <span className="unit-hw">{x.hardware}</span>}</span>
+                          ? <span title={`${x.what}${x.hardware ? `, ${x.hardware}` : ''}`}>{formatSpeed(s.id, x.value)}{s.id === 'latency' && x.what !== 'per request' ? '*' : ''}{s.id !== 'latency' && s.id !== 'cost' && <span className="unit-hw">{x.hardware}</span>}</span>
                           : <span className="na" title="Not measured">—</span>}
                       </td>
                     );

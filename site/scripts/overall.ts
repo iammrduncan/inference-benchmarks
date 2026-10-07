@@ -5,51 +5,16 @@
 // rules are tested.
 import type { Board, Bucket, OverallGroup, OverallRow, Run, SpeedColumn, SpeedFigure } from '../lib/types.ts';
 
-type BucketDef = { id: string; label: string; note: string | null; matches: (suite: string, category: string | null) => boolean };
-type GroupDef = { id: string; label: string; description: string; buckets: BucketDef[]; speed: SpeedColumn[]; owns: (r: Run) => boolean };
+type BucketDef = {
+  id: string; label: string; note: string | null;
+  matches: (suite: string, category: string | null) => boolean;
+  /** The bucket's number for one run, on a 0–100 scale (higher is better); null if the run has none. */
+  metric: (run: Run) => number | null;
+};
+type GroupDef = { id: string; label: string; description: string; buckets: BucketDef[]; speed: SpeedColumn[]; owns: (category: string | null) => boolean };
 
 const byCategory = (c: string) => (_suite: string, category: string | null) => category === c;
 const bySuite = (...names: string[]) => (suite: string) => names.includes(suite);
-
-const PREFILL: SpeedColumn = { id: 'prefill', label: 'Prefill tok/s', lower_is_better: false, note: 'input tokens processed per second' };
-const DECODE: SpeedColumn = { id: 'decode', label: 'Decode tok/s', lower_is_better: false, note: 'output tokens generated per second' };
-const TTFT: SpeedColumn = { id: 'ttft', label: 'TTFT', lower_is_better: true, note: 'time to first token; needs the streaming suites' };
-const LATENCY: SpeedColumn = { id: 'latency', label: 'Latency p50', lower_is_better: true, note: 'whole request' };
-
-/**
- * Categories follow the core set's order (docs/design/core-set.md). A suite joins a bucket
- * through the `category` in its suite.yaml (or by name, for embedding modalities). Buckets
- * with no ranked suite yet still show, so the table says what is missing.
- */
-export const GROUPS: GroupDef[] = [
-  {
-    id: 'language', label: 'Language & decision models',
-    description: 'Chat, coding and decision models: anything that generates an answer.',
-    owns: (r) => r.kind !== 'embeddings',
-    buckets: [
-      { id: 'decisions', label: 'Decisions', note: null, matches: byCategory('decisions') },
-      { id: 'taste', label: 'Taste', note: "owner's ranking", matches: byCategory('taste') },
-      { id: 'coding', label: 'Coding', note: null, matches: byCategory('coding') },
-      { id: 'math', label: 'Math', note: null, matches: byCategory('math') },
-      { id: 'tool-calling', label: 'Tool calling', note: null, matches: byCategory('tool-calling') },
-      { id: 'knowledge', label: 'Knowledge', note: null, matches: byCategory('knowledge') },
-    ],
-    speed: [PREFILL, DECODE, TTFT, LATENCY],
-  },
-  {
-    id: 'embedding', label: 'Embedding models',
-    description: 'Models that turn text (or images and audio) into vectors for search and similarity.',
-    owns: (r) => r.kind === 'embeddings',
-    buckets: [
-      { id: 'text', label: 'Text (MTEB)', note: null, matches: bySuite('embeddings', 'mteb-eng') },
-      { id: 'code', label: 'Code', note: null, matches: bySuite('mteb-code') },
-      { id: 'multilingual', label: 'Multilingual', note: null, matches: bySuite('mteb-multilingual') },
-      { id: 'image', label: 'Image', note: null, matches: bySuite('mieb') },
-      { id: 'audio', label: 'Audio', note: null, matches: bySuite('maeb') },
-    ],
-    speed: [{ ...PREFILL, note: 'input tokens embedded per second (engine time); embedding has no decode' }],
-  },
-];
 
 /** A suite's headline on a 0–100 scale. Only ranked boards count; pass/fail suites do not. */
 export function headline(run: Run): number | null {
@@ -59,6 +24,79 @@ export function headline(run: Run): number | null {
     case 'conformance': return null;
   }
 }
+/** Calibration as (1 − Brier) × 100, so higher is better like every other column. */
+const calibration = (run: Run) => (run.kind === 'decisions' ? (1 - run.metrics.brier.value) * 100 : null);
+
+const PREFILL: SpeedColumn = { id: 'prefill', label: 'Prefill tok/s', lower_is_better: false, note: 'input tokens processed per second' };
+const DECODE: SpeedColumn = { id: 'decode', label: 'Decode tok/s', lower_is_better: false, note: 'output tokens generated per second' };
+const TTFT: SpeedColumn = { id: 'ttft', label: 'TTFT', lower_is_better: true, note: 'time to first token; needs the streaming suites' };
+const LATENCY: SpeedColumn = { id: 'latency', label: 'Latency p50', lower_is_better: true, note: 'whole request' };
+const COST: SpeedColumn = { id: 'cost', label: '$ / 1k decisions', lower_is_better: true, note: 'provider price for 1,000 decisions; local engines show —' };
+const PER_IMAGE: SpeedColumn = { id: 'per_image', label: 'Time / image', lower_is_better: true, note: 'seconds per generated image' };
+
+const LANGUAGE_CATEGORIES = ['taste', 'coding', 'math', 'tool-calling', 'knowledge', 'instruction-following', 'long-context'];
+
+/**
+ * One table per model type: scores from different types do not mean the same thing, so
+ * they never share an Index. A suite's `category` (suite.yaml) decides its table, so a model
+ * appears in every table it has results in (Qwen answering decisions through the gateway
+ * is in Decision; its coding runs would be in Language). Categories follow the core set's
+ * order (docs/design/core-set.md). Buckets with no ranked suite yet still show, so each
+ * table says what is missing.
+ */
+export const GROUPS: GroupDef[] = [
+  {
+    id: 'language', label: 'Language',
+    description: 'Chat and coding models answering in text.',
+    owns: (c) => c !== null && LANGUAGE_CATEGORIES.includes(c),
+    buckets: [
+      { id: 'taste', label: 'Taste', note: "owner's ranking", matches: byCategory('taste'), metric: headline },
+      { id: 'coding', label: 'Coding', note: null, matches: byCategory('coding'), metric: headline },
+      { id: 'math', label: 'Math', note: null, matches: byCategory('math'), metric: headline },
+      { id: 'tool-calling', label: 'Tool calling', note: null, matches: byCategory('tool-calling'), metric: headline },
+      { id: 'knowledge', label: 'Knowledge', note: null, matches: byCategory('knowledge'), metric: headline },
+      { id: 'instruction-following', label: 'Instructions', note: 'instruction following', matches: byCategory('instruction-following'), metric: headline },
+      { id: 'long-context', label: 'Long context', note: null, matches: byCategory('long-context'), metric: headline },
+    ],
+    speed: [PREFILL, DECODE, TTFT, LATENCY],
+  },
+  {
+    id: 'decision', label: 'Decision',
+    description: 'System One decisions: typed Choice, Score and Noul answers with full probability distributions, from decision models or LLMs through the gateway.',
+    owns: (c) => c === 'decisions',
+    buckets: [
+      { id: 'typed', label: 'Typed decisions', note: 'accuracy', matches: bySuite('typed-decisions'), metric: headline },
+      { id: 'calibration', label: 'Calibration', note: '(1 − Brier) × 100 on typed-decisions', matches: bySuite('typed-decisions'), metric: calibration },
+      { id: 'scenes', label: 'Scenes', note: null, matches: bySuite('decisions-scenes'), metric: headline },
+      { id: 'classic', label: 'Classic', note: 'SST-2, AG News, Banking77', matches: bySuite('decisions-classic'), metric: headline },
+      { id: 'sealed', label: 'Sealed', note: 'private items', matches: bySuite('decisions-sealed'), metric: headline },
+    ],
+    speed: [{ ...LATENCY, note: 'one decision request' }, COST],
+  },
+  {
+    id: 'embedding', label: 'Embedding',
+    description: 'Models that turn text, images or audio into vectors for search and similarity.',
+    owns: (c) => c === 'embeddings',
+    buckets: [
+      { id: 'text', label: 'Text (MTEB)', note: null, matches: bySuite('embeddings', 'mteb-eng'), metric: headline },
+      { id: 'code', label: 'Code', note: null, matches: bySuite('mteb-code'), metric: headline },
+      { id: 'multilingual', label: 'Multilingual', note: null, matches: bySuite('mteb-multilingual'), metric: headline },
+      { id: 'image', label: 'Image', note: null, matches: bySuite('mieb'), metric: headline },
+      { id: 'audio', label: 'Audio', note: null, matches: bySuite('maeb'), metric: headline },
+    ],
+    speed: [{ ...PREFILL, note: 'input tokens embedded per second (engine time); embedding has no decode' }],
+  },
+  {
+    id: 'image', label: 'Image',
+    description: 'Models that generate or edit images.',
+    owns: (c) => c === 'image',
+    buckets: [
+      { id: 'text-to-image', label: 'Text-to-image', note: null, matches: byCategory('image'), metric: headline },
+      { id: 'editing', label: 'Image editing', note: null, matches: byCategory('image-editing'), metric: headline },
+    ],
+    speed: [PER_IMAGE],
+  },
+];
 
 /**
  * For each suite, the one board every row is compared on: the tier with the most subjects
@@ -77,13 +115,16 @@ export function boardPerSuite(boards: Board[]): Map<string, Board> {
 
 /** Speed from the subject's latest complete run that has each figure. */
 function speedOf(runs: Run[]): Record<string, SpeedFigure | null> {
-  const out: Record<string, SpeedFigure | null> = { prefill: null, decode: null, ttft: null, latency: null };
+  const out: Record<string, SpeedFigure | null> = { prefill: null, decode: null, ttft: null, latency: null, cost: null, per_image: null };
   for (const r of runs) {
     if (r.status !== 'complete') continue;
     const hw = r.hardware?.label ?? 'provider-hosted';
     if (!out.prefill && r.kind === 'embeddings' && r.throughput) out.prefill = { value: r.throughput.engine_tokens_per_s, what: 'input tokens/s, engine time', hardware: hw };
     if (!out.latency && r.latency_ms) {
       out.latency = { value: r.latency_ms.p50, what: r.kind === 'embeddings' ? 'per batch of 32 texts' : 'per request', hardware: hw };
+    }
+    if (!out.cost && r.kind === 'decisions' && r.usage && r.usage.cost_usd > 0 && r.metrics.decisions > 0) {
+      out.cost = { value: (r.usage.cost_usd / r.metrics.decisions) * 1000, what: `$ per 1,000 decisions (${r.metrics.decisions} decisions, ${r.tier} tier)`, hardware: hw };
     }
   }
   return out;
@@ -109,13 +150,15 @@ export function overall(runs: Run[], boards: Board[], categoryOf: (suite: string
     const rows = new Map<string, OverallRow>();
 
     for (const b of buckets) {
+      const bucketDef = g.buckets.find((x) => x.id === b.id);
+      if (!bucketDef) continue;
       const perSubject = new Map<string, Map<string, number>>(); // subject -> suite -> best headline
       const runIds = new Map<string, string[]>();
       for (const boardId of b.boards) {
         for (const entry of boards.find((x) => x.id === boardId)?.rows ?? []) {
           const run = byId.get(entry.run);
-          const h = run ? headline(run) : null;
-          if (!run || h === null || !g.owns(run)) continue;
+          const h = run ? bucketDef.metric(run) : null;
+          if (!run || h === null || !g.owns(categoryOf(run.suite))) continue;
           const suites = perSubject.get(run.subject) ?? new Map<string, number>();
           // A subject with several modes on one suite (e.g. two gateway modes) keeps its best.
           if ((suites.get(run.suite) ?? -Infinity) < h) {
@@ -134,7 +177,7 @@ export function overall(runs: Run[], boards: Board[], categoryOf: (suite: string
     }
 
     for (const row of rows.values()) {
-      const mine = latestFirst.filter((r) => r.subject === row.subject && g.owns(r));
+      const mine = latestFirst.filter((r) => r.subject === row.subject && g.owns(categoryOf(r.suite)));
       row.speed = speedOf(mine);
       row.last_run = mine[0]?.started_at ?? '';
     }

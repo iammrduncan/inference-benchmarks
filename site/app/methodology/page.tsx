@@ -32,7 +32,13 @@ export default function Methodology() {
       </ul>
 
       <h2>The home page&apos;s Index</h2>
-      <p>The home page has one table per kind of model, because their scores do not mean the same thing: a decision model&apos;s accuracy and an embedding model&apos;s retrieval score cannot be averaged. <b>Language &amp; decision models</b> have the categories Decisions, Taste, Coding, Math, Tool calling and Knowledge; <b>embedding models</b> have Text (MTEB), Code, Multilingual, Image and Audio. A subject belongs to a table by the suites it ran. A suite joins a category through its <code>category</code> (or by name, for embedding modalities), and only ranked suites count: pass/fail suites such as decision-conformance are listed, not scored.</p>
+      <p>The home page has one table per kind of model: <b>Language</b>, <b>Decision</b>, <b>Embedding</b> and <b>Image</b>. Their scores do not mean the same thing (a decision model&apos;s accuracy, an embedding model&apos;s retrieval score), so they are never averaged together. A suite&apos;s <code>category</code> decides its table, so a model appears in every table it has results in: Qwen answering decisions through the gateway is in Decision, and its coding runs will be in Language. Only ranked suites count: pass/fail suites such as decision-conformance are listed, not scored.</p>
+      <ul>
+        <li><b>Language</b>: Taste, Coding, Math, Tool calling, Knowledge, Instruction following, Long context. Speed: prefill, decode, TTFT, latency.</li>
+        <li><b>Decision</b>: Typed decisions (accuracy), Calibration ((1 − Brier) × 100 on typed-decisions), Scenes, Classic, Sealed. Speed and cost: latency per decision request, $ per 1,000 decisions.</li>
+        <li><b>Embedding</b>: Text (MTEB), Code, Multilingual, Image, Audio. Speed: prefill only.</li>
+        <li><b>Image</b>: Text-to-image, Image editing. Speed: time per image.</li>
+      </ul>
       <ul>
         <li><b>Category score</b>: the mean of the subject&apos;s suite headlines in that category, each on a 0–100 scale (decision accuracy, mean MTEB score). For each suite, every subject is compared on the same board: the tier most subjects ran.</li>
         <li><b>Index</b>: in each category the subject ran, its score as a share of the best subject&apos;s score there (best = 100), averaged over those categories. It is computed within one table only.</li>
