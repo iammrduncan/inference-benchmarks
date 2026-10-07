@@ -29,6 +29,32 @@ case. Measured 2026-10-06 from America/Chicago, `greedy-nothink`.
   [`results/`](results/), and `npx bench summarize results/ --check` recomputes each
   summary byte for byte.
 
+**embeddings**: EmbeddingGemma 2 (`google/embeddinggemma-2@914f7f8`), quick tier (NanoBEIR
++ STSBenchmark + Banking77, 66,939 texts), the card's own prompts, scored offline with
+MTEB 2.22.5. Stock, untuned engines. Measured 2026-10-07. The reference is
+sentence-transformers fp32 on the P100; fidelity compares each run's vectors with it.
+
+| Variant | Machine · engine | Score @768 | Δ vs ref | @256 | @128 | Fidelity | Prefill tok/s |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| fp32 (Google) | P100 16 GB · sentence-transformers (reference) | 66.90 | — | 64.98 | 60.61 | reference | 10,961 |
+| fp32 (Google) | M4 Pro 24 GB · sentence-transformers (MPS) | 66.90 | +0.00 | 64.98 | 60.61 | lossless | 4,793 |
+| bf16 (Google) | M4 Pro 24 GB · sentence-transformers (MPS) | 66.93 | +0.03 | 65.05 | 60.80 | faithful | 6,064 |
+| fp32 (onnx-community) | P100 16 GB · ONNX Runtime CUDA | 66.90 | +0.00 | 64.98 | 60.61 | lossless | 12,808 |
+| fp32 (onnx-community) | M4 Pro 24 GB · ONNX Runtime CPU | 66.90 | +0.00 | 64.98 | 60.61 | lossless | 2,654 |
+| q8 (onnx-community) | P100 16 GB · ONNX Runtime CUDA | 66.80 | −0.10 | 65.06 | 60.66 | faithful | 12,620 |
+| q8 (onnx-community) | M4 Pro 24 GB · ONNX Runtime CPU | 66.80 | −0.10 | 65.06 | 60.66 | faithful | 2,756 |
+| q4 (onnx-community) | P100 16 GB · ONNX Runtime CUDA | 66.19 | **−0.71** | 64.53 | 60.37 | **degraded** | 12,530 |
+| q4 (onnx-community) | M4 Pro 24 GB · ONNX Runtime CPU | 66.19 | **−0.71** | 64.53 | 60.37 | **degraded** | 1,391 |
+
+- **Precision:** fp32 and bf16 match the reference, and q8 is faithful (cosine 0.9999).
+  q4 is the only variant that loses quality: −0.71 points at 768, with only 63–72% of
+  each query's top-10 neighbors unchanged.
+- **Dimensions:** truncating to 256 costs about 2 points and 128 about 6, for every variant.
+- **Engines:** the same ONNX file gives the same vectors on CUDA and on CPU. q4 is no
+  faster than fp32 on the P100, and half as fast on the M4 Pro's CPU.
+- **Prefill only:** embedding has no decode. Speed is engine time, batches of 32.
+- The Intel Arc Pro B70 runs are pending.
+
 ## How it works
 
 ```
