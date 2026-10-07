@@ -47,7 +47,7 @@ export default async function ModelPage({ params }: Props) {
       </Section>
 
       <Section title="Output dimension (Matryoshka truncation)" aside="each line is one run: its own vectors truncated, then re-normalized">
-        <DimChart runs={ordered} labels={runLabel} />
+        <DimChart runs={ordered} labels={runLabel} yLabel={`mean MTEB score ×100 (${tasks.length} tasks)`} />
       </Section>
 
       <Section title={`Per task at ${top} dimensions`} aside="MTEB main score ×100; Δ vs reference below">

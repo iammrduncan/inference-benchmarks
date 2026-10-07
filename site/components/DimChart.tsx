@@ -7,10 +7,10 @@ const COLORS = ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)',
  * Score against output dimension (Matryoshka truncation), one line per run. Static SVG:
  * the x axis is the dimension on a log scale, since 128→256 and 384→768 are the same step.
  */
-export function DimChart({ runs, labels }: { runs: EmbeddingsRun[]; labels: (r: EmbeddingsRun) => string }) {
+export function DimChart({ runs, labels, yLabel }: { runs: EmbeddingsRun[]; labels: (r: EmbeddingsRun) => string; yLabel: string }) {
   const W = 960;
   const H = 360;
-  const pad = { l: 56, r: 20, t: 16, b: 44 };
+  const pad = { l: 84, r: 20, t: 16, b: 48 };
   const dims = [...new Set(runs.flatMap((r) => r.dims.map((d) => d.dim)))].sort((a, b) => a - b);
   const values = runs.flatMap((r) => r.dims.map((d) => d.score.value * 100));
   if (dims.length === 0 || values.length === 0) return null;
@@ -35,7 +35,8 @@ export function DimChart({ runs, labels }: { runs: EmbeddingsRun[]; labels: (r: 
         {dims.map((d) => (
           <text key={d} x={x(d)} y={H - pad.b + 20} className="tick" textAnchor="middle">{d}</text>
         ))}
-        <text x={(W + pad.l) / 2} y={H - 4} className="axis" textAnchor="middle">output dimension</text>
+        <text x={(W + pad.l) / 2} y={H - 4} className="axis" textAnchor="middle">output dimension (vector length kept after truncation, log scale)</text>
+        <text transform={`translate(18 ${(H - pad.b + pad.t) / 2}) rotate(-90)`} className="axis" textAnchor="middle">{yLabel}</text>
         {runs.map((r, i) => {
           const pts = [...r.dims].sort((a, b) => a.dim - b.dim);
           const color = COLORS[i % COLORS.length];
