@@ -31,6 +31,16 @@ export default function Methodology() {
         <li>A metric a subject cannot produce is absent, never 0. Partial runs are published and never ranked.</li>
       </ul>
 
+      <h2>The home page&apos;s Index</h2>
+      <p>The top table has one column per category (Decisions, Taste, Coding, Math, Tool calling, Knowledge, Embeddings). A suite joins a category through its <code>category</code>, and only ranked suites count: pass/fail suites such as decision-conformance are listed, not scored.</p>
+      <ul>
+        <li><b>Category score</b>: the mean of the subject&apos;s suite headlines in that category, each on a 0–100 scale (decision accuracy, mean MTEB score). For each suite, every subject is compared on the same board: the tier most subjects ran.</li>
+        <li><b>Index</b>: in each category the subject ran, its score as a share of the best subject&apos;s score there (best = 100), averaged over those categories.</li>
+        <li><b>Coverage</b> (e.g. 1/2) is shown next to every Index: how many of the categories with results this subject has. The Index says how close a subject is to the best at what it runs, and nothing about what it does not run. Read it with its coverage, never alone.</li>
+        <li>Taste counts only once the owner&apos;s ranking exists. Speed columns (Tok/s, latency) come from the subject&apos;s latest run on its stated hardware and are not part of the Index: speed only compares on the same machine. TTFT is not measured yet.</li>
+      </ul>
+      <p>This is a starting rule and will change as categories fill in. Every change will be listed here.</p>
+
       <h2>Embeddings</h2>
       <ul>
         <li><b>Prompts</b> are the model card&apos;s own, read from the checkpoint at its pinned revision and applied with MTEB&apos;s rules. The server adds none.</li>

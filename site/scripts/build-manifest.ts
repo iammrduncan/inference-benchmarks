@@ -15,6 +15,7 @@ import type {
   Matrix, RecipeRef, Run, Subject, Suite, Verdict,
 } from '../lib/types.ts';
 import { engineFamily } from './engines.ts';
+import { overall } from './overall.ts';
 import { bootstrapMean, rankBands } from './stats.ts';
 
 const SITE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -107,12 +108,46 @@ function findRunDirs(dir = RESULTS): string[] {
   return dirs(dir).flatMap((d) => findRunDirs(join(dir, d)));
 }
 
+const VENDORS: Record<string, string> = { nvidia: 'NVIDIA', intel: 'Intel', amd: 'AMD', apple: 'Apple' };
+
+/** "Apple M4 Pro · 24 GB", "NVIDIA P100 · 16 GB": the exact device, not just its family. */
+export function deviceLabel(d: Obj, observed: Obj | null): string {
+  if (d.kind === 'apple-silicon') {
+    const chip = typeof observed?.chip === 'string' ? observed.chip : `Apple ${String(d.chip ?? d.label ?? 'silicon')}`;
+    const mem = observed?.memory_gb ?? d.memory_gb;
+    return mem !== undefined ? `${chip} · ${String(mem)} GB` : chip;
+  }
+  if (d.kind === 'gpu') {
+    const vendor = typeof d.vendor === 'string' ? (VENDORS[d.vendor] ?? d.vendor) : '';
+    const name = `${vendor} ${String(d.model ?? d.label ?? 'GPU')}`.trim();
+    return d.vram_gb !== undefined ? `${name} · ${String(d.vram_gb)} GB` : name;
+  }
+  return String(d.chip ?? d.model ?? d.label ?? d.kind);
+}
+
 function hardwareOf(run: Obj): Hardware | null {
   if (run.hardware === undefined || run.hardware === null) return null;
   const h = obj(run.hardware, 'run.hardware');
   const recipe = optStr(h.recipe, 'run.hardware.recipe');
-  const cls = recipe?.split('/')[1] ?? 'unknown';
-  return { class: cls, label: HARDWARE[cls] ?? cls, host: optStr(h.host, 'run.hardware.host') ?? 'unknown' };
+  const family = recipe?.split('/')[1] ?? 'unknown';
+  const host = optStr(h.host, 'run.hardware.host') ?? 'unknown';
+  const placements = Array.isArray(h.placements) ? h.placements.map((p, i) => obj(p, `run.hardware.placements[${i}]`)) : [];
+  const devices = placements.flatMap((p) => {
+    const observed = p.observed ? obj(p.observed, 'run.hardware.observed') : null;
+    return (Array.isArray(p.devices) ? p.devices : []).map((d, i) => ({ d: obj(d, `run.hardware.devices[${i}]`), observed }));
+  });
+  if (devices.length === 0) {
+    // Older records name only the recipe's hardware family.
+    return { class: family, label: HARDWARE[family] ?? family, host };
+  }
+  const labels = devices.map((x) => deviceLabel(x.d, x.observed));
+  const counted = [...new Set(labels)].map((l) => {
+    const n = labels.filter((x) => x === l).length;
+    return n > 1 ? `${n}× ${l}` : l;
+  });
+  const ids = devices.map((x) => String(x.d.label ?? x.d.kind));
+  const note = optStr(h.backfilled, 'run.hardware.backfilled');
+  return { class: `${family}:${[...new Set(ids)].join('+')}`, label: counted.join(' + '), host, ...(note ? { note } : {}) };
 }
 
 function recipeOf(run: Obj): RecipeRef | null {
@@ -394,9 +429,13 @@ function build(): Manifest {
     if (!s) throw new RecordError(`results/references.yaml: ${cp} names ${key}, which has no published runs`);
     if (s.engine_visibility === 'private') throw new RecordError(`results/references.yaml: ${key} has a private engine and cannot be a reference`);
   }
+  const suites = loadSuites();
+  const allBoards = boards(runs);
+  const category = new Map(suites.map((s) => [s.name, s.category]));
   return {
     generated_at: new Date().toISOString(), repo: REPO, engines_repo: ENGINES_REPO,
-    suites: loadSuites(), subjects, runs: runs.sort(latestFirst), boards: boards(runs), matrices: matrices(runs, subjects, references),
+    suites, subjects, runs: runs.sort(latestFirst), boards: allBoards, matrices: matrices(runs, subjects, references),
+    overall: overall(runs, allBoards, (suite) => category.get(suite) ?? null),
   };
 }
 

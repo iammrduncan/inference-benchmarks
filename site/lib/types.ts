@@ -11,7 +11,8 @@ export type Fidelity = {
   top10_overlap: number; queries: number; documents: number; verdict: Verdict;
 };
 
-export type Hardware = { class: string; label: string; host: string };
+/** `note` says when device facts were added after the run instead of recorded by it. */
+export type Hardware = { class: string; label: string; host: string; note?: string };
 
 export type RecipeRef = {
   id: string; profile: string | null; commit: string; repo: string;
@@ -136,6 +137,24 @@ export type Matrix = {
   cells: Record<string, Record<string, MatrixCell>>;
 };
 
+/** A category column on the home page. `suites` are the ranked suites that feed it. */
+export type Bucket = { id: string; label: string; note: string | null; suites: string[]; boards: string[] };
+
+export type SpeedFigure = { value: number; what: string; hardware: string | null };
+
+/** One subject on the home page's overall table. Missing buckets are absent, never 0. */
+export type OverallRow = {
+  subject: string;
+  buckets: Record<string, { score: number; runs: string[] } | undefined>;
+  index: number | null;
+  coverage: number;
+  tokens_per_s: SpeedFigure | null;
+  latency_p50_ms: SpeedFigure | null;
+  /** Not measured by any suite yet (needs streaming); kept so the column is honest about it. */
+  ttft_ms: SpeedFigure | null;
+  last_run: string;
+};
+
 export type Manifest = {
   generated_at: string;
   repo: string;
@@ -145,4 +164,5 @@ export type Manifest = {
   runs: Run[];
   boards: Board[];
   matrices: Matrix[];
+  overall: { buckets: Bucket[]; rows: OverallRow[] };
 };

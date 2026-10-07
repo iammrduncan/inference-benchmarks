@@ -114,7 +114,21 @@
   },
   "hardware": {
     "host": "macbook",
-    "recipe": "embeddinggemma-2/apple-m/st-ort"
+    "recipe": "embeddinggemma-2/apple-m/st-ort",
+    "placements": [
+      {
+        "host": "macbook",
+        "devices": [
+          {
+            "kind": "apple-silicon",
+            "label": "m4-pro",
+            "chip": "M4 Pro",
+            "memory_gb": 24
+          }
+        ]
+      }
+    ],
+    "backfilled": "2026-10-07: device facts copied from the operator's inventory after the run; the launcher did not record them yet"
   },
   "launcher": {
     "run_id": "2026-10-07T04-28-14-136Z",

@@ -45,7 +45,7 @@ export default async function RunPage({ params }: Props) {
           ['Suite', <span key="su">{r.suite} · {r.tier} tier · profile {r.profile} · mode <span className="mono">{r.mode}</span></span>],
           ['Items', `${int(r.items.succeeded)} succeeded of ${int(r.items.attempted)} attempted (${int(r.items.planned)} planned)${r.items.failed ? `, ${int(r.items.failed)} failed` : ''}`],
           ['When', `${r.started_at.replace('T', ' ').slice(0, 19)} UTC · ${duration(r.started_at, r.finished_at)}`],
-          ['Hardware', r.hardware ? `${r.hardware.label} (host ${r.hardware.host})` : 'provider-hosted'],
+          ['Hardware', r.hardware ? <span key="hw">{r.hardware.label} (host {r.hardware.host}){r.hardware.note && <><br /><span className="small muted">{r.hardware.note}</span></>}</span> : 'provider-hosted'],
           ['Harness', <span key="h"><a href={`${manifest.repo}/tree/${r.harness.commit}`} className="mono">bench @ {r.harness.commit.slice(0, 7)}</a>{r.harness.dirty ? ' (with local changes)' : ''} · scorer {r.harness.scorer}</span>],
           ['Suite hash', <span key="sh" className="mono small">{r.harness.suite_hash}</span>],
           ...(r.recipe ? [['Recipe', <span key="rc"><a href={`${r.recipe.repo}/tree/${r.recipe.commit}`} className="mono">{r.recipe.id}</a> · profile {r.recipe.profile ?? 'default'} · inference-engines @ {r.recipe.commit.slice(0, 7)}</span>] as [string, ReactNode]] : []),

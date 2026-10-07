@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { manifest } from '../lib/data.ts';
+import { Logo } from '../components/Logo.tsx';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -15,9 +16,10 @@ export default function Layout({ children }: { children: ReactNode }) {
       <body>
         <header className="top">
           <div className="wrap top-inner">
-            <Link href="/" className="brand"><span className="brand-mark" aria-hidden="true">×</span>Inference Benchmarks</Link>
+            <Link href="/" className="brand" aria-label="Inference Benchmarks, home"><Logo /></Link>
             <nav className="nav">
               <Link href="/suites/">Leaderboards</Link>
+              <Link href="/runs/">Runs</Link>
               <Link href="/models/">Model matrix</Link>
               <Link href="/subjects/">Subjects</Link>
               <Link href="/methodology/">Methodology</Link>

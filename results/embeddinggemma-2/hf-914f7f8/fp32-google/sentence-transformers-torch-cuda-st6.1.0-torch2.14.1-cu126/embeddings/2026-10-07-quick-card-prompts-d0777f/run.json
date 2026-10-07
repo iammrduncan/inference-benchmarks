@@ -122,7 +122,22 @@
   },
   "hardware": {
     "host": "mbox03",
-    "recipe": "embeddinggemma-2/p100/st-ort"
+    "recipe": "embeddinggemma-2/p100/st-ort",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ],
+    "backfilled": "2026-10-07: device facts copied from the operator's inventory after the run; the launcher did not record them yet"
   },
   "launcher": {
     "run_id": "2026-10-07T03-11-18-474Z",
