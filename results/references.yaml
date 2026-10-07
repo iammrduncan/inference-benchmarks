@@ -1,0 +1,7 @@
+# The reference subject for each checkpoint (docs/design/subjects-and-results.md).
+# Quality deltas and fidelity are computed against it. Change it only by PR.
+embeddinggemma-2/hf-914f7f8:
+  subject: embeddinggemma-2/hf-914f7f8/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126
+  why: >-
+    The release checkpoint at full precision in the model card's own runtime
+    (sentence-transformers). fp32 rather than bf16 because the P100 has no bfloat16.

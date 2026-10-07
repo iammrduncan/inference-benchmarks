@@ -32,7 +32,7 @@ case. Measured 2026-10-06 from America/Chicago, `greedy-nothink`.
 ## How it works
 
 ```
- link or target ─▶ subject ─▶ bench ─▶ results/<subject>/<suite>/<run>/ ─▶ site (planned)
+ link or target ─▶ subject ─▶ bench ─▶ results/<subject>/<suite>/<run>/ ─▶ site
                   model ×      one harness:     run.json · raw.jsonl · summary.json
                   checkpoint × prompts, client,
                   quant ×      capture, scoring
@@ -62,6 +62,8 @@ op run --env-file=benchmarks.env.op -- npx bench run --cloud typesafe:jev-latest
 npx bench subjects
 npx bench summarize results/ --check
 npm run check                     # types, lint, offline tests, builds; no keys needed
+npm run site                      # the results site in dev mode, http://localhost:3100
+npm run build -w site && npm run preview -w site   # the static export, as Cloudflare Pages serves it
 ```
 
 ## What's here
@@ -73,6 +75,7 @@ npm run check                     # types, lint, offline tests, builds; no keys 
 | [`results/`](results/), [`subjects/`](subjects/) | Run records and subject identities |
 | [`packages/decisions/`](packages/decisions/) | Decision scenes, contracts and the Jev mapping |
 | [`packages/gateway/`](packages/gateway/) | A `/v1/systemone` gateway that lets chat LLMs answer decision suites |
+| [`site/`](site/) | The static results site: leaderboards, the model matrix, subject and run pages. Built from `results/` and `subjects/` |
 | [`apps/theater/`](apps/theater/) | The live side-by-side decisions theater (local, keyed) |
 | [`docs/design/`](docs/design/README.md) | The design and the build plan (milestones M0–M8) |
 
@@ -81,12 +84,14 @@ npm run check                     # types, lint, offline tests, builds; no keys 
 Built:
 - `bench`, with the decision suites;
 - the reorganized repo;
-- the launcher interface in inference-engines.
+- the launcher interface in inference-engines;
+- recipe targets and the embeddings suite;
+- the static results site (`site/`), not yet connected to Cloudflare Pages.
 
 Next:
-- recipe and Hugging Face targets, with single-turn suites (M4);
+- Hugging Face targets, with single-turn suites (M4);
 - agentic suites (M5);
-- the results site on Cloudflare Pages (M6).
+- Cloudflare Pages deploys, the Decisions page and the taste gallery (M6).
 
 See the [build plan](docs/design/build-plan.md).
 

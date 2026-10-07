@@ -1,0 +1,25 @@
+{
+  "name": "site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The static results site: a Next.js export built from results/, subjects/ and suites/.",
+  "scripts": {
+    "manifest": "node scripts/build-manifest.ts",
+    "dev": "node scripts/build-manifest.ts && next dev --port 3100",
+    "build": "node scripts/build-manifest.ts && next build",
+    "preview": "node scripts/serve-out.ts",
+    "typecheck": "node scripts/build-manifest.ts && tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
+    "test": "node --test 'test/*.test.ts'"
+  },
+  "dependencies": {
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0"
+  }
+}
