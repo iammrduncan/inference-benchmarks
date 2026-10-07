@@ -1,50 +1,72 @@
 'use client';
-// The home page's top subjects, sortable by any column. Client-side only for sorting; the
-// rows and every number come from the static manifest.
+// The home page's top subjects: one tab per model type, each with its own categories, speed
+// columns and Index, sortable by any column. Client-side only for tabs and sorting; every
+// number comes from the static manifest.
 import Link from 'next/link';
 import { useState, type ReactNode } from 'react';
-import type { Bucket, OverallRow } from '../lib/types.ts';
+import type { OverallGroup, OverallRow } from '../lib/types.ts';
 
 type Labels = Record<string, { model: string; variant: string; badges: string[] }>;
-type SortKey = 'index' | `bucket:${string}` | 'tokens_per_s' | 'latency' | 'ttft';
+/** 'index', `bucket:<id>` or `speed:<id>`. */
+type SortKey = string;
 
 const fmt1 = (v: number) => v.toFixed(1);
 
 function value(r: OverallRow, key: SortKey): number | null {
   if (key === 'index') return r.index;
-  if (key === 'tokens_per_s') return r.tokens_per_s?.value ?? null;
-  if (key === 'latency') return r.latency_p50_ms?.value ?? null;
-  if (key === 'ttft') return r.ttft_ms?.value ?? null;
+  if (key.startsWith('speed:')) return r.speed[key.slice('speed:'.length)]?.value ?? null;
   return r.buckets[key.slice('bucket:'.length)]?.score ?? null;
 }
 
-/** Latency and TTFT sort ascending (lower is better); everything else descending. */
-const ascending = (key: SortKey) => key === 'latency' || key === 'ttft';
+const lowerIsBetter = (g: OverallGroup, key: SortKey) => key.startsWith('speed:') && g.speed.find((s) => `speed:${s.id}` === key)?.lower_is_better === true;
 
-export function OverallTable({ rows, buckets, labels, limit = 10 }: { rows: OverallRow[]; buckets: Bucket[]; labels: Labels; limit?: number }) {
+function formatSpeed(id: string, v: number): string {
+  return id === 'ttft' || id === 'latency' ? `${Math.round(v)} ms` : Math.round(v).toLocaleString('en-US');
+}
+
+export function OverallTables({ groups, labels, limit = 10 }: { groups: OverallGroup[]; labels: Labels; limit?: number }) {
+  const withRows = groups.filter((g) => g.rows.length > 0);
+  const [tab, setTab] = useState(withRows[0]?.id ?? groups[0]?.id ?? '');
+  const g = groups.find((x) => x.id === tab) ?? groups[0];
+  if (!g) return null;
+  return (
+    <>
+      <div className="tabs" role="tablist" aria-label="Model type">
+        {groups.map((x) => (
+          <button key={x.id} type="button" role="tab" aria-selected={x.id === g.id} className={`tab${x.id === g.id ? ' tab-on' : ''}`} onClick={() => setTab(x.id)}>
+            {x.label}<span className="tab-count">{x.rows.length}</span>
+          </button>
+        ))}
+      </div>
+      <p className="muted small tab-desc">{g.description} The Index compares only subjects in this table.</p>
+      <OverallTable key={g.id} g={g} labels={labels} limit={limit} />
+    </>
+  );
+}
+
+function OverallTable({ g, labels, limit }: { g: OverallGroup; labels: Labels; limit: number }) {
   const [key, setKey] = useState<SortKey>('index');
-  const sorted = [...rows].sort((a, b) => {
+  const live = g.buckets.filter((b) => b.suites.length > 0);
+  const sorted = [...g.rows].sort((a, b) => {
     const x = value(a, key);
     const y = value(b, key);
     if (x === null && y === null) return (b.index ?? 0) - (a.index ?? 0);
     if (x === null) return 1; // missing is never ranked above a measurement
     if (y === null) return -1;
-    return ascending(key) ? x - y : y - x;
+    return lowerIsBetter(g, key) ? x - y : y - x;
   });
   const measured = sorted.filter((r) => value(r, key) !== null).length;
   const shown = sorted.slice(0, limit);
 
   const sorters: { key: SortKey; label: string }[] = [
     { key: 'index', label: 'Index' },
-    ...buckets.filter((b) => b.suites.length > 0).map((b) => ({ key: `bucket:${b.id}` as SortKey, label: b.label })),
-    { key: 'tokens_per_s', label: 'Tok/s' },
-    { key: 'latency', label: 'Latency' },
-    { key: 'ttft', label: 'TTFT' },
+    ...live.map((b) => ({ key: `bucket:${b.id}`, label: b.label })),
+    ...g.speed.map((s) => ({ key: `speed:${s.id}`, label: s.label })),
   ];
 
-  const Th = ({ k, children, title, className = 'num' }: { k: SortKey; children: ReactNode; title?: string; className?: string }) => (
-    <th className={`${className} sortable${key === k ? ' sorted' : ''}`} title={title} aria-sort={key === k ? (ascending(k) ? 'ascending' : 'descending') : 'none'}>
-      <button type="button" onClick={() => setKey(k)}>{children}{key === k ? (ascending(k) ? ' ↑' : ' ↓') : ''}</button>
+  const Th = ({ k, children, title }: { k: SortKey; children: ReactNode; title?: string }) => (
+    <th className={`num sortable${key === k ? ' sorted' : ''}`} title={title} aria-sort={key === k ? (lowerIsBetter(g, k) ? 'ascending' : 'descending') : 'none'}>
+      <button type="button" onClick={() => setKey(k)}>{children}{key === k ? (lowerIsBetter(g, k) ? ' ↑' : ' ↓') : ''}</button>
     </th>
   );
 
@@ -62,15 +84,13 @@ export function OverallTable({ rows, buckets, labels, limit = 10 }: { rows: Over
             <tr>
               <th className="num">#</th>
               <th>Subject</th>
-              <Th k="index" title="Per category: score as a share of the best subject's (best = 100), averaged over the categories this subject ran. See Methodology.">Index</Th>
-              {buckets.map((b) => (
+              <Th k="index" title="Per category: score as a share of the best subject's in this table (best = 100), averaged over the categories this subject ran. See Methodology.">Index</Th>
+              {g.buckets.map((b) => (
                 b.suites.length > 0
                   ? <Th key={b.id} k={`bucket:${b.id}`} title={`${b.label}: mean of ${b.suites.join(', ')}${b.note ? ` (${b.note})` : ''}`}>{b.label}</Th>
                   : <th key={b.id} className="num empty-col" title={`${b.label}: no ranked suite yet${b.note ? ` (${b.note})` : ''}`}>{b.label}</th>
               ))}
-              <Th k="tokens_per_s" title="Throughput on the subject's latest run, with the hardware it ran on">Tok/s</Th>
-              <Th k="latency" title="p50 latency on the subject's latest run. Per request for decisions; per batch of 32 texts for embeddings">Latency p50</Th>
-              <Th k="ttft" title="Time to first token. Not measured yet: it needs the streaming suites">TTFT</Th>
+              {g.speed.map((s) => <Th key={s.id} k={`speed:${s.id}`} title={`${s.label}: ${s.note}, on the subject's latest run and its hardware`}>{s.label}</Th>)}
             </tr>
           </thead>
           <tbody>
@@ -88,15 +108,22 @@ export function OverallTable({ rows, buckets, labels, limit = 10 }: { rows: Over
                     {l?.badges.map((b) => <span key={b} className="badge" style={{ marginLeft: 6 }}>{b}</span>)}
                   </td>
                   <td className="num">
-                    {r.index === null ? <span className="na">—</span> : <><b>{fmt1(r.index)}</b><span className="coverage" title={`${r.coverage} of ${buckets.filter((b) => b.suites.length > 0).length} categories with results`}>{r.coverage}/{buckets.filter((b) => b.suites.length > 0).length}</span></>}
+                    {r.index === null ? <span className="na">—</span> : <><b>{fmt1(r.index)}</b><span className="coverage" title={`${r.coverage} of ${live.length} categories with results in this table`}>{r.coverage}/{live.length}</span></>}
                   </td>
-                  {buckets.map((b) => {
+                  {g.buckets.map((b) => {
                     const x = r.buckets[b.id];
                     return <td key={b.id} className={`num${b.suites.length === 0 ? ' empty-col' : ''}`}>{x ? fmt1(x.score) : <span className="na">—</span>}</td>;
                   })}
-                  <td className="num">{r.tokens_per_s ? <span title={`${r.tokens_per_s.what}${r.tokens_per_s.hardware ? `, ${r.tokens_per_s.hardware}` : ''}`}>{Math.round(r.tokens_per_s.value).toLocaleString('en-US')}<span className="unit-hw">{r.tokens_per_s.hardware}</span></span> : <span className="na">—</span>}</td>
-                  <td className="num">{r.latency_p50_ms ? <span title={`${r.latency_p50_ms.what}, ${r.latency_p50_ms.hardware ?? ''}`}>{Math.round(r.latency_p50_ms.value)} ms{r.latency_p50_ms.what !== 'per request' ? '*' : ''}</span> : <span className="na">—</span>}</td>
-                  <td className="num"><span className="na" title="Not measured yet">—</span></td>
+                  {g.speed.map((s) => {
+                    const x = r.speed[s.id];
+                    return (
+                      <td key={s.id} className="num">
+                        {x
+                          ? <span title={`${x.what}${x.hardware ? `, ${x.hardware}` : ''}`}>{formatSpeed(s.id, x.value)}{s.id === 'latency' && x.what !== 'per request' ? '*' : ''}{s.id !== 'latency' && <span className="unit-hw">{x.hardware}</span>}</span>
+                          : <span className="na" title="Not measured">—</span>}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}
@@ -104,8 +131,10 @@ export function OverallTable({ rows, buckets, labels, limit = 10 }: { rows: Over
         </table>
       </div>
       <p className="table-note">
-        Showing {shown.length} of {rows.length} subjects{key !== 'index' ? `; ${measured} have this measurement, the rest sort last` : ''}. Category scores are each suite&apos;s headline on a 0–100 scale
-        (decision accuracy, mean MTEB score) and compare only within a column. <b>—</b> means not run, never zero. Faded columns have no ranked suite yet. Latency is per request; * marks embeddings, where it is per batch of 32 texts.
+        Showing {shown.length} of {g.rows.length} subjects{key !== 'index' ? `; ${measured} have this measurement, the rest sort last` : ''}. Category scores are each suite&apos;s headline on a 0–100 scale
+        and compare only within a column. <b>—</b> means not measured, never zero. Faded columns have no ranked suite yet.
+        {g.speed.some((s) => s.id === 'latency') && ' Latency is per request; * marks a batch.'}
+        {g.id === 'embedding' && ' Embedding speed is prefill only: input tokens embedded per second. There is no decode.'}
       </p>
     </>
   );

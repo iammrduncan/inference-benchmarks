@@ -35,7 +35,7 @@ export function MatrixTable({ m, compact = false }: { m: Matrix; compact?: boole
                         {top?.fidelity && <VerdictPill verdict={top.fidelity.verdict} />}
                         {!compact && top?.fidelity && <span>cos {fixed(top.fidelity.mean_cosine, 4)}</span>}
                       </span>
-                      {run.throughput && <span className="cell-line">{int(run.throughput.engine_tokens_per_s)} tok/s</span>}
+                      {run.throughput && <span className="cell-line">{int(run.throughput.engine_tokens_per_s)} prefill tok/s</span>}
                       <span className="cell-engine mono">{cell.engine}</span>
                     </Link>
                   </td>

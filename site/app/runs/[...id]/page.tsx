@@ -108,8 +108,8 @@ function EmbeddingsDetail({ r }: { r: EmbeddingsRun }) {
       {r.throughput && (
         <Section title="Throughput">
           <KeyValues rows={[
-            ['Engine tokens/s', int(r.throughput.engine_tokens_per_s)],
-            ['Wall tokens/s', `${int(r.throughput.tokens_per_s)} (includes HTTP and base64)`],
+            ['Prefill tokens/s (engine)', `${int(r.throughput.engine_tokens_per_s)} (embedding has no decode)`],
+            ['Prefill tokens/s (wall)', `${int(r.throughput.tokens_per_s)} (includes HTTP and base64)`],
             ['Texts', `${int(r.throughput.texts)} texts · ${int(r.throughput.tokens)} tokens · ${r.throughput.texts_per_s.toFixed(1)} texts/s`],
             ...(r.engine_info ? [['Engine', <span key="ei" className="mono small">{Object.entries(r.engine_info).map(([k, v]) => `${k}=${Array.isArray(v) ? v.join(',') : String(v)}`).join(' · ')}</span>] as [string, ReactNode]] : []),
           ]} />

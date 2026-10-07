@@ -142,18 +142,23 @@ export type Bucket = { id: string; label: string; note: string | null; suites: s
 
 export type SpeedFigure = { value: number; what: string; hardware: string | null };
 
-/** One subject on the home page's overall table. Missing buckets are absent, never 0. */
+/** A speed column. Prefill (input) and decode (output) are separate: they are different work. */
+export type SpeedColumn = { id: string; label: string; lower_is_better: boolean; note: string };
+
+/** One subject in one overall table. Missing buckets are absent, never 0. */
 export type OverallRow = {
   subject: string;
   buckets: Record<string, { score: number; runs: string[] } | undefined>;
+  /** Only within its group: never compared across model types. */
   index: number | null;
   coverage: number;
-  tokens_per_s: SpeedFigure | null;
-  latency_p50_ms: SpeedFigure | null;
-  /** Not measured by any suite yet (needs streaming); kept so the column is honest about it. */
-  ttft_ms: SpeedFigure | null;
+  /** Keyed by SpeedColumn.id; null means not measured. */
+  speed: Record<string, SpeedFigure | null>;
   last_run: string;
 };
+
+/** One overall table: a model type with its own categories, speed columns and Index. */
+export type OverallGroup = { id: string; label: string; description: string; buckets: Bucket[]; speed: SpeedColumn[]; rows: OverallRow[] };
 
 export type Manifest = {
   generated_at: string;
@@ -164,5 +169,5 @@ export type Manifest = {
   runs: Run[];
   boards: Board[];
   matrices: Matrix[];
-  overall: { buckets: Bucket[]; rows: OverallRow[] };
+  overall: OverallGroup[];
 };

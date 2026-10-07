@@ -21,7 +21,8 @@ const board = (id: string, suite: string, tier: string, runs: Run[]): Board =>
 test('the index is a share of the best score in each category; missing categories are absent, not zero', () => {
   const a = decisions('a', 0.8);
   const b = decisions('b', 0.6);
-  const { buckets, rows } = overall([a, b], [board('typed-decisions/quick/p', 'typed-decisions', 'quick', [a, b])], () => 'decisions');
+  const [language] = overall([a, b], [board('typed-decisions/quick/p', 'typed-decisions', 'quick', [a, b])], () => 'decisions');
+  const { buckets, rows } = language ?? { buckets: [], rows: [] };
   assert.deepEqual(buckets.find((x) => x.id === 'decisions')?.suites, ['typed-decisions']);
   const ra = rows.find((r) => r.subject === 'a');
   const rb = rows.find((r) => r.subject === 'b');
@@ -29,8 +30,9 @@ test('the index is a share of the best score in each category; missing categorie
   assert.equal(Math.round((rb?.index ?? 0) * 100) / 100, 75);
   assert.equal(rb?.coverage, 1);
   assert.equal(ra?.buckets.coding, undefined, 'no coding run means no coding score');
-  assert.equal(ra?.latency_p50_ms?.value, 150);
-  assert.equal(ra?.ttft_ms, null);
+  assert.equal(ra?.speed.latency?.value, 150);
+  assert.equal(ra?.speed.decode, null, 'decode is not measured by decision suites');
+  assert.equal(ra?.speed.ttft, null);
 });
 
 test('each suite is compared on one board: the tier most subjects ran', () => {
@@ -44,7 +46,24 @@ test('each suite is compared on one board: the tier most subjects ran', () => {
 test('a subject with two modes on one suite keeps its better one', () => {
   const json = decisions('q', 0.6, 'quick', 'gateway:json-schema');
   const logprob = decisions('q', 0.7, 'quick', 'gateway:logprob');
-  const { rows } = overall([json, logprob], [board('typed-decisions/quick/p', 'typed-decisions', 'quick', [logprob, json])], () => 'decisions');
+  const rows = overall([json, logprob], [board('typed-decisions/quick/p', 'typed-decisions', 'quick', [logprob, json])], () => 'decisions')[0]?.rows ?? [];
   assert.equal(Math.round((rows[0]?.buckets.decisions?.score ?? 0) * 10) / 10, 70);
   assert.equal(headline(json), 60);
+});
+
+test('embedding models and language models never share an Index', () => {
+  const dec = decisions('jev', 0.75);
+  const emb = { ...decisions('gemma', 0.5), kind: 'embeddings', suite: 'embeddings', id: 'gemma/embeddings/r', reference: null, is_reference: true,
+    dims: [{ dim: 768, score: iv(0.669), tasks: {}, fidelity: null, delta: null }],
+    throughput: { texts_per_s: 40, tokens_per_s: 7000, engine_tokens_per_s: 11000, tokens: 1, texts: 1 }, engine_info: null } as unknown as Run;
+  const groups = overall([dec, emb], [
+    board('typed-decisions/quick/p', 'typed-decisions', 'quick', [dec]),
+    board('embeddings/quick/p', 'embeddings', 'quick', [emb]),
+  ], (s) => (s === 'embeddings' ? 'embeddings' : 'decisions'));
+  const language = groups.find((g) => g.id === 'language');
+  const embedding = groups.find((g) => g.id === 'embedding');
+  assert.deepEqual(language?.rows.map((r) => r.subject), ['jev']);
+  assert.deepEqual(embedding?.rows.map((r) => r.subject), ['gemma']);
+  assert.equal(embedding?.rows[0]?.speed.prefill?.value, 11000, 'embedding throughput is prefill');
+  assert.ok(!embedding?.speed.some((s) => s.id === 'decode'), 'embedding tables have no decode column');
 });

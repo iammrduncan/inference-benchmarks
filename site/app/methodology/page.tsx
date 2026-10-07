@@ -32,12 +32,12 @@ export default function Methodology() {
       </ul>
 
       <h2>The home page&apos;s Index</h2>
-      <p>The top table has one column per category (Decisions, Taste, Coding, Math, Tool calling, Knowledge, Embeddings). A suite joins a category through its <code>category</code>, and only ranked suites count: pass/fail suites such as decision-conformance are listed, not scored.</p>
+      <p>The home page has one table per kind of model, because their scores do not mean the same thing: a decision model&apos;s accuracy and an embedding model&apos;s retrieval score cannot be averaged. <b>Language &amp; decision models</b> have the categories Decisions, Taste, Coding, Math, Tool calling and Knowledge; <b>embedding models</b> have Text (MTEB), Code, Multilingual, Image and Audio. A subject belongs to a table by the suites it ran. A suite joins a category through its <code>category</code> (or by name, for embedding modalities), and only ranked suites count: pass/fail suites such as decision-conformance are listed, not scored.</p>
       <ul>
         <li><b>Category score</b>: the mean of the subject&apos;s suite headlines in that category, each on a 0–100 scale (decision accuracy, mean MTEB score). For each suite, every subject is compared on the same board: the tier most subjects ran.</li>
-        <li><b>Index</b>: in each category the subject ran, its score as a share of the best subject&apos;s score there (best = 100), averaged over those categories.</li>
+        <li><b>Index</b>: in each category the subject ran, its score as a share of the best subject&apos;s score there (best = 100), averaged over those categories. It is computed within one table only.</li>
         <li><b>Coverage</b> (e.g. 1/2) is shown next to every Index: how many of the categories with results this subject has. The Index says how close a subject is to the best at what it runs, and nothing about what it does not run. Read it with its coverage, never alone.</li>
-        <li>Taste counts only once the owner&apos;s ranking exists. Speed columns (Tok/s, latency) come from the subject&apos;s latest run on its stated hardware and are not part of the Index: speed only compares on the same machine. TTFT is not measured yet.</li>
+        <li>Taste counts only once the owner&apos;s ranking exists. Speed columns come from the subject&apos;s latest run on its stated hardware and are not part of the Index: speed only compares on the same machine. <b>Prefill</b> (input tokens per second) and <b>decode</b> (output tokens per second) are separate columns, because they are different work; embedding models only prefill. Decode and TTFT are not measured yet.</li>
       </ul>
       <p>This is a starting rule and will change as categories fill in. Every change will be listed here.</p>
 

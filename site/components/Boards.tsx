@@ -137,7 +137,7 @@ export function EmbeddingsSpeed({ runs }: { runs: EmbeddingsRun[] }) {
             <h3>{hw}</h3>
             <div className="table-scroll">
               <table>
-                <thead><tr><th>Subject</th><th>Engine tokens/s</th><th className="num">Wall tokens/s</th><th className="num">Texts/s</th><th className="num">Batch p50</th><th className="num">Batch p95</th><th>Fidelity</th></tr></thead>
+                <thead><tr><th>Subject</th><th>Prefill tokens/s (engine)</th><th className="num">Prefill tokens/s (wall)</th><th className="num">Texts/s</th><th className="num">Batch p50</th><th className="num">Batch p95</th><th>Fidelity</th></tr></thead>
                 <tbody>
                   {sorted.map((r) => {
                     const t = r.throughput;
@@ -161,7 +161,7 @@ export function EmbeddingsSpeed({ runs }: { runs: EmbeddingsRun[] }) {
         );
       })}
       <p className="table-note">
-        Engine tokens/s is the server&apos;s own forward-pass time; wall tokens/s includes HTTP and base64 from the client. Batches of 32 texts,
+        Embedding is prefill only: input tokens through the model, no decode. Engine time is the server&apos;s own forward passes; wall time adds HTTP and base64 on the client. Batches of 32 texts,
         longest first, one request at a time. A <b>degraded</b> subject is listed but not ranked for speed: being fast is not a win if the vectors moved.
       </p>
     </>

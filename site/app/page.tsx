@@ -3,13 +3,13 @@ import { keyParts, manifest, modelHref, subject } from '../lib/data.ts';
 import { date } from '../lib/format.ts';
 import { Section } from '../components/ui.tsx';
 import { MatrixTable } from '../components/Matrix.tsx';
-import { OverallTable } from '../components/OverallTable.tsx';
+import { OverallTables } from '../components/OverallTable.tsx';
 import { RunsTable } from '../components/RunsTable.tsx';
 
 const RECENT = 25;
 
 export default function Home() {
-  const { buckets, rows } = manifest.overall;
+  const rows = manifest.overall.flatMap((g) => g.rows);
   // Display names for the client table: model on top, the varying parts of the key below.
   const labels = Object.fromEntries(rows.map((r) => {
     const s = subject(r.subject);
@@ -54,8 +54,8 @@ export default function Home() {
       </section>
 
       <Section title="Top subjects" aside={<Link href="/suites/">All leaderboards →</Link>}>
-        <p className="muted">One row per subject (a model at one version on one engine), one column per category. Sort by any column; the Index combines the categories a subject ran.</p>
-        <OverallTable rows={rows} buckets={buckets} labels={labels} limit={10} />
+        <p className="muted">One row per subject (a model at one version on one engine), one column per category, one table per kind of model. Sort by any column; the Index combines the categories a subject ran.</p>
+        <OverallTables groups={manifest.overall} labels={labels} limit={10} />
       </Section>
 
       {latestMatrix && (
