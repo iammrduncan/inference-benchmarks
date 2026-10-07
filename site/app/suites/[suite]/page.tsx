@@ -22,9 +22,10 @@ export default async function SuitePage({ params }: Props) {
   const s = getSuite(name);
   const boards = manifest.boards.filter((b) => b.suite === name);
   if (!s || boards.length === 0) notFound();
+  const group = manifest.overall.find((g) => g.id === manifest.suite_groups[s.name]);
   return (
     <>
-      <div className="crumbs"><Link href="/suites/">Leaderboards</Link> /</div>
+      <div className="crumbs"><Link href="/suites/">Leaderboards</Link> / {group ? <><a href={`/suites/#${group.id}`}>{group.label}</a> /</> : null}</div>
       <div className="page-title">
         <h1>{s.name}</h1>
         <div className="tabs-note">

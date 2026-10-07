@@ -32,3 +32,24 @@ export function keyParts(key: string): { model: string; checkpoint: string; quan
   const [model = key, checkpoint = '', quant = '', ...engine] = key.split('/');
   return { model, checkpoint, quant, engine: engine.join('/') };
 }
+
+/** Display names for the overall tables: model on top, the varying parts of the key below. */
+export function subjectLabels(): Record<string, { model: string; variant: string; badges: string[] }> {
+  return Object.fromEntries(manifest.subjects.map((s) => {
+    const p = keyParts(s.key);
+    const badges = [s.engine_visibility === 'private' ? 'private engine' : null, s.label === 'provider-opaque' ? 'provider-opaque' : null].filter((x): x is string => x !== null);
+    return [s.key, { model: p.model, variant: `${p.quant} · ${p.engine}`, badges }];
+  }));
+}
+
+/** Per model-type group: its suites with results, linking to their detail boards. */
+export function groupSuites(): Record<string, { name: string; href: string; boards: number }[]> {
+  const out: Record<string, { name: string; href: string; boards: number }[]> = {};
+  for (const s of manifest.suites) {
+    const g = manifest.suite_groups[s.name];
+    const boards = manifest.boards.filter((b) => b.suite === s.name).length;
+    if (!g || boards === 0) continue;
+    (out[g] ??= []).push({ name: s.name, href: suiteHref(s.name), boards });
+  }
+  return out;
+}

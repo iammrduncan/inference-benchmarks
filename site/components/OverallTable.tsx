@@ -3,7 +3,7 @@
 // columns and Index, sortable by any column. Client-side only for tabs and sorting; every
 // number comes from the static manifest.
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { OverallGroup, OverallRow } from '../lib/types.ts';
 
 type Labels = Record<string, { model: string; variant: string; badges: string[] }>;
@@ -27,16 +27,39 @@ function formatSpeed(id: string, v: number): string {
   return Math.round(v).toLocaleString('en-US');
 }
 
-export function OverallTables({ groups, labels, limit = 10 }: { groups: OverallGroup[]; labels: Labels; limit?: number }) {
+/**
+ * `limit` caps rows (the home page shows 10); `fullHref` links each tab to its full table.
+ * `syncHash` keeps the open tab in the URL (#decision), so links can open a given table.
+ */
+export function OverallTables({ groups, labels, limit = Infinity, fullHref, syncHash = false, suites }: {
+  groups: OverallGroup[]; labels: Labels; limit?: number; fullHref?: string; syncHash?: boolean;
+  /** Per group: the suites whose detail boards to link under the table. */
+  suites?: Record<string, { name: string; href: string; boards: number }[]>;
+}) {
   const withRows = groups.filter((g) => g.rows.length > 0);
   const [tab, setTab] = useState(withRows[0]?.id ?? groups[0]?.id ?? '');
+  useEffect(() => {
+    if (!syncHash) return;
+    const fromHash = () => {
+      const id = window.location.hash.slice(1);
+      if (groups.some((g) => g.id === id)) setTab(id);
+    };
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
+    return () => window.removeEventListener('hashchange', fromHash);
+  }, [syncHash, groups]);
+  const choose = (id: string) => {
+    setTab(id);
+    if (syncHash) window.history.replaceState(null, '', `#${id}`);
+  };
   const g = groups.find((x) => x.id === tab) ?? groups[0];
   if (!g) return null;
+  const linked = suites?.[g.id] ?? [];
   return (
     <>
       <div className="tabs" role="tablist" aria-label="Model type">
         {groups.map((x) => (
-          <button key={x.id} type="button" role="tab" aria-selected={x.id === g.id} className={`tab${x.id === g.id ? ' tab-on' : ''}`} onClick={() => setTab(x.id)}>
+          <button key={x.id} type="button" role="tab" aria-selected={x.id === g.id} className={`tab${x.id === g.id ? ' tab-on' : ''}`} onClick={() => choose(x.id)}>
             {x.label}<span className="tab-count">{x.rows.length}</span>
           </button>
         ))}
@@ -45,6 +68,14 @@ export function OverallTables({ groups, labels, limit = 10 }: { groups: OverallG
       {g.rows.length > 0
         ? <OverallTable key={g.id} g={g} labels={labels} limit={limit} />
         : <div className="empty-state">No {g.label.toLowerCase()} results yet. Planned categories: {g.buckets.map((b) => b.label).join(', ')}.</div>}
+      {fullHref && g.rows.length > limit && <p className="more"><a href={`${fullHref}#${g.id}`} className="button">Full {g.label} leaderboard: all {g.rows.length} subjects →</a></p>}
+      {fullHref && g.rows.length > 0 && g.rows.length <= limit && <p className="table-note"><a href={`${fullHref}#${g.id}`}>Full {g.label} leaderboard and per-suite tables →</a></p>}
+      {linked.length > 0 && (
+        <div className="suite-links">
+          <span className="muted small">Per-suite tables in {g.label}, with intervals, per-tier boards and speed:</span>
+          {linked.map((x) => <a key={x.name} href={x.href} className="chip">{x.name}<span className="tab-count">{x.boards}</span></a>)}
+        </div>
+      )}
     </>
   );
 }

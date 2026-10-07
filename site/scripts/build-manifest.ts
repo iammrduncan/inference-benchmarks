@@ -15,7 +15,7 @@ import type {
   Matrix, RecipeRef, Run, Subject, Suite, Verdict,
 } from '../lib/types.ts';
 import { engineFamily } from './engines.ts';
-import { overall } from './overall.ts';
+import { groupOfCategory, overall } from './overall.ts';
 import { bootstrapMean, rankBands } from './stats.ts';
 
 const SITE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -436,6 +436,7 @@ function build(): Manifest {
     generated_at: new Date().toISOString(), repo: REPO, engines_repo: ENGINES_REPO,
     suites, subjects, runs: runs.sort(latestFirst), boards: allBoards, matrices: matrices(runs, subjects, references),
     overall: overall(runs, allBoards, (suite) => category.get(suite) ?? null),
+    suite_groups: Object.fromEntries(suites.map((s) => [s.name, groupOfCategory(s.category)])),
   };
 }
 

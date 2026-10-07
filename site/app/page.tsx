@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { keyParts, manifest, modelHref, subject } from '../lib/data.ts';
+import { manifest, modelHref, subjectLabels } from '../lib/data.ts';
 import { date } from '../lib/format.ts';
 import { Section } from '../components/ui.tsx';
 import { MatrixTable } from '../components/Matrix.tsx';
@@ -9,14 +9,7 @@ import { RunsTable } from '../components/RunsTable.tsx';
 const RECENT = 25;
 
 export default function Home() {
-  const rows = manifest.overall.flatMap((g) => g.rows);
-  // Display names for the client table: model on top, the varying parts of the key below.
-  const labels = Object.fromEntries(rows.map((r) => {
-    const s = subject(r.subject);
-    const p = keyParts(r.subject);
-    const badges = [s.engine_visibility === 'private' ? 'private engine' : null, s.label === 'provider-opaque' ? 'provider-opaque' : null].filter((x): x is string => x !== null);
-    return [r.subject, { model: p.model, variant: `${p.quant} · ${p.engine}`, badges }];
-  }));
+  const labels = subjectLabels();
   // The matrix holding the most recent run.
   const latestMatrix = manifest.runs
     .map((r) => manifest.matrices.find((m) => Object.values(m.cells).some((row) => Object.values(row).some((c) => c.run === r.id))))
@@ -53,9 +46,9 @@ export default function Home() {
         </dl>
       </section>
 
-      <Section title="Top subjects" aside={<Link href="/suites/">All leaderboards →</Link>}>
+      <Section title="Top subjects" aside={<Link href="/suites/">Full leaderboards →</Link>}>
         <p className="muted">One row per subject (a model at one version on one engine), one column per category, one table per kind of model. Sort by any column; the Index combines the categories a subject ran.</p>
-        <OverallTables groups={manifest.overall} labels={labels} limit={10} />
+        <OverallTables groups={manifest.overall} labels={labels} limit={10} fullHref="/suites/" />
       </Section>
 
       {latestMatrix && (

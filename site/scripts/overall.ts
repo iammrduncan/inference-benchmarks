@@ -191,3 +191,8 @@ export function overall(runs: Run[], boards: Board[], categoryOf: (suite: string
     return { id: g.id, label: g.label, description: g.description, buckets, speed: g.speed, rows: [...rows.values()] };
   });
 }
+
+/** The model-type table a suite belongs to, by its category. */
+export function groupOfCategory(category: string | null): string | null {
+  return GROUPS.find((g) => g.owns(category))?.id ?? null;
+}

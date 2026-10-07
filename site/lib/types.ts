@@ -170,4 +170,6 @@ export type Manifest = {
   boards: Board[];
   matrices: Matrix[];
   overall: OverallGroup[];
+  /** Which model-type table each suite belongs to (by its category); null if none. */
+  suite_groups: Record<string, string | null>;
 };

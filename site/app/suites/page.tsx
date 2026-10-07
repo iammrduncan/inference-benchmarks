@@ -1,32 +1,20 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { manifest, suiteHref } from '../../lib/data.ts';
-import { Badge } from '../../components/ui.tsx';
+import { groupSuites, manifest, subjectLabels } from '../../lib/data.ts';
+import { OverallTables } from '../../components/OverallTable.tsx';
 
 export const metadata: Metadata = { title: 'Leaderboards' };
 
-export default function Suites() {
+export default function Leaderboards() {
   return (
     <>
       <div className="hero">
         <h1>Leaderboards</h1>
-        <p className="lede">One table per suite, tier and settings profile. There is no global &ldquo;best model&rdquo; table: scores from different suites, tiers or profiles are not comparable.</p>
+        <p className="lede">
+          Every subject, one table per kind of model: the full version of the home page&apos;s top 10. Sort by any column.
+          Each table&apos;s Index compares only the subjects in it. Below each table are the per-suite boards, with intervals, every tier and speed.
+        </p>
       </div>
-      <ul className="list">
-        {manifest.suites.map((s) => {
-          const boards = manifest.boards.filter((b) => b.suite === s.name);
-          return (
-            <li key={s.name}>
-              <span>
-                {boards.length > 0 ? <Link href={suiteHref(s.name)}><b>{s.name}</b></Link> : <b>{s.name}</b>}{' '}
-                <Badge>{s.protocol}</Badge>{' '}{s.status !== 'ready' && <Badge tone="warn">{s.status}</Badge>}
-                <br /><span className="small muted">{s.description.split('. ')[0]}.</span>
-              </span>
-              <span className="small muted">{boards.length > 0 ? boards.map((b) => `${b.tier} · ${b.rows.length} subject${b.rows.length === 1 ? '' : 's'}`).join(' / ') : 'no runs yet'}</span>
-            </li>
-          );
-        })}
-      </ul>
+      <OverallTables groups={manifest.overall} labels={subjectLabels()} syncHash suites={groupSuites()} />
     </>
   );
 }
