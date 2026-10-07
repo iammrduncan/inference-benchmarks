@@ -27,10 +27,14 @@ export type RunJson = {
   observed_models: Record<string, number>;
 };
 
+/** The paths that make up the harness: bench, its suites, and the packages it imports. */
+export const HARNESS_PATHS = ['runner', 'suites', 'packages', 'package.json', 'package-lock.json'];
+
+/** `dirty` means uncommitted changes to the harness itself; edits elsewhere (results, site, docs) do not count. */
 export function harnessCommit(root = REPO_ROOT): { commit: string; dirty: boolean } {
   try {
     const commit = execFileSync('git', ['-C', root, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
-    const dirty = execFileSync('git', ['-C', root, 'status', '--porcelain', '--untracked-files=no'], { encoding: 'utf8' }).trim().length > 0;
+    const dirty = execFileSync('git', ['-C', root, 'status', '--porcelain', '--untracked-files=no', '--', ...HARNESS_PATHS], { encoding: 'utf8' }).trim().length > 0;
     return { commit, dirty };
   } catch { return { commit: 'unknown', dirty: true }; }
 }

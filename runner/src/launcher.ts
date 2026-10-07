@@ -15,6 +15,8 @@ export type UpResult = {
   identity: Identity & { engine_visibility: 'public' | 'private' };
   engine_visibility: 'public' | 'private'; label: string | null;
   params: Record<string, unknown>; profile: string | null; source: unknown; acknowledgments: unknown[];
+  /** Per placement: host, the inventory's device facts and, where probed, what the machine reports. */
+  hardware?: { host: string; devices: Record<string, unknown>[]; observed?: Record<string, unknown> }[];
 };
 
 export function enginesDir(): string {

@@ -158,7 +158,7 @@ async function runRecipe(t: RecipeTarget, o: RunOptions): Promise<string[]> {
     for (const name of o.suites) {
       log(`${name} ${o.tier}`);
       dirs.push(await runEmbeddings({ subject, baseUrl: up.base_url, tier: o.tier, profile: o.profile, ...(o.reference ? { reference: o.reference } : {}),
-        hardware: { host: t.on ?? null, recipe: up.id }, launcher: { run_id: up.run_id, profile: up.profile, params: up.params, source: up.source, acknowledgments: up.acknowledgments }, log }));
+        hardware: { host: t.on ?? null, recipe: up.id, placements: up.hardware ?? [] }, launcher: { run_id: up.run_id, profile: up.profile, params: up.params, source: up.source, acknowledgments: up.acknowledgments }, log }));
     }
   } finally {
     log(`launcher down ${up.id}`);
