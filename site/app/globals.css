@@ -205,3 +205,5 @@ tr.below td { background: color-mix(in srgb, var(--warn-soft) 45%, transparent);
 
 th.plain { text-transform: none; letter-spacing: 0; font-size: 12.5px; }
 .hw { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.rowh-engine { display: block; font-family: var(--sans); font-weight: 400; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.cell-engine { display: block; font-size: 11px; color: var(--faint); margin-top: 4px; word-break: break-all; }

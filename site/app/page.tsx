@@ -27,7 +27,7 @@ export default function Home() {
 
       {featured && (
         <Section title={`Model matrix: ${featured.model}`} aside={<Link href={modelHref(featured.model)}>Full matrix, chart and speed →</Link>}>
-          <p className="muted">One checkpoint across quants (rows) and engines on their hardware (columns). Each cell: quality change against the reference, and how far its vectors moved.</p>
+          <p className="muted">One checkpoint: each row is a variant (a quant on an engine), each column a machine. Each cell: quality change against the reference, how far its vectors moved, and speed.</p>
           <MatrixTable m={featured} compact />
         </Section>
       )}

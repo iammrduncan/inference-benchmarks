@@ -14,6 +14,7 @@ import type {
   Board, ConformanceRun, DecisionsRun, EmbeddingDim, EmbeddingsRun, Fidelity, Hardware, Interval, Manifest,
   Matrix, RecipeRef, Run, Subject, Suite, Verdict,
 } from '../lib/types.ts';
+import { engineFamily } from './engines.ts';
 import { bootstrapMean, rankBands } from './stats.ts';
 
 const SITE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -345,29 +346,30 @@ function matrices(runs: Run[], subjects: Subject[], references: Record<string, s
     checkpoints.set(cp, [...(checkpoints.get(cp) ?? []), r]);
   }
   for (const [cp, group] of checkpoints) {
-    const quants: string[] = [];
-    const engines: Matrix['engines'] = [];
+    const variants: Matrix['variants'] = [];
+    const hardware: Matrix['hardware'] = [];
     const cells: Matrix['cells'] = {};
+    let refVariant: string | null = null;
+    let refHardware: string | null = null;
     for (const r of [...group].sort(latestFirst)) {
       const s = bySubject.get(r.subject);
       if (!s) continue;
       const quant = r.subject.split('/')[2] ?? 'unknown';
-      const engineKey = `${s.engine.name}-${s.engine.version}@${r.hardware?.class ?? 'unknown'}`;
-      if (!quants.includes(quant)) quants.push(quant);
-      if (!engines.some((e) => e.key === engineKey)) engines.push({ key: engineKey, engine: `${s.engine.name} ${s.engine.version}`, hardware: r.hardware?.label ?? 'unknown hardware' });
-      cells[quant] ??= {};
-      const row = cells[quant];
-      if (row && !row[engineKey]) row[engineKey] = { run: r.id, subject: r.subject };
+      const family = engineFamily(s.engine.name);
+      const key = `${quant}|${family}`;
+      const hw = r.hardware?.class ?? 'unknown';
+      if (!variants.some((v) => v.key === key)) variants.push({ key, quant, family });
+      if (!hardware.some((h) => h.class === hw)) hardware.push({ class: hw, label: r.hardware?.label ?? 'unknown hardware' });
+      if (r.subject === references[cp]) { refVariant = key; refHardware = hw; }
+      cells[key] ??= {};
+      const row = cells[key];
+      if (row && !row[hw]) row[hw] = { run: r.id, subject: r.subject, engine: `${s.engine.name} ${s.engine.version}` };
     }
-    // Precision order: full precision first, then by bits.
+    // The reference first; then full precision before quantized, then by bits.
     const order = (q: string) => ['fp32', 'bf16', 'fp16', 'q8', 'int8', 'q6', 'q5', 'q4', 'q3', 'q2'].findIndex((p) => q.startsWith(p));
-    quants.sort((a, b) => order(a) - order(b) || a.localeCompare(b));
-    // The reference's engine first, then by hardware and engine.
-    const refSubject = references[cp];
-    const refEngine = refSubject ? group.find((r) => r.subject === refSubject) : undefined;
-    const refKey = refEngine ? (() => { const s = bySubject.get(refEngine.subject); return s ? `${s.engine.name}-${s.engine.version}@${refEngine.hardware?.class ?? 'unknown'}` : null; })() : null;
-    engines.sort((a, b) => Number(b.key === refKey) - Number(a.key === refKey) || a.hardware.localeCompare(b.hardware) || a.engine.localeCompare(b.engine));
-    out.push({ model: cp.split('/')[0] ?? cp, checkpoint: cp, suite: 'embeddings', reference: references[cp] ?? null, quants, engines, cells });
+    variants.sort((a, b) => Number(b.key === refVariant) - Number(a.key === refVariant) || order(a.quant) - order(b.quant) || a.family.localeCompare(b.family));
+    hardware.sort((a, b) => Number(b.class === refHardware) - Number(a.class === refHardware) || a.label.localeCompare(b.label));
+    out.push({ model: cp.split('/')[0] ?? cp, checkpoint: cp, suite: 'embeddings', reference: references[cp] ?? null, variants, hardware, cells });
   }
   return out;
 }

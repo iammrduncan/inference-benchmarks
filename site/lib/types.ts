@@ -119,16 +119,20 @@ export type Board = {
   rows: RankedRow[];
 };
 
-export type MatrixCell = { run: string; subject: string };
+export type MatrixCell = { run: string; subject: string; engine: string };
 
-/** One checkpoint: rows are quants, columns are engines (on their hardware). */
+/**
+ * One checkpoint. Rows are variants (a quant served by an engine family, e.g. q8 on
+ * onnxruntime), columns are hardware classes, and each cell is one run. The exact engine
+ * (onnxruntime-cuda vs onnxruntime-cpu, torch cu126 vs mps) is shown inside the cell.
+ */
 export type Matrix = {
   model: string;
   checkpoint: string;
   suite: string;
   reference: string | null;
-  quants: string[];
-  engines: { key: string; engine: string; hardware: string }[];
+  variants: { key: string; quant: string; family: string }[];
+  hardware: { class: string; label: string }[];
   cells: Record<string, Record<string, MatrixCell>>;
 };
 

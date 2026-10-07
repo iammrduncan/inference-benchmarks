@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { engineFamily } from '../scripts/engines.ts';
 import { bootstrapMean, rankBands } from '../scripts/stats.ts';
 
 test('rank bands: overlapping intervals share a range; separated ones do not', () => {
@@ -24,4 +25,12 @@ test('bootstrap mean is deterministic, brackets the mean, and collapses for cons
   assert.equal(flat.low, 0.5);
   assert.equal(flat.high, 0.5);
   assert.throws(() => bootstrapMean([]));
+});
+
+test('engine family drops the device, so one variant lines up across machines', () => {
+  assert.equal(engineFamily('sentence-transformers-torch-cuda'), 'sentence-transformers');
+  assert.equal(engineFamily('sentence-transformers-torch-mps'), 'sentence-transformers');
+  assert.equal(engineFamily('onnxruntime-cuda'), 'onnxruntime');
+  assert.equal(engineFamily('onnxruntime-cpu'), 'onnxruntime');
+  assert.equal(engineFamily('vllm'), 'vllm');
 });
