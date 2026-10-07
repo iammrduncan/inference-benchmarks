@@ -85,7 +85,7 @@ export function readRaw(dir: string, root = REPO_ROOT): RawRow[] {
 }
 
 /** summary.json from raw rows and run.json only. Deterministic: same inputs, same bytes. */
-export function buildSummary(run: RunJson, rows: RawRow[], suite: SuiteModule): string {
+export function buildSummary(run: RunJson, rows: RawRow[], suite: SuiteModule, dir?: string): string {
   const ok = rows.filter((r) => r.ok);
   const latencies = ok.map((r) => r.latency_ms);
   const summary = {
@@ -94,7 +94,7 @@ export function buildSummary(run: RunJson, rows: RawRow[], suite: SuiteModule): 
     label: run.subject.label,
     items: { planned: run.suite.ids, attempted: rows.length, succeeded: ok.length, failed: rows.length - ok.length,
       failed_by_status: Object.fromEntries([...rows.filter((r) => !r.ok).reduce((m, r) => m.set(String(r.status), (m.get(String(r.status)) ?? 0) + 1), new Map<string, number>())].sort(([a], [b]) => (a < b ? -1 : 1))) },
-    ...suite.summarize(rows),
+    ...suite.summarize(rows, dir),
     latency_ms: {
       p50: round6(percentile(latencies, 50) ?? 0), p95: round6(percentile(latencies, 95) ?? 0), p99: round6(percentile(latencies, 99) ?? 0),
       note: `successful requests, nearest rank, measured from ${run.environment.location}`,

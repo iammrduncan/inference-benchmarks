@@ -8,22 +8,26 @@ import { buildSummary, ensureSubject, harnessCommit, REPO_ROOT, runDirFor, suite
 import type { RawRow, SuiteModule, Tier, Usage } from './suite.ts';
 import { typedDecisions, suiteDef } from './suites/typed-decisions.ts';
 import { decisionConformance } from './suites/decision-conformance.ts';
+import { embeddingsSuite, runEmbeddings } from './embeddings.ts';
+import { recipeDown, recipeSubject, recipeUp, type RecipeTarget } from './launcher.ts';
 
 export const SUITES: Record<string, SuiteModule> = {
   'typed-decisions': typedDecisions,
   'decision-conformance': decisionConformance,
+  embeddings: embeddingsSuite,
 };
 
 export type Target =
   | { kind: 'cloud'; provider: string; model: string; via?: string }
-  | { kind: 'endpoint'; url: string; identity: string; model: string; keyEnv?: string };
+  | { kind: 'endpoint'; url: string; identity: string; model: string; keyEnv?: string }
+  | ({ kind: 'recipe' } & RecipeTarget);
 
-export type RunOptions = { suites: string[]; tier: Tier; profile: string; budgetUsd: number | null; concurrency: number; rpm?: number | null; root?: string; log?: (m: string) => void };
+export type RunOptions = { suites: string[]; tier: Tier; profile: string; budgetUsd: number | null; concurrency: number; rpm?: number | null; reference?: string; root?: string; log?: (m: string) => void };
 
 type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown> };
 
 /** Map a target to its subject and a decision client. */
-export async function resolveTarget(t: Target): Promise<Resolved> {
+export async function resolveTarget(t: Exclude<Target, { kind: 'recipe' }>): Promise<Resolved> {
   if (t.kind === 'endpoint') {
     const raw = YAML.parse(readFileSync(t.identity, 'utf8')) as Identity & { engine_visibility?: 'public' | 'private' };
     return { subject: endpointSubject(raw, raw.engine_visibility ?? 'public'), provider: decisionEndpoint(t.url, t.model, t.keyEnv), price: undefined,
@@ -124,6 +128,7 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
 export async function runAll(t: Target, o: RunOptions): Promise<string[]> {
   const unknown = o.suites.filter((s) => !SUITES[s]);
   if (unknown.length) throw new Error(`unknown suite(s): ${unknown.join(', ')}; known: ${Object.keys(SUITES).join(', ')}`);
+  if (t.kind === 'recipe') return runRecipe(t, o);
   const r = await resolveTarget(t);
   const dirs: string[] = [];
   try {
@@ -137,5 +142,27 @@ export async function runAll(t: Target, o: RunOptions): Promise<string[]> {
       if (remaining !== null) remaining = Math.max(0, remaining - out.spent);
     }
   } finally { await r.provider.close(); }
+  return dirs;
+}
+
+/** A recipe target: the launcher brings the engine up, bench measures it, the launcher takes it down. */
+async function runRecipe(t: RecipeTarget, o: RunOptions): Promise<string[]> {
+  const log = o.log ?? ((m: string) => process.stderr.write(`[bench] ${m}\n`));
+  for (const name of o.suites) if (SUITES[name]?.protocol !== 'embeddings') throw new Error(`recipe targets run the embeddings suite so far, not ${name}`);
+  log(`launcher up ${t.recipe}${t.profile ? ` (profile ${t.profile})` : ''}`);
+  const up = recipeUp(t);
+  const dirs: string[] = [];
+  try {
+    const subject = recipeSubject(up);
+    log(`${subject.key} at ${up.base_url}`);
+    for (const name of o.suites) {
+      log(`${name} ${o.tier}`);
+      dirs.push(await runEmbeddings({ subject, baseUrl: up.base_url, tier: o.tier, profile: o.profile, ...(o.reference ? { reference: o.reference } : {}),
+        hardware: { host: t.on ?? null, recipe: up.id }, launcher: { run_id: up.run_id, profile: up.profile, params: up.params, source: up.source, acknowledgments: up.acknowledgments }, log }));
+    }
+  } finally {
+    log(`launcher down ${up.id}`);
+    recipeDown(up.id);
+  }
   return dirs;
 }

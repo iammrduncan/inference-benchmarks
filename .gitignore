@@ -13,3 +13,4 @@ coverage/
 
 # Generated demo verification output stays local.
 .artifacts/
+.venv/

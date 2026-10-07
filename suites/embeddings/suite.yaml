@@ -1,0 +1,29 @@
+name: embeddings
+status: ready
+description: >-
+  MTEB tasks scored offline from vectors that bench collects through the subject's
+  /v1/embeddings endpoint. Output dimensions 768, 512, 256 and 128 are scored from the
+  same vectors (truncate, then L2-normalize), as Matryoshka truncation works.
+protocol: embeddings
+category: embeddings
+scorer: {name: mteb, version: 2.22.5, project: runner/scorers/mteb}
+prompts: >-
+  The model's own prompts, read from config_sentence_transformers.json at the pinned
+  checkpoint revision, and applied with MTEB's prompt-selection rules. The server adds none.
+dims: [768, 512, 256, 128]
+batch_size: 32
+tiers:
+  quick:
+    note: NanoBEIR (13 small retrieval tasks) + STSBenchmark + Banking77Classification
+    tasks: [NanoArguAnaRetrieval, NanoClimateFeverRetrieval, NanoDBPediaRetrieval, NanoFEVERRetrieval,
+            NanoFiQA2018Retrieval, NanoHotpotQARetrieval, NanoMSMARCORetrieval, NanoNFCorpusRetrieval,
+            NanoNQRetrieval, NanoQuoraRetrieval, NanoSCIDOCSRetrieval, NanoSciFactRetrieval,
+            NanoTouche2020Retrieval, STSBenchmark, Banking77Classification]
+  core:
+    note: the official MTEB(eng, v2) benchmark, 41 tasks
+    benchmark: MTEB(eng, v2)
+fidelity: >-
+  Against the reference run's vectors on the same manifest: mean, p1 and min cosine, and
+  top-10 neighbor overlap (Jaccard) for up to 1,000 queries against up to 20,000 documents.
+  Verdicts: broken (mean cosine < 0.90 or overlap < 0.50), degraded (< 0.98 or < 0.80),
+  lossless (>= 0.999 and >= 0.98), faithful otherwise. Provisional; see docs/design/embeddings.md.

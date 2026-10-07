@@ -1,7 +1,7 @@
 // What a suite provides to the runner: pinned items to send, and a pure summary of
 // the captured rows. Suites never call a subject themselves; the runner does.
 
-export type Protocol = 'decision';
+export type Protocol = 'decision' | 'embeddings';
 export type Tier = 'quick' | 'core';
 
 export type SuiteItem = {
@@ -29,5 +29,6 @@ export interface SuiteModule {
   /** Repo-relative files whose content defines the suite (hashed into the suite version). */
   sourceFiles: string[];
   items(root: string, tier: Tier): Promise<SuiteItem[]>;
-  summarize(rows: RawRow[]): Record<string, unknown>;
+  /** Pure summary of the captured rows; `dir` lets a suite read its offline scorer's output. */
+  summarize(rows: RawRow[], dir?: string): Record<string, unknown>;
 }

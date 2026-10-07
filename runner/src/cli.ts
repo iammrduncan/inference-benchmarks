@@ -12,7 +12,8 @@ import type { Tier } from './suite.ts';
 
 const USAGE = `usage: npm run bench -- <command> [options]
 
-  run --suite a,b (--cloud provider:model [--via gateway:json-schema] | --endpoint URL --identity FILE --model M [--api-key-env VAR])
+  run --suite a,b (--cloud provider:model [--via gateway:json-schema] | --endpoint URL --identity FILE --model M [--api-key-env VAR]
+                  | --recipe ID [--recipe-profile P] [--param k=v] [--on HOST] [--inventory FILE] [--engines-source PATH] [--reference RUN_DIR])
       [--tier quick|core] [--profile greedy-nothink] [--budget-usd N] [--concurrency N] [--rpm N]
                                  send the suites to one subject and write results/<subject>/<suite>/<run>/
   summarize <run-dir...> [--check]
@@ -29,10 +30,17 @@ const OPTIONS = {
   identity: { type: 'string' }, model: { type: 'string' }, 'api-key-env': { type: 'string' },
   tier: { type: 'string' }, profile: { type: 'string' }, 'budget-usd': { type: 'string' }, concurrency: { type: 'string' }, rpm: { type: 'string' },
   check: { type: 'boolean' }, help: { type: 'boolean', short: 'h' },
+  recipe: { type: 'string' }, 'recipe-profile': { type: 'string' }, on: { type: 'string' }, param: { type: 'string', multiple: true },
+  inventory: { type: 'string' }, reference: { type: 'string' }, 'engines-source': { type: 'string' },
 } as const;
 
-function target(v: Record<string, string | boolean | undefined>): Target {
-  if (v.cloud && v.endpoint) throw new Error('use --cloud or --endpoint, not both');
+function target(v: Record<string, string | boolean | string[] | undefined>): Target {
+  if ([v.cloud, v.endpoint, v.recipe].filter(Boolean).length > 1) throw new Error('use one of --cloud, --endpoint or --recipe');
+  if (typeof v.recipe === 'string') {
+    return { kind: 'recipe', recipe: v.recipe, ...(typeof v['recipe-profile'] === 'string' ? { profile: v['recipe-profile'] } : {}),
+      ...(Array.isArray(v.param) ? { params: v.param } : {}), ...(typeof v.on === 'string' ? { on: v.on } : {}), ...(typeof v.inventory === 'string' ? { inventory: v.inventory } : {}),
+      ...(typeof v['engines-source'] === 'string' ? { source: v['engines-source'] } : {}) };
+  }
   if (typeof v.cloud === 'string') {
     const i = v.cloud.indexOf(':');
     if (i < 1) throw new Error('--cloud expects provider:model, e.g. typesafe:jev-latest');
@@ -42,7 +50,7 @@ function target(v: Record<string, string | boolean | undefined>): Target {
     if (typeof v.identity !== 'string' || typeof v.model !== 'string') throw new Error('--endpoint needs --identity FILE and --model NAME');
     return { kind: 'endpoint', url: v.endpoint, identity: v.identity, model: v.model, ...(typeof v['api-key-env'] === 'string' ? { keyEnv: v['api-key-env'] } : {}) };
   }
-  throw new Error('run needs --cloud or --endpoint');
+  throw new Error('run needs --cloud, --endpoint or --recipe');
 }
 
 /** Every directory under results/ holding a run.json. */
@@ -63,7 +71,7 @@ async function main(argv: string[]): Promise<number> {
       if (tier !== 'quick' && tier !== 'core') throw new Error('--tier is quick or core');
       const budget = v['budget-usd'] === undefined ? null : Number(v['budget-usd']);
       if (budget !== null && !(budget >= 0)) throw new Error('--budget-usd must be a non-negative number');
-      const dirs = await runAll(target(v), { suites: v.suite.split(','), tier, profile: v.profile ?? 'greedy-nothink', budgetUsd: budget, concurrency: v.concurrency ? Number(v.concurrency) : 2, rpm: v.rpm ? Number(v.rpm) : null });
+      const dirs = await runAll(target(v), { suites: v.suite.split(','), tier, profile: v.profile ?? 'greedy-nothink', budgetUsd: budget, concurrency: v.concurrency ? Number(v.concurrency) : 2, rpm: v.rpm ? Number(v.rpm) : null, ...(v.reference ? { reference: resolve(v.reference) } : {}) });
       for (const d of dirs) console.log(relative(process.cwd(), d));
       return 0;
     }
@@ -76,7 +84,7 @@ async function main(argv: string[]): Promise<number> {
         if (run.stop_reason === 'running') { console.log(`running   ${relative(process.cwd(), dir)} (no raw data yet; skipped)`); continue; }
         const suite = SUITES[run.suite.name];
         if (!suite) throw new Error(`${dir}: unknown suite ${run.suite.name}`);
-        const fresh = buildSummary(run, readRaw(dir), suite);
+        const fresh = buildSummary(run, readRaw(dir), suite, dir);
         const file = join(dir, 'summary.json');
         const same = existsSync(file) && readFileSync(file, 'utf8') === fresh;
         if (v.check) { console.log(`${same ? 'identical' : 'DIFFERS  '} ${relative(process.cwd(), file)}`); if (!same) differ++; }

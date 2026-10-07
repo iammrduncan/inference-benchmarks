@@ -21,6 +21,25 @@ The model card's numbers are for full precision at 768 dimensions. What on-devic
 users actually run (a 4-bit file on a phone or a laptop, at 256 dimensions) is
 unmeasured. That gap is exactly what this project is for.
 
+## Built (2026-10-07)
+
+- **Recipes** in inference-engines, using `engines/embed-server`:
+  - `embeddinggemma-2/p100/st-ort` (Tesla P100, CUDA 12.6 container);
+  - `embeddinggemma-2/b70/st-ort` (Arc Pro B70, XPU + OpenVINO container);
+  - `embeddinggemma-2/apple-m/st-ort` (macOS native).
+- **Variants are recipe profiles:**
+  - `st-fp32` / `st-bf16`: sentence-transformers on the release checkpoint;
+  - `ort-fp32` / `ort-q8` / `ort-q4`: ONNX Runtime on the onnx-community files.
+- **One harness.** `bench run --recipe … --suite embeddings` brings the profile up
+  through the launcher, embeds the MTEB inputs, scores offline with MTEB 2.22.5, and
+  takes the engine down.
+- **Change from the original design: dimensions live inside a run.** Truncation is
+  exactly post-hoc, so one run embeds at 768 and its summary carries scores for 768,
+  512, 256 and 128. Splitting them into four subjects would only repeat identical
+  requests.
+- **Reference:** the P100 `st-fp32` run, since the P100 has no bfloat16. Fidelity
+  for every other run is measured against its vectors.
+
 ## Subject identity
 
 Embedding subjects use the same key, with the output dimension added to the quant
