@@ -1,0 +1,322 @@
+{
+  "mteb": "2.22.5",
+  "tasks": [
+    "NanoArguAnaRetrieval",
+    "NanoClimateFeverRetrieval",
+    "NanoDBPediaRetrieval",
+    "NanoFEVERRetrieval",
+    "NanoFiQA2018Retrieval",
+    "NanoHotpotQARetrieval",
+    "NanoMSMARCORetrieval",
+    "NanoNFCorpusRetrieval",
+    "NanoNQRetrieval",
+    "NanoQuoraRetrieval",
+    "NanoSCIDOCSRetrieval",
+    "NanoSciFactRetrieval",
+    "NanoTouche2020Retrieval",
+    "STSBenchmark",
+    "Banking77Classification"
+  ],
+  "by_dim": {
+    "768": {
+      "tasks": {
+        "NanoArguAnaRetrieval": {
+          "main_score": 0.6505,
+          "revision": "63ac9f026e8f6b85dc0622f3d630ed7a1758e9ec"
+        },
+        "NanoClimateFeverRetrieval": {
+          "main_score": 0.28006,
+          "revision": "ccb5552bc17e87afe0f9479fb4346898213a71db"
+        },
+        "NanoDBPediaRetrieval": {
+          "main_score": 0.65293,
+          "revision": "2d088f80d7a640eac0be5c66408d68c3f782baa1"
+        },
+        "NanoFEVERRetrieval": {
+          "main_score": 0.92432,
+          "revision": "a6490dfeed0f13c2a052e39c6ddaeb6086afd4a8"
+        },
+        "NanoFiQA2018Retrieval": {
+          "main_score": 0.44591,
+          "revision": "ede84da4793cd2d4e61bba0dd08fc58de90f3681"
+        },
+        "NanoHotpotQARetrieval": {
+          "main_score": 0.89559,
+          "revision": "a38a2615f29adba8b47a42905031aa9c137d8fae"
+        },
+        "NanoMSMARCORetrieval": {
+          "main_score": 0.57395,
+          "revision": "5a5aa0c3df65d6883d85c8f5cdc88e679633595e"
+        },
+        "NanoNFCorpusRetrieval": {
+          "main_score": 0.38023,
+          "revision": "2eec9d63140fb9af7c75ad0fdbf6350aaf20e94e"
+        },
+        "NanoNQRetrieval": {
+          "main_score": 0.78209,
+          "revision": "e3973b405feb9e94d07fd971d690d24d7f45264a"
+        },
+        "NanoQuoraRetrieval": {
+          "main_score": 0.95463,
+          "revision": "3ee153e5710da83a7f35df0cb1db4a0ad036072a"
+        },
+        "NanoSCIDOCSRetrieval": {
+          "main_score": 0.37601,
+          "revision": "cf39b8741a6f2e984d0b8f4796b2dd5bb65390f9"
+        },
+        "NanoSciFactRetrieval": {
+          "main_score": 0.88219,
+          "revision": "8c5f7bbe90bb865f46c67710221afa7d9096251b"
+        },
+        "NanoTouche2020Retrieval": {
+          "main_score": 0.43876,
+          "revision": "ff81c0caff8b6febe1495eae9f2ca3eddad074b8"
+        },
+        "STSBenchmark": {
+          "main_score": 0.874952,
+          "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831"
+        },
+        "Banking77Classification": {
+          "main_score": 0.92263,
+          "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300"
+        }
+      },
+      "mean_main_score": 0.668983,
+      "fidelity": {
+        "n": 66939,
+        "mean_cosine": 1.0,
+        "p1_cosine": 1.0,
+        "min_cosine": 1.0,
+        "top10_overlap": 1.0,
+        "queries": 649,
+        "documents": 20000,
+        "verdict": "lossless"
+      }
+    },
+    "512": {
+      "tasks": {
+        "NanoArguAnaRetrieval": {
+          "main_score": 0.63244,
+          "revision": "63ac9f026e8f6b85dc0622f3d630ed7a1758e9ec"
+        },
+        "NanoClimateFeverRetrieval": {
+          "main_score": 0.28422,
+          "revision": "ccb5552bc17e87afe0f9479fb4346898213a71db"
+        },
+        "NanoDBPediaRetrieval": {
+          "main_score": 0.64038,
+          "revision": "2d088f80d7a640eac0be5c66408d68c3f782baa1"
+        },
+        "NanoFEVERRetrieval": {
+          "main_score": 0.93224,
+          "revision": "a6490dfeed0f13c2a052e39c6ddaeb6086afd4a8"
+        },
+        "NanoFiQA2018Retrieval": {
+          "main_score": 0.43723,
+          "revision": "ede84da4793cd2d4e61bba0dd08fc58de90f3681"
+        },
+        "NanoHotpotQARetrieval": {
+          "main_score": 0.88379,
+          "revision": "a38a2615f29adba8b47a42905031aa9c137d8fae"
+        },
+        "NanoMSMARCORetrieval": {
+          "main_score": 0.55126,
+          "revision": "5a5aa0c3df65d6883d85c8f5cdc88e679633595e"
+        },
+        "NanoNFCorpusRetrieval": {
+          "main_score": 0.3708,
+          "revision": "2eec9d63140fb9af7c75ad0fdbf6350aaf20e94e"
+        },
+        "NanoNQRetrieval": {
+          "main_score": 0.76674,
+          "revision": "e3973b405feb9e94d07fd971d690d24d7f45264a"
+        },
+        "NanoQuoraRetrieval": {
+          "main_score": 0.95447,
+          "revision": "3ee153e5710da83a7f35df0cb1db4a0ad036072a"
+        },
+        "NanoSCIDOCSRetrieval": {
+          "main_score": 0.37696,
+          "revision": "cf39b8741a6f2e984d0b8f4796b2dd5bb65390f9"
+        },
+        "NanoSciFactRetrieval": {
+          "main_score": 0.897,
+          "revision": "8c5f7bbe90bb865f46c67710221afa7d9096251b"
+        },
+        "NanoTouche2020Retrieval": {
+          "main_score": 0.43876,
+          "revision": "ff81c0caff8b6febe1495eae9f2ca3eddad074b8"
+        },
+        "STSBenchmark": {
+          "main_score": 0.875527,
+          "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831"
+        },
+        "Banking77Classification": {
+          "main_score": 0.922662,
+          "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300"
+        }
+      },
+      "mean_main_score": 0.664299,
+      "fidelity": {
+        "n": 66939,
+        "mean_cosine": 1.0,
+        "p1_cosine": 1.0,
+        "min_cosine": 1.0,
+        "top10_overlap": 1.0,
+        "queries": 649,
+        "documents": 20000,
+        "verdict": "lossless"
+      }
+    },
+    "256": {
+      "tasks": {
+        "NanoArguAnaRetrieval": {
+          "main_score": 0.60192,
+          "revision": "63ac9f026e8f6b85dc0622f3d630ed7a1758e9ec"
+        },
+        "NanoClimateFeverRetrieval": {
+          "main_score": 0.27572,
+          "revision": "ccb5552bc17e87afe0f9479fb4346898213a71db"
+        },
+        "NanoDBPediaRetrieval": {
+          "main_score": 0.63436,
+          "revision": "2d088f80d7a640eac0be5c66408d68c3f782baa1"
+        },
+        "NanoFEVERRetrieval": {
+          "main_score": 0.91099,
+          "revision": "a6490dfeed0f13c2a052e39c6ddaeb6086afd4a8"
+        },
+        "NanoFiQA2018Retrieval": {
+          "main_score": 0.42543,
+          "revision": "ede84da4793cd2d4e61bba0dd08fc58de90f3681"
+        },
+        "NanoHotpotQARetrieval": {
+          "main_score": 0.87623,
+          "revision": "a38a2615f29adba8b47a42905031aa9c137d8fae"
+        },
+        "NanoMSMARCORetrieval": {
+          "main_score": 0.54544,
+          "revision": "5a5aa0c3df65d6883d85c8f5cdc88e679633595e"
+        },
+        "NanoNFCorpusRetrieval": {
+          "main_score": 0.35191,
+          "revision": "2eec9d63140fb9af7c75ad0fdbf6350aaf20e94e"
+        },
+        "NanoNQRetrieval": {
+          "main_score": 0.72881,
+          "revision": "e3973b405feb9e94d07fd971d690d24d7f45264a"
+        },
+        "NanoQuoraRetrieval": {
+          "main_score": 0.94814,
+          "revision": "3ee153e5710da83a7f35df0cb1db4a0ad036072a"
+        },
+        "NanoSCIDOCSRetrieval": {
+          "main_score": 0.35459,
+          "revision": "cf39b8741a6f2e984d0b8f4796b2dd5bb65390f9"
+        },
+        "NanoSciFactRetrieval": {
+          "main_score": 0.86551,
+          "revision": "8c5f7bbe90bb865f46c67710221afa7d9096251b"
+        },
+        "NanoTouche2020Retrieval": {
+          "main_score": 0.43309,
+          "revision": "ff81c0caff8b6febe1495eae9f2ca3eddad074b8"
+        },
+        "STSBenchmark": {
+          "main_score": 0.873838,
+          "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831"
+        },
+        "Banking77Classification": {
+          "main_score": 0.920844,
+          "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300"
+        }
+      },
+      "mean_main_score": 0.649788,
+      "fidelity": {
+        "n": 66939,
+        "mean_cosine": 1.0,
+        "p1_cosine": 1.0,
+        "min_cosine": 1.0,
+        "top10_overlap": 1.0,
+        "queries": 649,
+        "documents": 20000,
+        "verdict": "lossless"
+      }
+    },
+    "128": {
+      "tasks": {
+        "NanoArguAnaRetrieval": {
+          "main_score": 0.5678,
+          "revision": "63ac9f026e8f6b85dc0622f3d630ed7a1758e9ec"
+        },
+        "NanoClimateFeverRetrieval": {
+          "main_score": 0.27108,
+          "revision": "ccb5552bc17e87afe0f9479fb4346898213a71db"
+        },
+        "NanoDBPediaRetrieval": {
+          "main_score": 0.57991,
+          "revision": "2d088f80d7a640eac0be5c66408d68c3f782baa1"
+        },
+        "NanoFEVERRetrieval": {
+          "main_score": 0.86848,
+          "revision": "a6490dfeed0f13c2a052e39c6ddaeb6086afd4a8"
+        },
+        "NanoFiQA2018Retrieval": {
+          "main_score": 0.32727,
+          "revision": "ede84da4793cd2d4e61bba0dd08fc58de90f3681"
+        },
+        "NanoHotpotQARetrieval": {
+          "main_score": 0.78123,
+          "revision": "a38a2615f29adba8b47a42905031aa9c137d8fae"
+        },
+        "NanoMSMARCORetrieval": {
+          "main_score": 0.50244,
+          "revision": "5a5aa0c3df65d6883d85c8f5cdc88e679633595e"
+        },
+        "NanoNFCorpusRetrieval": {
+          "main_score": 0.30337,
+          "revision": "2eec9d63140fb9af7c75ad0fdbf6350aaf20e94e"
+        },
+        "NanoNQRetrieval": {
+          "main_score": 0.71419,
+          "revision": "e3973b405feb9e94d07fd971d690d24d7f45264a"
+        },
+        "NanoQuoraRetrieval": {
+          "main_score": 0.92877,
+          "revision": "3ee153e5710da83a7f35df0cb1db4a0ad036072a"
+        },
+        "NanoSCIDOCSRetrieval": {
+          "main_score": 0.30754,
+          "revision": "cf39b8741a6f2e984d0b8f4796b2dd5bb65390f9"
+        },
+        "NanoSciFactRetrieval": {
+          "main_score": 0.77691,
+          "revision": "8c5f7bbe90bb865f46c67710221afa7d9096251b"
+        },
+        "NanoTouche2020Retrieval": {
+          "main_score": 0.38123,
+          "revision": "ff81c0caff8b6febe1495eae9f2ca3eddad074b8"
+        },
+        "STSBenchmark": {
+          "main_score": 0.868983,
+          "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831"
+        },
+        "Banking77Classification": {
+          "main_score": 0.912468,
+          "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300"
+        }
+      },
+      "mean_main_score": 0.606111,
+      "fidelity": {
+        "n": 66939,
+        "mean_cosine": 1.0,
+        "p1_cosine": 1.0,
+        "min_cosine": 1.0,
+        "top10_overlap": 1.0,
+        "queries": 649,
+        "documents": 20000,
+        "verdict": "lossless"
+      }
+    }
+  }
+}

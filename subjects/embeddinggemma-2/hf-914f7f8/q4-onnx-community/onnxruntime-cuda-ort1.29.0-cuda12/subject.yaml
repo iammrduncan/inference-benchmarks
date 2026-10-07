@@ -1,0 +1,19 @@
+key: embeddinggemma-2/hf-914f7f8/q4-onnx-community/onnxruntime-cuda-ort1.29.0-cuda12
+target: recipe
+model: embeddinggemma-2
+checkpoint:
+  hf: google/embeddinggemma-2
+  revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+quant:
+  format: q4
+  producer: onnx-community
+  repo: onnx-community/embeddinggemma-2-ONNX
+  revision: daa72c51243991dfcaf9f9137d2c573d8f7790c0
+engine:
+  name: onnxruntime-cuda
+  version: ort1.29.0-cuda12
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

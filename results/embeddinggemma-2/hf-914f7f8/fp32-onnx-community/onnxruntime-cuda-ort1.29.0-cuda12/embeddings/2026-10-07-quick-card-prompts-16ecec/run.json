@@ -1,0 +1,151 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-07-quick-card-prompts-16ecec",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "embeddings",
+    "tier": "quick",
+    "suite_hash": "d499aab0d7091e3ba5b211e1cbaedf79ed4c9c86a7214156946d2ee4d21299ec",
+    "ids": 66939
+  },
+  "subject": {
+    "model": "embeddinggemma-2",
+    "checkpoint": {
+      "hf": "google/embeddinggemma-2",
+      "revision": "914f7f89142e33e77833254d9c9b90c3cef7303b"
+    },
+    "quant": {
+      "format": "fp32",
+      "producer": "onnx-community",
+      "repo": "onnx-community/embeddinggemma-2-ONNX",
+      "revision": "daa72c51243991dfcaf9f9137d2c573d8f7790c0"
+    },
+    "engine": {
+      "name": "onnxruntime-cuda",
+      "version": "ort1.29.0-cuda12"
+    },
+    "key": "embeddinggemma-2/hf-914f7f8/fp32-onnx-community/onnxruntime-cuda-ort1.29.0-cuda12",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "card-prompts",
+  "harness": {
+    "name": "bench",
+    "commit": "d7cc28564153cb83219bc1ea0d3f83f7bc5360f4",
+    "dirty": false,
+    "suite_hash": "d499aab0d7091e3ba5b211e1cbaedf79ed4c9c86a7214156946d2ee4d21299ec",
+    "scorer": {
+      "name": "mteb",
+      "version": "2.22.5"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/embeddings",
+  "dataset": {
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "manifest": ".artifacts/embeddings/manifests/70274443de023faf.jsonl",
+    "manifest_sha256": "2d2ce7c3195335d3917cd3675666232777a4bdf38c110da28a72cac316470566",
+    "texts": 66939,
+    "prompts_sha256": "ad3b452b25873415721b33192ebdb7f1f848620a93446ad399b52a83540c1ff4"
+  },
+  "request_settings": {
+    "batch_size": 32,
+    "encoding_format": "base64",
+    "order": "by text length, descending"
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 2092,
+  "completed": 2092,
+  "started_at": "2026-10-07T03:55:07.853Z",
+  "finished_at": "2026-10-07T04:24:37.485Z",
+  "observed_models": {
+    "embeddinggemma-2": 2092
+  },
+  "engine": {
+    "backend": "onnxruntime",
+    "onnx_file": "model.onnx",
+    "requested_provider": "CUDAExecutionProvider",
+    "active_providers": [
+      "CUDAExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "onnxruntime": "1.29.0",
+    "transformers": "5.19.0",
+    "max_seq_length": 8192,
+    "token_budget_per_forward": 16384,
+    "python": "3.12.15",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.36",
+    "machine": "x86_64",
+    "numpy": "2.5.3"
+  },
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "embeddinggemma-2/p100/st-ort"
+  },
+  "launcher": {
+    "run_id": "2026-10-07T03-54-54-997Z",
+    "profile": "ort-fp32",
+    "params": {
+      "backend": "ort",
+      "precision": "fp32",
+      "weights_repo": "onnx-community/embeddinggemma-2-ONNX",
+      "weights_rev": "daa72c51243991dfcaf9f9137d2c573d8f7790c0",
+      "engine_name": "onnxruntime-cuda",
+      "engine_version": "ort1.29.0-cuda12",
+      "producer": "onnx-community"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "98e84541b7452a60dcdd25f87c4c8020da9af9f3",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  },
+  "reference": "/Users/josephduncan/github/inference-and-benchmarks/typesafe-ai-benchmark/results/embeddinggemma-2/hf-914f7f8/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126/embeddings/2026-10-07-quick-card-prompts-d0777f",
+  "vectors": {
+    "path": ".artifacts/embeddings/vectors/embeddinggemma-2__hf-914f7f8__fp32-onnx-community__onnxruntime-cuda-ort1.29.0-cuda12__embeddings__2026-10-07-quick-card-prompts-16ecec.npy",
+    "sha256": "62ec534dbb3e2944843487934facf46d440904d37a67bb87624989d6e6afad9f",
+    "shape": [
+      66939,
+      768
+    ],
+    "dtype": "float32",
+    "uploaded": false
+  }
+}

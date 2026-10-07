@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-07-quick-card-prompts-55d63c",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "embeddings",
+    "tier": "quick",
+    "suite_hash": "d499aab0d7091e3ba5b211e1cbaedf79ed4c9c86a7214156946d2ee4d21299ec",
+    "ids": 66939
+  },
+  "subject": {
+    "model": "embeddinggemma-2",
+    "checkpoint": {
+      "hf": "google/embeddinggemma-2",
+      "revision": "914f7f89142e33e77833254d9c9b90c3cef7303b"
+    },
+    "quant": {
+      "format": "bf16",
+      "producer": "google",
+      "repo": "google/embeddinggemma-2",
+      "revision": "914f7f89142e33e77833254d9c9b90c3cef7303b"
+    },
+    "engine": {
+      "name": "sentence-transformers-torch-mps",
+      "version": "st6.1.0-torch2.14.1"
+    },
+    "key": "embeddinggemma-2/hf-914f7f8/bf16-google/sentence-transformers-torch-mps-st6.1.0-torch2.14.1",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "card-prompts",
+  "harness": {
+    "name": "bench",
+    "commit": "d7cc28564153cb83219bc1ea0d3f83f7bc5360f4",
+    "dirty": false,
+    "suite_hash": "d499aab0d7091e3ba5b211e1cbaedf79ed4c9c86a7214156946d2ee4d21299ec",
+    "scorer": {
+      "name": "mteb",
+      "version": "2.22.5"
+    },
+    "agent": null
+  },
+  "endpoint": "http://127.0.0.1:8000/v1/embeddings",
+  "dataset": {
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "manifest": ".artifacts/embeddings/manifests/70274443de023faf.jsonl",
+    "manifest_sha256": "2d2ce7c3195335d3917cd3675666232777a4bdf38c110da28a72cac316470566",
+    "texts": 66939,
+    "prompts_sha256": "ad3b452b25873415721b33192ebdb7f1f848620a93446ad399b52a83540c1ff4"
+  },
+  "request_settings": {
+    "batch_size": 32,
+    "encoding_format": "base64",
+    "order": "by text length, descending"
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 2092,
+  "completed": 2092,
+  "started_at": "2026-10-07T04:28:23.293Z",
+  "finished_at": "2026-10-07T05:04:02.165Z",
+  "observed_models": {
+    "embeddinggemma-2": 2092
+  },
+  "engine": {
+    "backend": "sentence-transformers",
+    "device": "mps",
+    "dtype": "bfloat16",
+    "torch": "2.14.1",
+    "cuda_arch_list": null,
+    "device_name": "mps",
+    "sentence_transformers": "6.1.0",
+    "transformers": "5.19.0",
+    "max_seq_length": 8192,
+    "token_budget_per_forward": 16384,
+    "python": "3.12.12",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "numpy": "2.5.3"
+  },
+  "hardware": {
+    "host": "macbook",
+    "recipe": "embeddinggemma-2/apple-m/st-ort"
+  },
+  "launcher": {
+    "run_id": "2026-10-07T04-28-14-136Z",
+    "profile": "st-bf16",
+    "params": {
+      "backend": "st",
+      "precision": "bf16",
+      "weights_repo": "google/embeddinggemma-2",
+      "weights_rev": "914f7f89142e33e77833254d9c9b90c3cef7303b",
+      "engine_name": "sentence-transformers-torch-mps",
+      "engine_version": "st6.1.0-torch2.14.1",
+      "producer": "google"
+    },
+    "source": {
+      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "commit": "0ddc73418c1c4175141031a5ba147fdad6ccb706",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  },
+  "reference": "/Users/josephduncan/github/inference-and-benchmarks/typesafe-ai-benchmark/results/embeddinggemma-2/hf-914f7f8/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126/embeddings/2026-10-07-quick-card-prompts-d0777f",
+  "vectors": {
+    "path": ".artifacts/embeddings/vectors/embeddinggemma-2__hf-914f7f8__bf16-google__sentence-transformers-torch-mps-st6.1.0-torch2.14.1__embeddings__2026-10-07-quick-card-prompts-55d63c.npy",
+    "sha256": "6760e7cb9d20bce874345196f40224a767e2bec2765223d5c8c062ba17a844a3",
+    "shape": [
+      66939,
+      768
+    ],
+    "dtype": "float32",
+    "uploaded": false
+  }
+}

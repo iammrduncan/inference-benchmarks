@@ -1,0 +1,19 @@
+key: embeddinggemma-2/hf-914f7f8/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126
+target: recipe
+model: embeddinggemma-2
+checkpoint:
+  hf: google/embeddinggemma-2
+  revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+quant:
+  format: fp32
+  producer: google
+  repo: google/embeddinggemma-2
+  revision: 914f7f89142e33e77833254d9c9b90c3cef7303b
+engine:
+  name: sentence-transformers-torch-cuda
+  version: st6.1.0-torch2.14.1+cu126
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []
