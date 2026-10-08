@@ -11,4 +11,4 @@
 - model: jev-27b-vl
   class: "p100:p100"
   label: NVIDIA P100 · 16 GB
-  reason: "27B: 56 GB in bf16. NF4 would need about 14-14.5 GB only with the embeddings on the CPU and a hand-sliced head; vLLM (the official path) does not support Pascal. Not attempted: too close to 16 GB to be a fair, reproducible run."
+  reason: "Tried 2026-10-08 (decide-server jev backend, bitsandbytes NF4, fp16 compute): with token embeddings on the GPU, loading runs out of memory at 15.58 of 15.89 GiB; with them on the CPU, accelerate offloads the whole decoder and one case takes 1,069 s (about 5 days for the 400-case core tier). vLLM (the official path) does not support Pascal."
