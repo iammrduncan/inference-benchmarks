@@ -12,7 +12,7 @@ function decisions(subject: string, accuracy: number, tier = 'quick', mode = 'na
     items: { planned: 1, attempted: 1, succeeded: 1, failed: 0 }, harness: { commit: 'c', dirty: false, scorer: 's', suite_hash: 'h' },
     latency_ms: { p50: 150, p95: 200, p99: 250 }, usage: null, hardware: null, recipe: null, endpoint: null, files: [], notes: [], reproduce: '',
     metrics: { decisions: 1, valid: 1, accuracy: iv(accuracy), kl_from_gold: iv(1), brier: iv(0.1), ece: 0.01, accuracy_by_type: {}, accuracy_by_workflow: {} },
-    invalid_reasons: {}, reference: null, delta_accuracy: null,
+    invalid_reasons: {}, reference: null, delta_accuracy: null, concurrency: 1, throughput: null,
   };
 }
 const board = (id: string, suite: string, tier: string, runs: Run[]): Board =>

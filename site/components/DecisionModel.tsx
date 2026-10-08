@@ -32,8 +32,8 @@ export function DecisionModel({ m }: { m: Matrix }) {
         <div className="table-scroll">
           <table>
             <thead>
-              <tr><th>Variant · machine</th><th>Accuracy (95% interval)</th><th className="num">KL ↓</th><th className="num">Brier ↓</th><th className="num">ECE ↓</th>
-                {types.map((t) => <th key={t} className="num">{t}</th>)}<th className="num">p50 / case</th><th className="num">Conformance</th></tr>
+              <tr><th>Variant · machine</th><th>Accuracy</th><th className="num">KL ↓</th><th className="num">Brier ↓</th><th className="num">ECE ↓</th>
+                {types.map((t) => <th key={t} className="num">{t}</th>)}<th className="num" title="Decisions per second over the run's wall-clock time">Decisions/s</th><th className="num" title="Input tokens per second, counted by this model's own tokenizer and prompt layout">Input tok/s*</th><th className="num" title="Median per case; includes queueing when more than one request was in flight">p50 / case</th><th className="num">Conformance</th></tr>
             </thead>
             <tbody>
               {ordered.map((r) => {
@@ -41,11 +41,13 @@ export function DecisionModel({ m }: { m: Matrix }) {
                 return (
                   <tr key={r.id}>
                     <td><Link href={runHref(r.id)} className="mono small">{label(r)}</Link>{r.subject === m.reference && <span className="badge badge-info" style={{ marginLeft: 6 }}>reference</span>}</td>
-                    <td><IntervalBar v={r.metrics.accuracy} min={lo} max={hi} format={(x) => pct(x)} /></td>
+                    <td><IntervalBar v={r.metrics.accuracy} min={lo} max={hi} format={(x) => pct(x)} showRange={false} /></td>
                     <td className="num">{fixed(r.metrics.kl_from_gold.value, 2)}</td>
                     <td className="num">{fixed(r.metrics.brier.value)}</td>
                     <td className="num">{fixed(r.metrics.ece)}</td>
                     {types.map((t) => <td key={t} className="num">{r.metrics.accuracy_by_type[t] ? pct(r.metrics.accuracy_by_type[t].value) : '—'}</td>)}
+                    <td className="num">{r.throughput ? r.throughput.decisions_per_s.toFixed(1) : '—'}</td>
+                    <td className="num">{r.throughput?.input_tokens_per_s ? Math.round(r.throughput.input_tokens_per_s).toLocaleString('en-US') : '—'}</td>
                     <td className="num">{r.latency_ms ? ms(r.latency_ms.p50) : '—'}</td>
                     <td className="num">{c ? <Link href={runHref(c.id)}>{c.metrics.passed}/{c.metrics.total}</Link> : '—'}</td>
                   </tr>
@@ -54,7 +56,11 @@ export function DecisionModel({ m }: { m: Matrix }) {
             </tbody>
           </table>
         </div>
-        <p className="table-note">Latency is per case (one request with all five questions), measured on the machine named, one request at a time.</p>
+        <p className="table-note">
+          Decisions/s is over the run&apos;s wall-clock time, client to server, so a remote machine includes the network. Engine-only figures are on each run&apos;s page.
+          *Input tok/s counts tokens with each model&apos;s own tokenizer and prompt layout (d1 counts the state once per question), so it compares one model across machines, not models with each other.
+          p50 is per case (all five questions); runs kept two requests in flight against servers that answer one at a time, so it includes waiting for the other.
+        </p>
       </Section>
     </>
   );

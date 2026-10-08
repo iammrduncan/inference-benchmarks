@@ -204,6 +204,30 @@ function fidelity(v: unknown, where: string): Fidelity | null {
 
 type Loaded = { run: Run; subject: Obj };
 
+/** Decisions and input tokens per second over the successful requests of a decision run's raw.jsonl. */
+function decisionThroughput(rawPath: string, elapsedMs: number, concurrency: number): DecisionsRun['throughput'] {
+  if (!existsSync(rawPath)) return null;
+  let decisions = 0; let ms = 0; let engineMs = 0; let allEngine = true; let tokens = 0; let allTokens = true;
+  for (const line of readFileSync(rawPath, 'utf8').split('\n')) {
+    if (!line) continue;
+    const row = JSON.parse(line) as { ok?: boolean; latency_ms?: number; request?: { body?: { questions?: Record<string, unknown> } }; response?: { engine_ms?: unknown }; usage?: { input_tokens?: unknown } };
+    if (!row.ok || typeof row.latency_ms !== 'number') continue;
+    decisions += Object.keys(row.request?.body?.questions ?? {}).length;
+    ms += row.latency_ms;
+    if (typeof row.response?.engine_ms === 'number') engineMs += row.response.engine_ms; else allEngine = false;
+    if (typeof row.usage?.input_tokens === 'number') tokens += row.usage.input_tokens; else allTokens = false;
+  }
+  if (!decisions || ms <= 0) return null;
+  // Wall time is the run's elapsed time: with several requests in flight, summing their latencies
+  // would count the same seconds twice. Engine time is the server's own (it serves one at a time).
+  const s = concurrency > 1 && elapsedMs > 0 ? elapsedMs / 1000 : ms / 1000;
+  const es = allEngine && engineMs > 0 ? engineMs / 1000 : null;
+  return {
+    decisions, seconds: s, decisions_per_s: decisions / s, input_tokens: tokens, input_tokens_per_s: allTokens && tokens ? tokens / s : null,
+    engine_seconds: es, engine_decisions_per_s: es ? decisions / es : null, engine_input_tokens_per_s: es && allTokens && tokens ? tokens / es : null,
+  };
+}
+
 function loadRun(id: string): Loaded | null {
   const dir = join(RESULTS, id);
   if (!existsSync(join(dir, 'summary.json'))) return null; // still running, or failed before summarizing
@@ -261,6 +285,8 @@ function loadRun(id: string): Loaded | null {
       },
       invalid_reasons: Object.fromEntries(Object.entries(obj(summary.invalid_reasons ?? {}, `${where} invalid_reasons`)).map(([k, v]) => [k, num(v, `${where} invalid_reasons.${k}`)])),
       reference: null, delta_accuracy: null,
+      throughput: decisionThroughput(join(dir, 'raw.jsonl'), Date.parse(str(run.finished_at, `${where} finished_at`)) - Date.parse(str(run.started_at, `${where} started_at`)), num(obj(run.dispatch, `${where} dispatch`).concurrency, `${where} dispatch.concurrency`)),
+      concurrency: num(obj(run.dispatch, `${where} dispatch`).concurrency, `${where} dispatch.concurrency`),
     };
     return { run: r, subject };
   }

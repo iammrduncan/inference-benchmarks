@@ -24,6 +24,7 @@ function formatSpeed(id: string, v: number): string {
   if (id === 'ttft' || id === 'latency') return `${Math.round(v)} ms`;
   if (id === 'cost') return v < 0.1 ? `$${v.toFixed(4)}` : `$${v.toFixed(2)}`;
   if (id === 'per_image') return `${v.toFixed(1)} s`;
+  if (id === 'decisions_per_s') return v.toFixed(1);
   return Math.round(v).toLocaleString('en-US');
 }
 

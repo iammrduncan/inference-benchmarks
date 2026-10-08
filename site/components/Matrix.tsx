@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { findRun, runHref } from '../lib/data.ts';
-import { fixed, int, ms, pct } from '../lib/format.ts';
+import { fixed, int, pct } from '../lib/format.ts';
 import type { DecisionsRun, EmbeddingsRun, Matrix } from '../lib/types.ts';
 import { DeltaCell, VerdictPill } from './ui.tsx';
 
@@ -31,7 +31,7 @@ function DecisionCell({ run, isReference }: { run: DecisionsRun; isReference: bo
             : <span className={`delta ${Math.abs(d) < 0.05 ? 'flat' : d < 0 ? 'neg' : 'pos'}`} title="accuracy minus the reference's, in points">{d >= 0 ? '+' : '−'}{Math.abs(d).toFixed(1)} pts</span>}
       </span>
       <span className="cell-line">Brier {fixed(m.brier.value)} · CI {pct(m.accuracy.low)}–{pct(m.accuracy.high)}</span>
-      {run.latency_ms && <span className="cell-line">{ms(run.latency_ms.p50)} p50 per case</span>}
+      {run.throughput && <span className="cell-line">{run.throughput.decisions_per_s.toFixed(1)} decisions/s</span>}
     </>
   );
 }

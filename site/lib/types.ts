@@ -72,6 +72,17 @@ export type DecisionsRun = RunBase & {
   reference: string | null;
   /** Accuracy minus the reference's, in points; null for the reference itself or without one. */
   delta_accuracy: number | null;
+  /** Requests in flight. Above 1 against a one-at-a-time server, per-request latency includes queueing. */
+  concurrency: number;
+  /**
+   * Speed over successful requests, one request at a time. Wall time includes the network; engine
+   * time is the server's own (reported by engines we start, not by hosted APIs). Input tokens are
+   * the model's own count (its tokenizer and prompt layout), so they compare machines, not models.
+   */
+  throughput: {
+    decisions: number; seconds: number; decisions_per_s: number; input_tokens: number; input_tokens_per_s: number | null;
+    engine_seconds: number | null; engine_decisions_per_s: number | null; engine_input_tokens_per_s: number | null;
+  } | null;
 };
 
 export type ConformanceCheck = { passed: number; total: number; failures: string[] };

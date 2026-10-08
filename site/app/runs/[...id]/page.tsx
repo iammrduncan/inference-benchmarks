@@ -121,6 +121,7 @@ function EmbeddingsDetail({ r }: { r: EmbeddingsRun }) {
 
 function DecisionsDetail({ r }: { r: DecisionsRun }) {
   const m = r.metrics;
+  const t = r.throughput;
   const groups: [string, Record<string, typeof m.accuracy>][] = [['By question type', m.accuracy_by_type], ['By workflow', m.accuracy_by_workflow]];
   return (
     <>
@@ -129,6 +130,15 @@ function DecisionsDetail({ r }: { r: DecisionsRun }) {
         <div className="card"><div className="card-kicker">Brier ↓</div><div className="stat">{fixed(m.brier.value)}</div><div className="small muted">KL from gold {fixed(m.kl_from_gold.value, 2)} · ECE {fixed(m.ece)}</div></div>
         <div className="card"><div className="card-kicker">Valid decisions</div><div className="stat">{int(m.valid)}/{int(m.decisions)}</div><div className="small muted">{Object.entries(r.invalid_reasons).map(([k, v]) => `${v}× ${k}`).join(' · ') || 'no invalid outputs'}</div></div>
       </div>
+      {t && (
+        <Section title="Throughput" aside={`${r.concurrency} request(s) in flight`}>
+          <KeyValues rows={[
+            ['Decisions/s', `${t.decisions_per_s.toFixed(1)} over ${t.seconds.toFixed(0)} s wall clock (client to server)`],
+            ['Engine decisions/s', t.engine_decisions_per_s ? `${t.engine_decisions_per_s.toFixed(1)} (the server's own time; ${t.engine_seconds?.toFixed(0)} s)` : 'not reported by this server'],
+            ['Input tok/s', t.input_tokens_per_s ? `${int(Math.round(t.input_tokens_per_s))} wall${t.engine_input_tokens_per_s ? ` · ${int(Math.round(t.engine_input_tokens_per_s))} engine` : ''} (${int(t.input_tokens)} tokens by this model's own count)` : 'not reported'],
+          ]} />
+        </Section>
+      )}
       {groups.map(([title, g]) => {
         const vals = Object.values(g);
         const min = Math.min(...vals.map((v) => v.low)) - 0.02;

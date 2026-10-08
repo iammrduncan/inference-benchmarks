@@ -32,6 +32,7 @@ const DECODE: SpeedColumn = { id: 'decode', label: 'Decode tok/s', lower_is_bett
 const TTFT: SpeedColumn = { id: 'ttft', label: 'TTFT', lower_is_better: true, note: 'time to first token; needs the streaming suites' };
 const LATENCY: SpeedColumn = { id: 'latency', label: 'Latency p50', lower_is_better: true, note: 'whole request' };
 const COST: SpeedColumn = { id: 'cost', label: '$ / 1k decisions', lower_is_better: true, note: 'provider price for 1,000 decisions; local engines show —' };
+const DECISIONS_PER_S: SpeedColumn = { id: 'decisions_per_s', label: 'Decisions/s', lower_is_better: false, note: 'decisions per second over the run\'s wall-clock time' };
 const PER_IMAGE: SpeedColumn = { id: 'per_image', label: 'Time / image', lower_is_better: true, note: 'seconds per generated image' };
 
 const LANGUAGE_CATEGORIES = ['taste', 'coding', 'math', 'tool-calling', 'knowledge', 'instruction-following', 'long-context'];
@@ -71,7 +72,7 @@ export const GROUPS: GroupDef[] = [
       { id: 'classic', label: 'Classic', note: 'SST-2, AG News, Banking77', matches: bySuite('decisions-classic'), metric: headline },
       { id: 'sealed', label: 'Sealed', note: 'private items', matches: bySuite('decisions-sealed'), metric: headline },
     ],
-    speed: [{ ...LATENCY, note: 'one decision request' }, COST],
+    speed: [DECISIONS_PER_S, { ...LATENCY, note: 'one case (five questions); includes queueing when two were in flight' }, COST],
   },
   {
     id: 'embedding', label: 'Embedding',
@@ -115,13 +116,16 @@ export function boardPerSuite(boards: Board[]): Map<string, Board> {
 
 /** Speed from the subject's latest complete run that has each figure. */
 function speedOf(runs: Run[]): Record<string, SpeedFigure | null> {
-  const out: Record<string, SpeedFigure | null> = { prefill: null, decode: null, ttft: null, latency: null, cost: null, per_image: null };
+  const out: Record<string, SpeedFigure | null> = { prefill: null, decode: null, ttft: null, latency: null, cost: null, per_image: null, decisions_per_s: null };
   for (const r of runs) {
     if (r.status !== 'complete') continue;
     const hw = r.hardware?.label ?? 'provider-hosted';
     if (!out.prefill && r.kind === 'embeddings' && r.throughput) out.prefill = { value: r.throughput.engine_tokens_per_s, what: 'input tokens/s, engine time', hardware: hw };
     if (!out.latency && r.latency_ms) {
       out.latency = { value: r.latency_ms.p50, what: r.kind === 'embeddings' ? 'per batch of 32 texts' : 'per request', hardware: hw };
+    }
+    if (!out.decisions_per_s && r.kind === 'decisions' && r.throughput) {
+      out.decisions_per_s = { value: r.throughput.decisions_per_s, what: `decisions/s, wall clock, ${r.concurrency} in flight`, hardware: hw };
     }
     if (!out.cost && r.kind === 'decisions' && r.usage && r.usage.cost_usd > 0 && r.metrics.decisions > 0) {
       out.cost = { value: (r.usage.cost_usd / r.metrics.decisions) * 1000, what: `$ per 1,000 decisions (${r.metrics.decisions} decisions, ${r.tier} tier)`, hardware: hw };
