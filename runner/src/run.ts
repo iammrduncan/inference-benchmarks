@@ -25,7 +25,8 @@ export type Target =
 
 export type RunOptions = { suites: string[]; tier: Tier; profile: string; budgetUsd: number | null; concurrency: number; rpm?: number | null; reference?: string; root?: string; log?: (m: string) => void };
 
-type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown>; hardware?: unknown; launcher?: unknown };
+/** expectModel: for engines we started, the model name the server must echo; any other answer is a failed row. */
+type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown>; hardware?: unknown; launcher?: unknown; expectModel?: string };
 
 /** Map a target to its subject and a decision client. */
 export async function resolveTarget(t: Exclude<Target, { kind: 'recipe' }>): Promise<Resolved> {
@@ -97,7 +98,11 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
       const item = items[index];
       if (!item) break;
       await paced();
-      const c = await r.provider.call(item.body);
+      const raw = await r.provider.call(item.body);
+      const answeredBy = rec(raw.response).model;
+      // A stale server holding the port answers as another model: that answer is not this subject's.
+      const c = raw.ok && r.expectModel && answeredBy !== r.expectModel
+        ? { ...raw, ok: false, error: `answered by ${String(answeredBy)}, not ${r.expectModel}` } : raw;
       const usage = c.ok ? usageOf(c.response) : undefined;
       const usd = cost(usage, r.price);
       spent += usd;
@@ -173,6 +178,7 @@ async function runRecipe(t: RecipeTarget, o: RunOptions): Promise<string[]> {
         const r: Resolved = {
           subject, provider: decisionEndpoint(up.base_url, up.endpoint.model ?? subject.model), price: undefined,
           settings: { note: 'recipe engine speaking the decision protocol natively; no sampling parameters' }, hardware, launcher,
+          expectModel: up.endpoint.model ?? subject.model,
         };
         dirs.push((await runSuite(r, suite, o)).dir);
       } else {

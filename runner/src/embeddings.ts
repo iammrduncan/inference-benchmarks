@@ -123,7 +123,8 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
     const idx = order.slice(b * def.batch_size, (b + 1) * def.batch_size);
     const c = await postJsonReachable(`${o.baseUrl}/v1/embeddings`, { input: idx.map((i) => manifest[i]?.text), encoding_format: 'base64', model: o.subject.model }, {});
     const resp = (c.response ?? {}) as { data?: { index: number; embedding: string }[]; usage?: { prompt_tokens?: number }; engine_ms?: number; model?: string };
-    let problem = !c.ok ? (c.error ?? `HTTP ${c.status}`) : !Array.isArray(resp.data) || resp.data.length !== idx.length ? 'wrong number of embeddings' : null;
+    let problem = !c.ok ? (c.error ?? `HTTP ${c.status}`) : !Array.isArray(resp.data) || resp.data.length !== idx.length ? 'wrong number of embeddings'
+      : resp.model !== o.subject.model ? `answered by ${String(resp.model)}, not ${o.subject.model}` : null;
     for (const d of problem ? [] : resp.data ?? []) {
       const v = decodeVector(d.embedding);
       if (v.length !== DIM || !v.every(Number.isFinite)) { problem = `embedding ${d.index} has ${v.length} values or non-finite values`; break; }
