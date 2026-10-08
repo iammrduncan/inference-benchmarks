@@ -6,6 +6,10 @@ export type Captured = {
   ok: boolean; status: number; latency_ms: number; ttft_ms?: number;
   request: { url: string; body: unknown };
   response?: unknown; error?: string;
+  /** The request never got an HTTP response for a connection reason (refused, reset, DNS), not a timeout. */
+  transport?: boolean;
+  /** Earlier connection failures for this same request, in order, when it was retried (see postJsonReachable). */
+  transport_failures?: string[];
 };
 
 const SECRET_HEADERS = new Set(['authorization', 'x-api-key', 'api-key']);
@@ -22,7 +26,10 @@ export async function postJson(url: string, body: unknown, headers: Record<strin
   try {
     res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json', ...headers }, body: JSON.stringify(body), signal: AbortSignal.timeout(timeoutMs) });
   } catch (e) {
-    return { ok: false, status: 0, latency_ms: performance.now() - started, request: { url, body }, error: (e as Error).message };
+    const err = e as Error & { cause?: { code?: string } };
+    const timedOut = err.name === 'TimeoutError' || err.name === 'AbortError';
+    const message = err.cause?.code ? `${err.message} (${err.cause.code})` : err.message;
+    return { ok: false, status: 0, latency_ms: performance.now() - started, request: { url, body }, error: message, ...(timedOut ? {} : { transport: true }) };
   }
   const text = await res.text();
   const latency = performance.now() - started;
@@ -33,6 +40,27 @@ export async function postJson(url: string, body: unknown, headers: Record<strin
     response: json ?? text.slice(0, 2000),
     ...(res.ok && json !== undefined ? {} : { error: json === undefined ? 'response is not JSON' : JSON.stringify((json as { error?: unknown }).error ?? json).slice(0, 500) }),
   };
+}
+
+/** Backoff before each retry of a request that never reached the server: about a minute in all. */
+export const TRANSPORT_BACKOFF_MS = [1000, 2000, 4000, 8000, 16000, 32000];
+
+/**
+ * postJson, retried only while the request gets no HTTP response for a connection reason (the
+ * server was unreachable, so the model never saw it). Any HTTP response, error or not, and any
+ * timeout is final. Every failed attempt is kept on the result (transport_failures), so a retry is
+ * never hidden. Used for engines the launcher started, reached over the network.
+ */
+export async function postJsonReachable(url: string, body: unknown, headers: Record<string, string>,
+  backoffMs: readonly number[] = TRANSPORT_BACKOFF_MS, post: typeof postJson = postJson): Promise<Captured> {
+  const failures: string[] = [];
+  for (let attempt = 0; ; attempt++) {
+    const c = await post(url, body, headers);
+    const wait = backoffMs[attempt];
+    if (!c.transport || wait === undefined) return failures.length ? { ...c, transport_failures: failures } : c;
+    failures.push(c.error ?? 'no response');
+    await new Promise((resolve) => setTimeout(resolve, wait));
+  }
 }
 
 export interface ChatResult {

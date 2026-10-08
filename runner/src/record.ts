@@ -20,7 +20,8 @@ export type RunJson = {
   subject: Subject; mode: string; profile: string;
   harness: { name: 'bench'; commit: string; dirty: boolean; suite_hash: string; scorer: { name: string; version: string }; agent: null };
   endpoint: string; dataset: unknown; request_settings: Record<string, unknown>;
-  dispatch: { concurrency: number; requests_per_minute: number | null; retries: 0 };
+  /** retries: requests are never retried, except connection failures before any response (transport_retry). */
+  dispatch: { concurrency: number; requests_per_minute: number | null; retries: 0; transport_retry?: { backoff_ms: number[]; retried_requests: number } };
   budget: { cap_usd: number | null; spent_usd: number; price: unknown };
   environment: { node: string; platform: string; arch: string; location: string };
   attempted: number; completed: number; started_at: string; finished_at: string | null;

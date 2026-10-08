@@ -4,7 +4,7 @@ import { randomBytes } from 'node:crypto';
 import { createServer } from '@decision/gateway/http';
 import { models as gatewayPrices, modelIds as gatewayModels, type Model as GatewayModel } from '@decision/gateway/models';
 import { models as decisionPrices } from '@decision/decisions/models';
-import { chat, postJson, type Captured, type ChatResult } from './client.ts';
+import { chat, postJson, postJsonReachable, type Captured, type ChatResult } from './client.ts';
 import type { Usage } from './suite.ts';
 
 /** USD per million tokens. Sources: the gateway's Cerebras snapshot and the decisions package's Jev price. */
@@ -51,7 +51,7 @@ export function typesafe(model: string, endpoint = 'https://api.typesafe.ai/v1/s
 export function decisionEndpoint(url: string, model: string, keyEnv?: string): DecisionProvider {
   const auth: Record<string, string> = keyEnv ? { authorization: `Bearer ${key(keyEnv)}` } : {};
   const endpoint = url.endsWith('/v1/systemone') ? url : `${url.replace(/\/$/, '')}/v1/systemone`;
-  return { describe: { endpoint, mode: 'native', model }, call: (body) => postJson(endpoint, { ...body, model }, auth), close: async () => {} };
+  return { describe: { endpoint, mode: 'native', model }, call: (body) => postJsonReachable(endpoint, { ...body, model }, auth), close: async () => {} };
 }
 
 /**

@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import YAML from 'yaml';
-import { postJson } from './client.ts';
+import { postJsonReachable, TRANSPORT_BACKOFF_MS } from './client.ts';
 import { sha256, type Subject } from './identity.ts';
 import { buildSummary, harnessCommit, REPO_ROOT, runDirFor, ensureSubject, writeRaw, type RunJson } from './record.ts';
 import { percentile, round6 } from './stats.ts';
@@ -121,7 +121,7 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
   let failed = false;
   for (let b = 0; b * def.batch_size < order.length; b++) {
     const idx = order.slice(b * def.batch_size, (b + 1) * def.batch_size);
-    const c = await postJson(`${o.baseUrl}/v1/embeddings`, { input: idx.map((i) => manifest[i]?.text), encoding_format: 'base64', model: o.subject.model }, {});
+    const c = await postJsonReachable(`${o.baseUrl}/v1/embeddings`, { input: idx.map((i) => manifest[i]?.text), encoding_format: 'base64', model: o.subject.model }, {});
     const resp = (c.response ?? {}) as { data?: { index: number; embedding: string }[]; usage?: { prompt_tokens?: number }; engine_ms?: number; model?: string };
     let problem = !c.ok ? (c.error ?? `HTTP ${c.status}`) : !Array.isArray(resp.data) || resp.data.length !== idx.length ? 'wrong number of embeddings' : null;
     for (const d of problem ? [] : resp.data ?? []) {
@@ -134,12 +134,15 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
     rows.push({ index: b, item_id: `batch-${b}`, ok, status: c.status, latency_ms: c.latency_ms,
       request: { url: c.request.url, body: { inputs: idx.length, sha256: idx.map((i) => manifest[i]?.sha256.slice(0, 16)) } },
       response: { usage: resp.usage ?? null, engine_ms: resp.engine_ms ?? null, model: resp.model ?? null }, ...(problem ? { error: problem } : {}),
-      usage: { input_tokens: resp.usage?.prompt_tokens ?? 0, output_tokens: 0 }, cost_usd: 0, ...(resp.model ? { model: resp.model } : {}) });
+      usage: { input_tokens: resp.usage?.prompt_tokens ?? 0, output_tokens: 0 }, cost_usd: 0, ...(resp.model ? { model: resp.model } : {}),
+      ...(c.transport_failures ? { transport_failures: c.transport_failures } : {}) });
     if (failed) { log(`batch ${b} failed (HTTP ${c.status}: ${problem}): stopping; no hidden retries`); break; }
     if (b % 100 === 0) log(`${Math.min(order.length, (b + 1) * def.batch_size)}/${order.length} embedded`);
   }
 
   run.attempted = rows.length; run.completed = rows.filter((r) => r.ok).length;
+  const retried = rows.filter((r) => r.transport_failures?.length).length;
+  if (retried) (run.dispatch as RunJson['dispatch']).transport_retry = { backoff_ms: [...TRANSPORT_BACKOFF_MS], retried_requests: retried };
   run.observed_models = rows.reduce<Record<string, number>>((m, r) => { if (r.model) m[r.model] = (m[r.model] ?? 0) + 1; return m; }, {});
   writeRaw(dir, rows, root);
   if (!failed) {

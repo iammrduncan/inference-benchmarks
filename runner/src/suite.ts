@@ -20,6 +20,8 @@ export type RawRow = {
   response?: unknown; error?: string;
   usage?: Usage; cost_usd: number; model?: string;
   expected?: unknown;
+  /** Connection failures before this request reached the server (it was retried; see client.postJsonReachable). */
+  transport_failures?: string[];
 };
 
 export interface SuiteModule {

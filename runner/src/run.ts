@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import YAML from 'yaml';
 import { cloudSubject, endpointSubject, type Identity, type Subject } from './identity.ts';
+import { TRANSPORT_BACKOFF_MS } from './client.ts';
 import { cost, decisionEndpoint, gatewayJsonSchema, priceFor, typesafe, type DecisionProvider, type Price } from './providers.ts';
 import { buildSummary, ensureSubject, harnessCommit, REPO_ROOT, runDirFor, suiteHash, writeRaw, type RunJson } from './record.ts';
 import type { RawRow, SuiteModule, Tier, Usage } from './suite.ts';
@@ -103,7 +104,8 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
       const model = rec(c.response).model;
       rows.push({ index, item_id: item.id, ok: c.ok, status: c.status, latency_ms: c.latency_ms, request: c.request,
         ...(c.response !== undefined ? { response: c.response } : {}), ...(c.error ? { error: c.error } : {}),
-        ...(usage ? { usage } : {}), cost_usd: usd, ...(typeof model === 'string' ? { model } : {}), expected: item.expected });
+        ...(usage ? { usage } : {}), cost_usd: usd, ...(typeof model === 'string' ? { model } : {}), expected: item.expected,
+        ...(c.transport_failures ? { transport_failures: c.transport_failures } : {}) });
       if (rows.length % 25 === 0) log(`${rows.length}/${items.length} sent, $${spent.toFixed(4)}`);
     }
   };
@@ -115,6 +117,8 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
     run.completed = rows.filter((x) => x.ok).length;
     run.observed_models = rows.reduce<Record<string, number>>((m, x) => { if (x.model) m[x.model] = (m[x.model] ?? 0) + 1; return m; }, {});
     run.budget.spent_usd = Math.round(spent * 1e6) / 1e6;
+    const retried = rows.filter((x) => x.transport_failures?.length).length;
+    if (retried) run.dispatch.transport_retry = { backoff_ms: [...TRANSPORT_BACKOFF_MS], retried_requests: retried };
     run.status = rows.length === items.length ? 'complete' : 'partial';
     run.stop_reason = stop ?? (rows.length === items.length ? null : 'interrupted');
     run.finished_at = new Date().toISOString();
