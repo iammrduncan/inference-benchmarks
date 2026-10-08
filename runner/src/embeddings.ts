@@ -3,6 +3,7 @@
 // The scorer never calls a model; bench is the only client. See suites/embeddings/suite.yaml.
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join, relative } from 'node:path';
 import YAML from 'yaml';
 import { postJsonReachable, TRANSPORT_BACKOFF_MS } from './client.ts';
@@ -25,11 +26,23 @@ function scorer(args: string[]): string {
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 64 * 1024 * 1024 });
 }
 
+function hfToken(): string | undefined {
+  if (process.env.HF_TOKEN) return process.env.HF_TOKEN;
+  const file = join(process.env.HF_HOME ?? join(homedir(), '.cache', 'huggingface'), 'token');
+  return existsSync(file) ? readFileSync(file, 'utf8').trim() || undefined : undefined;
+}
+
 /** The model's own prompts, from config_sentence_transformers.json at the pinned revision. */
 async function prompts(subject: Subject): Promise<{ path: string; sha256: string }> {
   const { hf, revision } = subject.checkpoint;
   if (!hf || !revision) throw new Error('embeddings needs a Hugging Face checkpoint and revision in the subject identity');
-  const res = await fetch(`https://huggingface.co/${hf}/raw/${revision}/config_sentence_transformers.json`, { signal: AbortSignal.timeout(30_000) });
+  // Gated checkpoints need the operator's own token (HF_TOKEN, else the hf CLI's token file); it is
+  // sent as a header and never recorded. Only a 404 means "no prompts"; any other failure stops the
+  // run, because silently embedding without the card's prompts measures a different setup.
+  const token = hfToken();
+  const res = await fetch(`https://huggingface.co/${hf}/resolve/${revision}/config_sentence_transformers.json`,
+    { signal: AbortSignal.timeout(30_000), ...(token ? { headers: { authorization: `Bearer ${token}` } } : {}) });
+  if (!res.ok && res.status !== 404) throw new Error(`${hf}@${revision}: config_sentence_transformers.json returned HTTP ${res.status}${res.status === 401 || res.status === 403 ? ' (gated: accept the terms and set HF_TOKEN or run `hf auth login`)' : ''}`);
   const cfg = res.ok ? (await res.json()) as { prompts?: Record<string, string> } : {};
   const text = JSON.stringify(cfg.prompts ?? {});
   const path = artifacts(REPO_ROOT, 'prompts', `${sha256(text).slice(0, 16)}.json`);
