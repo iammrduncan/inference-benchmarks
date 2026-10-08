@@ -1,0 +1,17 @@
+key: laya/hf-7b928d8/fp32-convai/decide-server-laya-torch-mps-tf5.19.0-torch2.14.1
+target: recipe
+model: laya
+checkpoint:
+  hf: convaiinnovations/laya
+  revision: 7b928d828b7b0e022f929d9bd2e44165aa270148
+quant:
+  format: fp32
+  producer: convai
+engine:
+  name: decide-server-laya-torch-mps
+  version: tf5.19.0-torch2.14.1
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

@@ -1,0 +1,196 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-08-quick-card-prompts-2e5238",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "embeddings",
+    "tier": "quick",
+    "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+    "ids": 66939
+  },
+  "subject": {
+    "model": "embeddinggemma-300m",
+    "checkpoint": {
+      "hf": "google/embeddinggemma-300m",
+      "revision": "57c266a740f537b4dc058e1b0cda161fd15afa75"
+    },
+    "quant": {
+      "format": "fp32",
+      "producer": "google",
+      "repo": "google/embeddinggemma-300m",
+      "revision": "57c266a740f537b4dc058e1b0cda161fd15afa75"
+    },
+    "engine": {
+      "name": "sentence-transformers-torch-cuda",
+      "version": "st6.1.0-torch2.14.1+cu126"
+    },
+    "key": "embeddinggemma-300m/hf-57c266a/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "card-prompts",
+  "harness": {
+    "name": "bench",
+    "commit": "86f9bc06d769c296ac09a88092b755d4bf22a912",
+    "dirty": false,
+    "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+    "scorer": {
+      "name": "mteb",
+      "version": "2.22.5"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/embeddings",
+  "dataset": {
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "manifest": ".artifacts/embeddings/manifests/670f8d38974312e2.jsonl",
+    "manifest_sha256": "2d2ce7c3195335d3917cd3675666232777a4bdf38c110da28a72cac316470566",
+    "texts": 66939,
+    "prompts_sha256": "3d60d338d6b690bbd1eae200c329bfea91f1f669c5333ababdf2ffd41aa5d9b0"
+  },
+  "request_settings": {
+    "batch_size": 32,
+    "encoding_format": "base64",
+    "order": "by text length, descending",
+    "dims_scored": [
+      768,
+      512,
+      256,
+      128
+    ],
+    "width": 768
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 2092,
+  "completed": 2092,
+  "started_at": "2026-10-08T21:34:13.945Z",
+  "finished_at": "2026-10-08T21:53:03.432Z",
+  "observed_models": {
+    "embeddinggemma-300m": 2092
+  },
+  "engine": {
+    "backend": "sentence-transformers",
+    "device": "cuda",
+    "dtype": "float32",
+    "torch": "2.14.1+cu126",
+    "cuda_arch_list": [
+      "sm_50",
+      "sm_60",
+      "sm_70",
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90"
+    ],
+    "device_name": "Tesla P100-PCIE-16GB",
+    "sentence_transformers": "6.1.0",
+    "transformers": "5.19.0",
+    "max_seq_length": 2048,
+    "dimension": 768,
+    "trust_remote_code": false,
+    "unpadded": false,
+    "triton_overrides": "disabled torch's native Triton op overrides (sm_60 is below Triton's sm_70 minimum)",
+    "token_budget_per_forward": 16384,
+    "python": "3.12.15",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.36",
+    "machine": "x86_64",
+    "numpy": "2.5.3"
+  },
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "embeddinggemma-300m/p100/st",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-08T21-33-07-269Z",
+    "profile": "st-fp32",
+    "params": {
+      "checkpoint": "google/embeddinggemma-300m",
+      "checkpoint_rev": "57c266a740f537b4dc058e1b0cda161fd15afa75",
+      "model_name": "embeddinggemma-300m",
+      "max_len": "2048",
+      "trust_remote_code": "false",
+      "unpadded": "false",
+      "stack": "",
+      "engine_name": "sentence-transformers-torch-cuda",
+      "engine_version": "st6.1.0-torch2.14.1+cu126",
+      "producer": "google",
+      "weights_repo": "google/embeddinggemma-300m",
+      "weights_rev": "57c266a740f537b4dc058e1b0cda161fd15afa75",
+      "backend": "st",
+      "precision": "fp32"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "e6ceae95a5303653a7abbd1dff06d7ce6ce6d878",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": [
+      {
+        "component": "google/embeddinggemma-300m",
+        "hash": "f58fc42228e4ba242f03b95234afcfb7ca13fa57e5d757d02807a8b6f4508a34",
+        "at": "2026-10-08T21:33:07.268Z"
+      }
+    ]
+  },
+  "reference": null,
+  "vectors": {
+    "path": ".artifacts/embeddings/vectors/embeddinggemma-300m__hf-57c266a__fp32-google__sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126__embeddings__2026-10-08-quick-card-prompts-2e5238.npy",
+    "sha256": "047fd67edd0380aa4484faf0a32f0144a668954bc2eb18d40ebc0f65b9b96e81",
+    "shape": [
+      66939,
+      768
+    ],
+    "dtype": "float32",
+    "uploaded": false
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-08-core-greedy-nothink-fca947",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "decision-conformance",
+    "tier": "core",
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "ids": 17
+  },
+  "subject": {
+    "model": "d1-omni-600m",
+    "checkpoint": {
+      "hf": "LiquidAI/d1-omni-600M",
+      "revision": "02b55d7076f15129e59ab3f94783f32c4b088674"
+    },
+    "quant": {
+      "format": "fp32",
+      "producer": "liquidai"
+    },
+    "engine": {
+      "name": "decide-server-d1-torch-mps",
+      "version": "tf5.19.0-torch2.14.1"
+    },
+    "key": "d1-omni-600m/hf-02b55d7/fp32-liquidai/decide-server-d1-torch-mps-tf5.19.0-torch2.14.1",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "6182c52c33fb83f882558700870b956b1e8d6a8b",
+    "dirty": false,
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "scorer": {
+      "name": "bench/decision-conformance",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "http://127.0.0.1:8000/v1/systemone",
+  "dataset": null,
+  "request_settings": {
+    "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 17,
+  "completed": 17,
+  "started_at": "2026-10-08T19:20:53.863Z",
+  "finished_at": "2026-10-08T19:20:54.793Z",
+  "observed_models": {
+    "d1-omni-600m": 17
+  },
+  "hardware": {
+    "host": "macbook",
+    "recipe": "d1-omni-600m/apple-m/decide",
+    "placements": [
+      {
+        "host": "macbook",
+        "devices": [
+          {
+            "kind": "apple-silicon",
+            "label": "m4-pro",
+            "chip": "M4 Pro",
+            "memory_gb": 24
+          }
+        ],
+        "observed": {
+          "chip": "Apple M4 Pro",
+          "memory_gb": 24
+        }
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-08T19-18-05-248Z",
+    "profile": "fp32",
+    "params": {
+      "backend": "d1",
+      "checkpoint": "LiquidAI/d1-omni-600M",
+      "checkpoint_rev": "02b55d7076f15129e59ab3f94783f32c4b088674",
+      "dtype": "float32",
+      "quant": "none",
+      "precision": "fp32",
+      "producer": "liquidai",
+      "model_name": "d1-omni-600m",
+      "include": "",
+      "engine_name": "decide-server-d1-torch-mps",
+      "engine_version": "tf5.19.0-torch2.14.1"
+    },
+    "source": {
+      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "commit": "253f49320e9035f79b4664f1cf8ed7fba41e115f",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  }
+}

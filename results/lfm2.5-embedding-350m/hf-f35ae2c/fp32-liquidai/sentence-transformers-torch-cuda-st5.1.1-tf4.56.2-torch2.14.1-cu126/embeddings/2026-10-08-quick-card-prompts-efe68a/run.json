@@ -1,0 +1,188 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-08-quick-card-prompts-efe68a",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "embeddings",
+    "tier": "quick",
+    "suite_hash": "c8280a4454c525bf91218ad69c4c09d220fcedd2cb41dfce6134c902d40b49cd",
+    "ids": 66939
+  },
+  "subject": {
+    "model": "lfm2.5-embedding-350m",
+    "checkpoint": {
+      "hf": "LiquidAI/LFM2.5-Embedding-350M",
+      "revision": "f35ae2c91d687658dbf1f2b449382f0b019b9808"
+    },
+    "quant": {
+      "format": "fp32",
+      "producer": "liquidai",
+      "repo": "LiquidAI/LFM2.5-Embedding-350M",
+      "revision": "f35ae2c91d687658dbf1f2b449382f0b019b9808"
+    },
+    "engine": {
+      "name": "sentence-transformers-torch-cuda",
+      "version": "st5.1.1-tf4.56.2-torch2.14.1+cu126"
+    },
+    "key": "lfm2.5-embedding-350m/hf-f35ae2c/fp32-liquidai/sentence-transformers-torch-cuda-st5.1.1-tf4.56.2-torch2.14.1-cu126",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "card-prompts",
+  "harness": {
+    "name": "bench",
+    "commit": "e72ea887c3852275823cdf344999b22bbe37a482",
+    "dirty": false,
+    "suite_hash": "c8280a4454c525bf91218ad69c4c09d220fcedd2cb41dfce6134c902d40b49cd",
+    "scorer": {
+      "name": "mteb",
+      "version": "2.22.5"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/embeddings",
+  "dataset": {
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "manifest": ".artifacts/embeddings/manifests/93e2d29aafb15cd0.jsonl",
+    "manifest_sha256": "1d1c3098e932ff0e2116e75e3040ec60f31a59a7a707ba324a4219809143570c",
+    "texts": 66939,
+    "prompts_sha256": "b140335cfabe6f8375cbe89b426c0521df6bdc91bd12497c5665c86303de3d7c"
+  },
+  "request_settings": {
+    "batch_size": 32,
+    "encoding_format": "base64",
+    "order": "by text length, descending",
+    "dims_scored": [
+      1024
+    ],
+    "width": 1024
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 2092,
+  "completed": 2092,
+  "started_at": "2026-10-08T20:12:55.918Z",
+  "finished_at": "2026-10-08T20:44:18.077Z",
+  "observed_models": {
+    "lfm2.5-embedding-350m": 2092
+  },
+  "engine": {
+    "backend": "sentence-transformers",
+    "device": "cuda",
+    "dtype": "float32",
+    "torch": "2.14.1+cu126",
+    "cuda_arch_list": [
+      "sm_50",
+      "sm_60",
+      "sm_70",
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90"
+    ],
+    "device_name": "Tesla P100-PCIE-16GB",
+    "sentence_transformers": "5.1.1",
+    "transformers": "4.56.2",
+    "max_seq_length": 512,
+    "dimension": 1024,
+    "trust_remote_code": true,
+    "unpadded": true,
+    "triton_overrides": "disabled torch's native Triton op overrides (sm_60 is below Triton's sm_70 minimum)",
+    "token_budget_per_forward": 16384,
+    "python": "3.12.15",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.36",
+    "machine": "x86_64",
+    "numpy": "2.5.3"
+  },
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "lfm2.5-embedding-350m/p100/st",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-08T20-11-46-753Z",
+    "profile": "st-fp32",
+    "params": {
+      "checkpoint": "LiquidAI/LFM2.5-Embedding-350M",
+      "checkpoint_rev": "f35ae2c91d687658dbf1f2b449382f0b019b9808",
+      "model_name": "lfm2.5-embedding-350m",
+      "max_len": "512",
+      "trust_remote_code": "true",
+      "unpadded": "true",
+      "stack": "tf456",
+      "engine_name": "sentence-transformers-torch-cuda",
+      "engine_version": "st5.1.1-tf4.56.2-torch2.14.1+cu126",
+      "producer": "liquidai",
+      "weights_repo": "LiquidAI/LFM2.5-Embedding-350M",
+      "weights_rev": "f35ae2c91d687658dbf1f2b449382f0b019b9808",
+      "backend": "st",
+      "dims": "1024",
+      "precision": "fp32"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "e6ceae95a5303653a7abbd1dff06d7ce6ce6d878",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  },
+  "reference": null,
+  "vectors": {
+    "path": ".artifacts/embeddings/vectors/lfm2.5-embedding-350m__hf-f35ae2c__fp32-liquidai__sentence-transformers-torch-cuda-st5.1.1-tf4.56.2-torch2.14.1-cu126__embeddings__2026-10-08-quick-card-prompts-efe68a.npy",
+    "sha256": "9b2c44cd1bd046fe721647ae00bf8537c828b3ffdda2f987ad166dccae31e356",
+    "shape": [
+      66939,
+      1024
+    ],
+    "dtype": "float32",
+    "uploaded": false
+  }
+}

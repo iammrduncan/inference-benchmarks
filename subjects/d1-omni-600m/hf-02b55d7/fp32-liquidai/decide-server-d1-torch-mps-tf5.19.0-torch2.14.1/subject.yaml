@@ -1,0 +1,17 @@
+key: d1-omni-600m/hf-02b55d7/fp32-liquidai/decide-server-d1-torch-mps-tf5.19.0-torch2.14.1
+target: recipe
+model: d1-omni-600m
+checkpoint:
+  hf: LiquidAI/d1-omni-600M
+  revision: 02b55d7076f15129e59ab3f94783f32c4b088674
+quant:
+  format: fp32
+  producer: liquidai
+engine:
+  name: decide-server-d1-torch-mps
+  version: tf5.19.0-torch2.14.1
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

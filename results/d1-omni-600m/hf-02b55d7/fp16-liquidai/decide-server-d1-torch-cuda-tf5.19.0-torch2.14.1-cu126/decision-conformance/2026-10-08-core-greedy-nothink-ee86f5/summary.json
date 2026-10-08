@@ -1,0 +1,70 @@
+{
+  "run_id": "2026-10-08-core-greedy-nothink-ee86f5",
+  "suite": "decision-conformance",
+  "tier": "core",
+  "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+  "subject": "d1-omni-600m/hf-02b55d7/fp16-liquidai/decide-server-d1-torch-cuda-tf5.19.0-torch2.14.1-cu126",
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "status": "complete",
+  "label": null,
+  "items": {
+    "planned": 17,
+    "attempted": 17,
+    "succeeded": 17,
+    "failed": 0,
+    "failed_by_status": {}
+  },
+  "metrics": {
+    "checks": {
+      "invariants": {
+        "passed": 33,
+        "total": 33,
+        "failures": []
+      },
+      "batched_vs_separate": {
+        "passed": 6,
+        "total": 6,
+        "failures": [],
+        "max_abs_diff": 0.000055
+      },
+      "repeat_stability": {
+        "passed": 6,
+        "total": 6,
+        "failures": [],
+        "max_std": 0
+      },
+      "option_order": {
+        "passed": 2,
+        "total": 2,
+        "failures": [],
+        "max_confidence_delta": 0.012834
+      },
+      "monotonic": {
+        "passed": 1,
+        "total": 2,
+        "failures": [
+          "state 1 -> 2: 1.051018738609855 -> 0.2864902683068067"
+        ],
+        "expected_scores": [
+          0.626453,
+          1.051019,
+          0.28649
+        ]
+      }
+    },
+    "passed": 48,
+    "total": 49
+  },
+  "latency_ms": {
+    "p50": 73.463875,
+    "p95": 193.233417,
+    "p99": 193.233417,
+    "note": "successful requests, nearest rank, measured from America/Chicago"
+  },
+  "usage": {
+    "input_tokens": 4685,
+    "output_tokens": 0,
+    "cost_usd": 0
+  }
+}

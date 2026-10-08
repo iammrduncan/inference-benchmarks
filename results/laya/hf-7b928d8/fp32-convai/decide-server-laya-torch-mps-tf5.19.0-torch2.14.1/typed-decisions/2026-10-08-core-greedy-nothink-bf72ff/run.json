@@ -1,0 +1,139 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-08-core-greedy-nothink-bf72ff",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "typed-decisions",
+    "tier": "core",
+    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "ids": 400
+  },
+  "subject": {
+    "model": "laya",
+    "checkpoint": {
+      "hf": "convaiinnovations/laya",
+      "revision": "7b928d828b7b0e022f929d9bd2e44165aa270148"
+    },
+    "quant": {
+      "format": "fp32",
+      "producer": "convai"
+    },
+    "engine": {
+      "name": "decide-server-laya-torch-mps",
+      "version": "tf5.19.0-torch2.14.1"
+    },
+    "key": "laya/hf-7b928d8/fp32-convai/decide-server-laya-torch-mps-tf5.19.0-torch2.14.1",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "6182c52c33fb83f882558700870b956b1e8d6a8b",
+    "dirty": false,
+    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "scorer": {
+      "name": "bench/typed-decisions",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "http://127.0.0.1:8000/v1/systemone",
+  "dataset": {
+    "repo": "LocalLLaMA/typed-decisions",
+    "revision": "d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18",
+    "workflows": [
+      "agent_trace_observability",
+      "customer_service",
+      "invoice_processing",
+      "security_incidents"
+    ],
+    "files": {
+      "agent_trace_observability/test-00000-of-00001.parquet": "833ad1364237b9a3fe05be2c62e632f0cb34ba372284b975140d362ab246f70d",
+      "customer_service/test-00000-of-00001.parquet": "b4e6e23b3c2add197dda74008f2ce42ff996511ff1bf9c93e8b0e6d84ac9c275",
+      "invoice_processing/test-00000-of-00001.parquet": "ce2adfb5201dba910b23bda6ab9678c385b580edaabbf8348b4e024c120d4b75",
+      "security_incidents/test-00000-of-00001.parquet": "4d8bc1879a0b67e5d275edea21a694b06136ca2a2c3355215a7d8adea6b0c75f"
+    },
+    "train_files": {
+      "agent_trace_observability/train-00000-of-00001.parquet": "e7b2f78fe539517c6a66a90c68ed671c6133194a88d27dbff5d84713af46b901",
+      "customer_service/train-00000-of-00001.parquet": "3e3abc2a9307bc641f60a6f9042627897ca01c145c3206211dfa9c926ba8721c",
+      "invoice_processing/train-00000-of-00001.parquet": "6a5cfcd12e77e707cd9861107868a5adbb7df566ced3162bb9472cd3e348a598",
+      "security_incidents/train-00000-of-00001.parquet": "3aae379ac25fc6434d5f5675f04b06f4310d1aac3056a0e30bb0f779aa2f0a99"
+    }
+  },
+  "request_settings": {
+    "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 400,
+  "completed": 400,
+  "started_at": "2026-10-08T19:16:22.818Z",
+  "finished_at": "2026-10-08T19:18:03.210Z",
+  "observed_models": {
+    "laya": 400
+  },
+  "hardware": {
+    "host": "macbook",
+    "recipe": "laya/apple-m/decide",
+    "placements": [
+      {
+        "host": "macbook",
+        "devices": [
+          {
+            "kind": "apple-silicon",
+            "label": "m4-pro",
+            "chip": "M4 Pro",
+            "memory_gb": 24
+          }
+        ],
+        "observed": {
+          "chip": "Apple M4 Pro",
+          "memory_gb": 24
+        }
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-08T19-15-29-712Z",
+    "profile": "fp32",
+    "params": {
+      "backend": "laya",
+      "checkpoint": "convaiinnovations/laya",
+      "checkpoint_rev": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+      "dtype": "float32",
+      "quant": "none",
+      "precision": "fp32",
+      "producer": "convai",
+      "model_name": "laya",
+      "include": "model.safetensors rl_agent_config.json rl_agent_api.py rl_common.py encoder/* tokenizer/* config.json",
+      "engine_name": "decide-server-laya-torch-mps",
+      "engine_version": "tf5.19.0-torch2.14.1"
+    },
+    "source": {
+      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "commit": "253f49320e9035f79b4664f1cf8ed7fba41e115f",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  }
+}

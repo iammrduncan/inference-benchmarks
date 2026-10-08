@@ -5,3 +5,28 @@ embeddinggemma-2/hf-914f7f8:
   why: >-
     The release checkpoint at full precision in the model card's own runtime
     (sentence-transformers). fp32 rather than bf16 because the P100 has no bfloat16.
+laya/hf-7b928d8:
+  subject: laya/hf-7b928d8/fp32-convai/decide-server-laya-torch-cuda-tf5.19.0-torch2.14.1-cu126
+  why: >-
+    The release checkpoint at full precision (fp32) on the reference machine (Tesla P100), through
+    the model's own release code. The P100 has no bfloat16.
+d1-omni-600m/hf-02b55d7:
+  subject: d1-omni-600m/hf-02b55d7/fp32-liquidai/decide-server-d1-torch-cuda-tf5.19.0-torch2.14.1-cu126
+  why: >-
+    The release checkpoint at full precision (fp32) on the reference machine (Tesla P100), through
+    the model's own release code. The P100 has no bfloat16.
+d1-3b/hf-051bcc4:
+  subject: d1-3b/hf-051bcc4/fp32-liquidai/decide-server-d1-torch-cuda-tf5.19.0-torch2.14.1-cu126
+  why: >-
+    The release checkpoint at full precision (fp32) on the reference machine (Tesla P100), through
+    the model's own release code. The P100 has no bfloat16.
+lfm2.5-embedding-350m/hf-f35ae2c:
+  subject: lfm2.5-embedding-350m/hf-f35ae2c/fp32-liquidai/sentence-transformers-torch-cuda-st5.1.1-tf4.56.2-torch2.14.1-cu126
+  why: >-
+    The release checkpoint at full precision on the reference machine (Tesla P100), in
+    sentence-transformers on its release stack (transformers 4.56.2), each text encoded alone.
+embeddinggemma-300m/hf-57c266a:
+  subject: embeddinggemma-300m/hf-57c266a/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126
+  why: >-
+    The release checkpoint at full precision on the reference machine (Tesla P100), in the model
+    card's own runtime (sentence-transformers) with its own prompts.

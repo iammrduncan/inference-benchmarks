@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-08-core-greedy-nothink-d2a926",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "decision-conformance",
+    "tier": "core",
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "ids": 17
+  },
+  "subject": {
+    "model": "d1-3b",
+    "checkpoint": {
+      "hf": "LiquidAI/d1-3B",
+      "revision": "051bcc464b01b9f92942b364d9586b0ef5912432"
+    },
+    "quant": {
+      "format": "fp16",
+      "producer": "liquidai"
+    },
+    "engine": {
+      "name": "decide-server-d1-torch-cuda",
+      "version": "tf5.19.0-torch2.14.1+cu126"
+    },
+    "key": "d1-3b/hf-051bcc4/fp16-liquidai/decide-server-d1-torch-cuda-tf5.19.0-torch2.14.1-cu126",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "86f9bc06d769c296ac09a88092b755d4bf22a912",
+    "dirty": false,
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "scorer": {
+      "name": "bench/decision-conformance",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/systemone",
+  "dataset": null,
+  "request_settings": {
+    "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 17,
+  "completed": 17,
+  "started_at": "2026-10-08T21:32:26.788Z",
+  "finished_at": "2026-10-08T21:32:29.850Z",
+  "observed_models": {
+    "d1-3b": 17
+  },
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "d1-3b/p100/decide",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-08T21-29-01-470Z",
+    "profile": "fp16",
+    "params": {
+      "backend": "d1",
+      "checkpoint": "LiquidAI/d1-3B",
+      "checkpoint_rev": "051bcc464b01b9f92942b364d9586b0ef5912432",
+      "dtype": "float16",
+      "quant": "none",
+      "precision": "fp16",
+      "producer": "liquidai",
+      "model_name": "d1-3b",
+      "include": "",
+      "engine_name": "decide-server-d1-torch-cuda",
+      "engine_version": "tf5.19.0-torch2.14.1+cu126"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "e6ceae95a5303653a7abbd1dff06d7ce6ce6d878",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  }
+}

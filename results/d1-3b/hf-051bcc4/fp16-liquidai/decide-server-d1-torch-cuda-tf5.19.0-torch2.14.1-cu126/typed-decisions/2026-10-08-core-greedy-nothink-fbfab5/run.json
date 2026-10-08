@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-08-core-greedy-nothink-fbfab5",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "typed-decisions",
+    "tier": "core",
+    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "ids": 400
+  },
+  "subject": {
+    "model": "d1-3b",
+    "checkpoint": {
+      "hf": "LiquidAI/d1-3B",
+      "revision": "051bcc464b01b9f92942b364d9586b0ef5912432"
+    },
+    "quant": {
+      "format": "fp16",
+      "producer": "liquidai"
+    },
+    "engine": {
+      "name": "decide-server-d1-torch-cuda",
+      "version": "tf5.19.0-torch2.14.1+cu126"
+    },
+    "key": "d1-3b/hf-051bcc4/fp16-liquidai/decide-server-d1-torch-cuda-tf5.19.0-torch2.14.1-cu126",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "86f9bc06d769c296ac09a88092b755d4bf22a912",
+    "dirty": false,
+    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "scorer": {
+      "name": "bench/typed-decisions",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/systemone",
+  "dataset": {
+    "repo": "LocalLLaMA/typed-decisions",
+    "revision": "d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18",
+    "workflows": [
+      "agent_trace_observability",
+      "customer_service",
+      "invoice_processing",
+      "security_incidents"
+    ],
+    "files": {
+      "agent_trace_observability/test-00000-of-00001.parquet": "833ad1364237b9a3fe05be2c62e632f0cb34ba372284b975140d362ab246f70d",
+      "customer_service/test-00000-of-00001.parquet": "b4e6e23b3c2add197dda74008f2ce42ff996511ff1bf9c93e8b0e6d84ac9c275",
+      "invoice_processing/test-00000-of-00001.parquet": "ce2adfb5201dba910b23bda6ab9678c385b580edaabbf8348b4e024c120d4b75",
+      "security_incidents/test-00000-of-00001.parquet": "4d8bc1879a0b67e5d275edea21a694b06136ca2a2c3355215a7d8adea6b0c75f"
+    },
+    "train_files": {
+      "agent_trace_observability/train-00000-of-00001.parquet": "e7b2f78fe539517c6a66a90c68ed671c6133194a88d27dbff5d84713af46b901",
+      "customer_service/train-00000-of-00001.parquet": "3e3abc2a9307bc641f60a6f9042627897ca01c145c3206211dfa9c926ba8721c",
+      "invoice_processing/train-00000-of-00001.parquet": "6a5cfcd12e77e707cd9861107868a5adbb7df566ced3162bb9472cd3e348a598",
+      "security_incidents/train-00000-of-00001.parquet": "3aae379ac25fc6434d5f5675f04b06f4310d1aac3056a0e30bb0f779aa2f0a99"
+    }
+  },
+  "request_settings": {
+    "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 400,
+  "completed": 400,
+  "started_at": "2026-10-08T21:29:12.013Z",
+  "finished_at": "2026-10-08T21:32:26.669Z",
+  "observed_models": {
+    "d1-3b": 400
+  },
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "d1-3b/p100/decide",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-08T21-29-01-470Z",
+    "profile": "fp16",
+    "params": {
+      "backend": "d1",
+      "checkpoint": "LiquidAI/d1-3B",
+      "checkpoint_rev": "051bcc464b01b9f92942b364d9586b0ef5912432",
+      "dtype": "float16",
+      "quant": "none",
+      "precision": "fp16",
+      "producer": "liquidai",
+      "model_name": "d1-3b",
+      "include": "",
+      "engine_name": "decide-server-d1-torch-cuda",
+      "engine_version": "tf5.19.0-torch2.14.1+cu126"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "e6ceae95a5303653a7abbd1dff06d7ce6ce6d878",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  }
+}

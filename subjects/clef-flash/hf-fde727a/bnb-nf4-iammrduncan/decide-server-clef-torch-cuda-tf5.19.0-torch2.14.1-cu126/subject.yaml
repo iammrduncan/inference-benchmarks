@@ -1,0 +1,17 @@
+key: clef-flash/hf-fde727a/bnb-nf4-iammrduncan/decide-server-clef-torch-cuda-tf5.19.0-torch2.14.1-cu126
+target: recipe
+model: clef-flash
+checkpoint:
+  hf: Cloudflare/clef-flash
+  revision: fde727a287004204b7518dcc983fe64379776712
+quant:
+  format: bnb-nf4
+  producer: iammrduncan
+engine:
+  name: decide-server-clef-torch-cuda
+  version: tf5.19.0-torch2.14.1+cu126
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

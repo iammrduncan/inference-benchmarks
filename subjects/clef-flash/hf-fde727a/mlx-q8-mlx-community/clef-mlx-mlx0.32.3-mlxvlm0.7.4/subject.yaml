@@ -1,0 +1,19 @@
+key: clef-flash/hf-fde727a/mlx-q8-mlx-community/clef-mlx-mlx0.32.3-mlxvlm0.7.4
+target: recipe
+model: clef-flash
+checkpoint:
+  hf: Cloudflare/clef-flash
+  revision: fde727a287004204b7518dcc983fe64379776712
+quant:
+  format: mlx-q8
+  producer: mlx-community
+  repo: mlx-community/clef-flash-8bit
+  revision: 5a195dc147926b63b1d139691ed4480ca9f92c0e
+engine:
+  name: clef-mlx
+  version: mlx0.32.3-mlxvlm0.7.4
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

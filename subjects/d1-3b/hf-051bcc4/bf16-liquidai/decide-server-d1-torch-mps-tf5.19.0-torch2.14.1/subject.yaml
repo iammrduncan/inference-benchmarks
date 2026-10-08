@@ -1,0 +1,17 @@
+key: d1-3b/hf-051bcc4/bf16-liquidai/decide-server-d1-torch-mps-tf5.19.0-torch2.14.1
+target: recipe
+model: d1-3b
+checkpoint:
+  hf: LiquidAI/d1-3B
+  revision: 051bcc464b01b9f92942b364d9586b0ef5912432
+quant:
+  format: bf16
+  producer: liquidai
+engine:
+  name: decide-server-d1-torch-mps
+  version: tf5.19.0-torch2.14.1
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []
