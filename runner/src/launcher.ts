@@ -7,7 +7,8 @@ import { subjectKey, type Identity, type Subject } from './identity.ts';
 import { REPO_ROOT } from './record.ts';
 
 /** `source` is a mirror of the pinned commit (a path the target host can clone); the launcher still records the pin. */
-export type RecipeTarget = { recipe: string; profile?: string; params?: string[]; on?: string; inventory?: string; source?: string };
+/** `accept` names license-gated components the operator has accepted (the launcher records each acknowledgment). */
+export type RecipeTarget = { recipe: string; profile?: string; params?: string[]; on?: string; inventory?: string; source?: string; accept?: string[] };
 
 export type UpResult = {
   id: string; run_id: string; run_dir: string; url: string; base_url: string;
@@ -33,7 +34,8 @@ function launcher(args: string[], inherit = false): string {
 
 function common(t: RecipeTarget): string[] {
   return [...(t.profile ? ['--profile', t.profile] : []), ...(t.params ?? []).flatMap((p) => ['--param', p]),
-    ...(t.on ? ['--on', t.on] : []), ...(t.inventory ? ['--inventory', t.inventory] : []), ...(t.source ? ['--source', t.source] : [])];
+    ...(t.on ? ['--on', t.on] : []), ...(t.inventory ? ['--inventory', t.inventory] : []), ...(t.source ? ['--source', t.source] : []),
+    ...(t.accept ?? []).flatMap((c) => ['--accept', c])];
 }
 
 /** Bring the recipe up and wait for health; the launcher's own logs go to stderr. */

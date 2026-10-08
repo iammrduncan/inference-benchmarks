@@ -29,6 +29,7 @@ from mteb.cache import ResultCache  # noqa: E402
 from mteb.models import ModelMeta  # noqa: E402
 from mteb.models.abs_encoder import AbsEncoder  # noqa: E402
 
+# The collector returns placeholder vectors of this size; real vectors keep their own width.
 DIM = 768
 
 
@@ -36,9 +37,9 @@ def sha(text: str) -> str:
     return hashlib.sha256(text.encode()).hexdigest()
 
 
-def meta(name: str) -> ModelMeta:
+def meta(name: str, dim: int = DIM) -> ModelMeta:
     return ModelMeta(loader=None, name=f"bench/{name}", revision="0", release_date=None, languages=None,
-                     n_parameters=None, memory_usage_mb=None, max_tokens=None, embed_dim=DIM, license=None,
+                     n_parameters=None, memory_usage_mb=None, max_tokens=None, embed_dim=dim, license=None,
                      open_weights=None, public_training_code=None, public_training_data=None, framework=[],
                      similarity_fn_name="cosine", use_instructions=None, training_datasets=None)
 
@@ -79,6 +80,7 @@ class Lookup(Prompted):
         self.index, self.dim = index, dim
         v = vectors[:, :dim].astype(np.float32)
         self.vectors = v / np.maximum(np.linalg.norm(v, axis=1, keepdims=True), 1e-12)  # re-normalize after truncation
+        self.mteb_model_meta = meta(f"lookup-d{dim}", dim)
 
     def encode(self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs):
         texts = self.texts(inputs, task_metadata, prompt_type)
@@ -158,12 +160,15 @@ def main() -> None:
         return
     manifest = [json.loads(line) for line in open(a.manifest)]
     vectors = np.load(a.vectors)
-    if vectors.shape != (len(manifest), DIM):
-        raise SystemExit(f"vectors {vectors.shape} do not match the manifest ({len(manifest)} x {DIM})")
+    if vectors.ndim != 2 or vectors.shape[0] != len(manifest):
+        raise SystemExit(f"vectors {vectors.shape} do not match the manifest ({len(manifest)} rows)")
+    dims = [int(x) for x in a.dims.split(",")]
+    if any(d > vectors.shape[1] for d in dims):
+        raise SystemExit(f"dims {dims} exceed the vectors' width {vectors.shape[1]}")
     index = {m["sha256"]: i for i, m in enumerate(manifest)}
     ref = np.load(a.reference) if a.reference else None
     out = {"mteb": mteb.__version__, "tasks": tasks, "by_dim": {}}
-    for dim in [int(x) for x in a.dims.split(",")]:
+    for dim in dims:
         scores = evaluate(Lookup(prompts, index, vectors, dim), tasks)
         entry = {"tasks": scores, "mean_main_score": round(float(np.mean([v["main_score"] for v in scores.values()])), 6)}
         if ref is not None:

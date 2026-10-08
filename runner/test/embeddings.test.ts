@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { decodeVector, embeddingsSuite, writeNpy } from '../src/embeddings.ts';
+import { decodeVector, embeddingsSuite, scoredDims, writeNpy } from '../src/embeddings.ts';
 import type { RawRow } from '../src/suite.ts';
 
 test('vectors are written as NumPy .npy (v1.0, little-endian float32, C order, 64-byte aligned header)', () => {
@@ -42,4 +42,11 @@ test('base64 vectors decode to exactly their own bytes (regression: pooled Buffe
   assert.equal(out.length, 768);
   assert.equal(out[767], 383.5);
   assert.equal(decodeVector(Buffer.from([1, 2, 3]).toString('base64')).length, 0, 'a partial float is rejected');
+});
+
+test('scored dims: the recipe\'s list wins; otherwise the suite\'s, cut to the vector width', () => {
+  assert.deepEqual(scoredDims([768, 512, 256, 128], 768), [768, 512, 256, 128]);
+  assert.deepEqual(scoredDims([768, 512, 256, 128], 1024, [1024]), [1024], 'no Matryoshka cuts a model was not trained for');
+  assert.deepEqual(scoredDims([768, 512, 256, 128], 384), [256, 128]);
+  assert.throws(() => scoredDims([768], 512, [1024]), /cannot score/);
 });

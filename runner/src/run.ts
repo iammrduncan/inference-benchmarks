@@ -24,7 +24,7 @@ export type Target =
 
 export type RunOptions = { suites: string[]; tier: Tier; profile: string; budgetUsd: number | null; concurrency: number; rpm?: number | null; reference?: string; root?: string; log?: (m: string) => void };
 
-type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown> };
+type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown>; hardware?: unknown; launcher?: unknown };
 
 /** Map a target to its subject and a decision client. */
 export async function resolveTarget(t: Exclude<Target, { kind: 'recipe' }>): Promise<Resolved> {
@@ -77,6 +77,7 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
     budget: { cap_usd: o.budgetUsd, spent_usd: 0, price: r.price ?? null },
     environment: { node: process.version, platform: process.platform, arch: process.arch, location: process.env.BENCH_LOCATION ?? Intl.DateTimeFormat().resolvedOptions().timeZone },
     attempted: 0, completed: 0, started_at: started.toISOString(), finished_at: null, observed_models: {},
+    ...(r.hardware !== undefined ? { hardware: r.hardware } : {}), ...(r.launcher !== undefined ? { launcher: r.launcher } : {}),
   };
   const save = () => writeFileSync(join(dir, 'run.json'), JSON.stringify(run, null, 2) + '\n');
   save();
@@ -148,17 +149,32 @@ export async function runAll(t: Target, o: RunOptions): Promise<string[]> {
 /** A recipe target: the launcher brings the engine up, bench measures it, the launcher takes it down. */
 async function runRecipe(t: RecipeTarget, o: RunOptions): Promise<string[]> {
   const log = o.log ?? ((m: string) => process.stderr.write(`[bench] ${m}\n`));
-  for (const name of o.suites) if (SUITES[name]?.protocol !== 'embeddings') throw new Error(`recipe targets run the embeddings suite so far, not ${name}`);
+  for (const name of o.suites) {
+    const protocol = SUITES[name]?.protocol;
+    if (protocol !== 'embeddings' && protocol !== 'decision') throw new Error(`recipe targets run the embeddings and decision suites so far, not ${name}`);
+  }
   log(`launcher up ${t.recipe}${t.profile ? ` (profile ${t.profile})` : ''}`);
   const up = recipeUp(t);
   const dirs: string[] = [];
   try {
     const subject = recipeSubject(up);
     log(`${subject.key} at ${up.base_url}`);
+    const hardware = { host: t.on ?? null, recipe: up.id, placements: up.hardware ?? [] };
+    const launcher = { run_id: up.run_id, profile: up.profile, params: up.params, source: up.source, acknowledgments: up.acknowledgments };
     for (const name of o.suites) {
       log(`${name} ${o.tier}`);
-      dirs.push(await runEmbeddings({ subject, baseUrl: up.base_url, tier: o.tier, profile: o.profile, ...(o.reference ? { reference: o.reference } : {}),
-        hardware: { host: t.on ?? null, recipe: up.id, placements: up.hardware ?? [] }, launcher: { run_id: up.run_id, profile: up.profile, params: up.params, source: up.source, acknowledgments: up.acknowledgments }, log }));
+      const suite = SUITES[name];
+      if (suite?.protocol === 'decision') {
+        if (up.endpoint.protocol !== 'decision') throw new Error(`${up.id} serves ${up.endpoint.protocol}, not the decision protocol ${name} needs`);
+        const r: Resolved = {
+          subject, provider: decisionEndpoint(up.base_url, up.endpoint.model ?? subject.model), price: undefined,
+          settings: { note: 'recipe engine speaking the decision protocol natively; no sampling parameters' }, hardware, launcher,
+        };
+        dirs.push((await runSuite(r, suite, o)).dir);
+      } else {
+        const recipeDims = typeof up.params.dims === 'string' ? up.params.dims.split(',').map(Number) : undefined;
+        dirs.push(await runEmbeddings({ ...(recipeDims ? { dims: recipeDims } : {}), subject, baseUrl: up.base_url, tier: o.tier, profile: o.profile, ...(o.reference ? { reference: o.reference } : {}), hardware, launcher, log }));
+      }
     }
   } finally {
     log(`launcher down ${up.id}`);

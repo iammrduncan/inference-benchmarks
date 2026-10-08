@@ -25,6 +25,8 @@ export type RunJson = {
   environment: { node: string; platform: string; arch: string; location: string };
   attempted: number; completed: number; started_at: string; finished_at: string | null;
   observed_models: Record<string, number>;
+  /** Recipe targets: what ran it (host, recipe, device placements) and the launcher run. */
+  hardware?: unknown; launcher?: unknown;
 };
 
 /** The paths that make up the harness: bench, its suites, and the packages it imports. */

@@ -11,7 +11,8 @@ import { buildSummary, harnessCommit, REPO_ROOT, runDirFor, ensureSubject, write
 import { percentile, round6 } from './stats.ts';
 import type { RawRow, SuiteModule, Tier } from './suite.ts';
 
-const DIM = 768;
+/** EmbeddingGemma 2's width: runs recorded before engines reported their dimension. */
+const DEFAULT_DIM = 768;
 const SCORER = join(REPO_ROOT, 'runner', 'scorers', 'mteb');
 type Suite = { tiers: Record<string, { tasks?: string[]; benchmark?: string }>; dims: number[]; batch_size: number; scorer: { version: string } };
 type ManifestRow = { sha256: string; text: string; role: 'query' | 'document' };
@@ -63,7 +64,17 @@ export function writeNpy(path: string, data: Float32Array, rows: number, cols: n
   return sha256(buf);
 }
 
-export type EmbedRun = { subject: Subject; baseUrl: string; tier: Tier; profile: string; reference?: string; hardware: unknown; launcher?: unknown; root?: string; log?: (m: string) => void };
+export type EmbedRun = { dims?: number[]; subject: Subject; baseUrl: string; tier: Tier; profile: string; reference?: string; hardware: unknown; launcher?: unknown; root?: string; log?: (m: string) => void };
+
+/**
+ * Which output widths to score. A recipe that names its dims wins (e.g. [1024] for a model
+ * with no Matryoshka training); otherwise the suite's list, cut to the vectors' width.
+ */
+export function scoredDims(suiteDims: number[], width: number, fromRecipe?: number[]): number[] {
+  const dims = fromRecipe && fromRecipe.length ? fromRecipe : suiteDims.filter((d) => d <= width);
+  if (!dims.length || dims.some((d) => !Number.isSafeInteger(d) || d <= 0 || d > width)) throw new Error(`cannot score dims ${JSON.stringify(dims)} on ${width}-wide vectors`);
+  return [...dims].sort((a, b) => b - a);
+}
 
 export async function runEmbeddings(o: EmbedRun): Promise<string> {
   const root = o.root ?? REPO_ROOT;
@@ -71,6 +82,9 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
   const def = suiteDef(root);
   const tasks = tasksFor(def, o.tier);
   const engine = ((await (await fetch(`${o.baseUrl}/v1/models`)).json()) as { engine?: unknown }).engine ?? null;
+  const reported = (engine as { dimension?: unknown } | null)?.dimension;
+  const DIM = typeof reported === 'number' && Number.isSafeInteger(reported) && reported > 0 ? reported : DEFAULT_DIM;
+  const dims = scoredDims(def.dims, DIM, o.dims);
   const p = await prompts(o.subject);
   const manifestKey = sha256(JSON.stringify({ tasks, prompts: p.sha256, mteb: def.scorer.version })).slice(0, 16);
   const manifestPath = artifacts(root, 'manifests', `${manifestKey}.jsonl`);
@@ -90,7 +104,7 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
     subject: o.subject, mode: 'native', profile: o.profile,
     harness: { name: 'bench', ...harnessCommit(root), suite_hash: hash, scorer: { name: 'mteb', version: def.scorer.version }, agent: null },
     endpoint: `${o.baseUrl}/v1/embeddings`, dataset: { tasks, manifest: relative(root, manifestPath), manifest_sha256: sha256(manifestText), texts: manifest.length, prompts_sha256: p.sha256 },
-    request_settings: { batch_size: def.batch_size, encoding_format: 'base64', order: 'by text length, descending' },
+    request_settings: { batch_size: def.batch_size, encoding_format: 'base64', order: 'by text length, descending', dims_scored: dims, width: DIM },
     dispatch: { concurrency: 1, requests_per_minute: null, retries: 0 },
     budget: { cap_usd: null, spent_usd: 0, price: null },
     environment: { node: process.version, platform: process.platform, arch: process.arch, location: process.env.BENCH_LOCATION ?? Intl.DateTimeFormat().resolvedOptions().timeZone },
@@ -134,7 +148,7 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
     const refVectors = o.reference ? (JSON.parse(readFileSync(join(o.reference, 'run.json'), 'utf8')) as { vectors?: { path: string } }).vectors?.path : undefined;
     if (o.reference && !refVectors) throw new Error(`${o.reference}: reference run has no vectors`);
     log('scoring with MTEB (offline)');
-    scorer(['score', '--tasks', tasks.join(','), '--prompts', p.path, '--manifest', manifestPath, '--vectors', vpath, '--dims', def.dims.join(','),
+    scorer(['score', '--tasks', tasks.join(','), '--prompts', p.path, '--manifest', manifestPath, '--vectors', vpath, '--dims', dims.join(','),
       '--out', join(dir, 'harness', 'scores.json'), ...(refVectors ? ['--reference', join(root, refVectors)] : [])]);
   }
   run.status = failed ? 'failed' : 'complete';

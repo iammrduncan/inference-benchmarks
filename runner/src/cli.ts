@@ -13,7 +13,7 @@ import type { Tier } from './suite.ts';
 const USAGE = `usage: npm run bench -- <command> [options]
 
   run --suite a,b (--cloud provider:model [--via gateway:json-schema] | --endpoint URL --identity FILE --model M [--api-key-env VAR]
-                  | --recipe ID [--recipe-profile P] [--param k=v] [--on HOST] [--inventory FILE] [--engines-source PATH] [--reference RUN_DIR])
+                  | --recipe ID [--recipe-profile P] [--param k=v] [--on HOST] [--inventory FILE] [--engines-source PATH] [--reference RUN_DIR] [--accept COMPONENT])
       [--tier quick|core] [--profile greedy-nothink] [--budget-usd N] [--concurrency N] [--rpm N]
                                  send the suites to one subject and write results/<subject>/<suite>/<run>/
   summarize <run-dir...> [--check]
@@ -31,7 +31,7 @@ const OPTIONS = {
   tier: { type: 'string' }, profile: { type: 'string' }, 'budget-usd': { type: 'string' }, concurrency: { type: 'string' }, rpm: { type: 'string' },
   check: { type: 'boolean' }, help: { type: 'boolean', short: 'h' },
   recipe: { type: 'string' }, 'recipe-profile': { type: 'string' }, on: { type: 'string' }, param: { type: 'string', multiple: true },
-  inventory: { type: 'string' }, reference: { type: 'string' }, 'engines-source': { type: 'string' },
+  inventory: { type: 'string' }, reference: { type: 'string' }, 'engines-source': { type: 'string' }, accept: { type: 'string', multiple: true },
 } as const;
 
 function target(v: Record<string, string | boolean | string[] | undefined>): Target {
@@ -39,7 +39,7 @@ function target(v: Record<string, string | boolean | string[] | undefined>): Tar
   if (typeof v.recipe === 'string') {
     return { kind: 'recipe', recipe: v.recipe, ...(typeof v['recipe-profile'] === 'string' ? { profile: v['recipe-profile'] } : {}),
       ...(Array.isArray(v.param) ? { params: v.param } : {}), ...(typeof v.on === 'string' ? { on: v.on } : {}), ...(typeof v.inventory === 'string' ? { inventory: v.inventory } : {}),
-      ...(typeof v['engines-source'] === 'string' ? { source: v['engines-source'] } : {}) };
+      ...(typeof v['engines-source'] === 'string' ? { source: v['engines-source'] } : {}), ...(Array.isArray(v.accept) ? { accept: v.accept } : {}) };
   }
   if (typeof v.cloud === 'string') {
     const i = v.cloud.indexOf(':');
