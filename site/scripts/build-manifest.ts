@@ -260,6 +260,7 @@ function loadRun(id: string): Loaded | null {
         accuracy_by_workflow: Object.fromEntries(Object.entries(obj(metrics.accuracy_by_workflow, `${where} by_workflow`)).map(([k, v]) => [k, interval(v, `${where} by_workflow.${k}`)])),
       },
       invalid_reasons: Object.fromEntries(Object.entries(obj(summary.invalid_reasons ?? {}, `${where} invalid_reasons`)).map(([k, v]) => [k, num(v, `${where} invalid_reasons.${k}`)])),
+      reference: null, delta_accuracy: null,
     };
     return { run: r, subject };
   }
@@ -371,13 +372,36 @@ function boards(runs: Run[]): Board[] {
   }).sort((a, b) => a.id.localeCompare(b.id));
 }
 
-function matrices(runs: Run[], subjects: Subject[], references: Record<string, string>): Matrix[] {
+/** The checkpoint part of a subject key: `<model>/<checkpoint>`. */
+const checkpointOf = (subject: string) => subject.split('/').slice(0, 2).join('/');
+
+/** Decision accuracy against the checkpoint's reference subject, on the same suite and tier. */
+function addDecisionDeltas(runs: Run[], references: Record<string, string>): void {
+  for (const r of runs) {
+    if (r.kind !== 'decisions') continue;
+    const refSubject = references[checkpointOf(r.subject)];
+    if (!refSubject || refSubject === r.subject) continue;
+    const ref = runs.filter((x) => x.kind === 'decisions' && x.subject === refSubject && x.suite === r.suite && x.tier === r.tier && x.status === 'complete')
+      .sort(latestFirst)[0];
+    if (!ref || ref.kind !== 'decisions') continue;
+    r.reference = ref.id;
+    r.delta_accuracy = (r.metrics.accuracy.value - ref.metrics.accuracy.value) * 100;
+  }
+}
+
+type NotRun = { model: string; class: string; label: string; reason: string };
+
+/** Machine × variant tables per checkpoint: embeddings (quick tier) and typed-decisions (core tier). */
+function matrices(runs: Run[], subjects: Subject[], references: Record<string, string>, notRun: NotRun[]): Matrix[] {
   const out: Matrix[] = [];
   const bySubject = new Map(subjects.map((s) => [s.key, s]));
   const checkpoints = new Map<string, Run[]>();
   for (const r of runs) {
-    if (r.kind !== 'embeddings' || r.status !== 'complete' || r.tier !== 'quick') continue;
-    const cp = r.subject.split('/').slice(0, 2).join('/');
+    if (r.status !== 'complete') continue;
+    const embeddings = r.kind === 'embeddings' && r.tier === 'quick';
+    const decisions = r.kind === 'decisions' && r.suite === 'typed-decisions' && r.tier === 'core' && bySubject.get(r.subject)?.target === 'recipe';
+    if (!embeddings && !decisions) continue;
+    const cp = checkpointOf(r.subject);
     checkpoints.set(cp, [...(checkpoints.get(cp) ?? []), r]);
   }
   for (const [cp, group] of checkpoints) {
@@ -400,13 +424,20 @@ function matrices(runs: Run[], subjects: Subject[], references: Record<string, s
       const row = cells[key];
       if (row && !row[hw]) row[hw] = { run: r.id, subject: r.subject, engine: `${s.engine.name} ${s.engine.version}` };
     }
+    const model = cp.split('/')[0] ?? cp;
+    const missing: Record<string, string> = {};
+    for (const n of notRun.filter((x) => x.model === model)) {
+      if (!hardware.some((h) => h.class === n.class)) hardware.push({ class: n.class, label: n.label });
+      missing[n.class] = n.reason;
+    }
     // The reference first; then full precision before quantized, then by bits.
-    const order = (q: string) => ['fp32', 'bf16', 'fp16', 'q8', 'int8', 'q6', 'q5', 'q4', 'q3', 'q2'].findIndex((p) => q.startsWith(p));
+    const order = (q: string) => ['fp32', 'bf16', 'fp16', 'auto', 'q8', 'mlx-q8', 'int8', 'bnb-nf4', 'q6', 'q5', 'q4', 'mlx-q4', 'q3', 'q2'].findIndex((p) => q.startsWith(p));
     variants.sort((a, b) => Number(b.key === refVariant) - Number(a.key === refVariant) || order(a.quant) - order(b.quant) || a.family.localeCompare(b.family));
     hardware.sort((a, b) => Number(b.class === refHardware) - Number(a.class === refHardware) || a.label.localeCompare(b.label));
-    out.push({ model: cp.split('/')[0] ?? cp, checkpoint: cp, suite: 'embeddings', reference: references[cp] ?? null, variants, hardware, cells });
+    const suite = group[0]?.suite ?? 'embeddings';
+    out.push({ model, checkpoint: cp, suite, reference: references[cp] ?? null, variants, hardware, cells, not_run: missing });
   }
-  return out;
+  return out.sort((a, b) => a.suite.localeCompare(b.suite) || a.model.localeCompare(b.model));
 }
 
 // ---- main -------------------------------------------------------------------------------
@@ -429,12 +460,20 @@ function build(): Manifest {
     if (!s) throw new RecordError(`results/references.yaml: ${cp} names ${key}, which has no published runs`);
     if (s.engine_visibility === 'private') throw new RecordError(`results/references.yaml: ${key} has a private engine and cannot be a reference`);
   }
+  addDecisionDeltas(runs, references);
+  const nrFile = join(RESULTS, 'not-run.yaml');
+  const nrRaw = existsSync(nrFile) ? YAML.parse(readFileSync(nrFile, 'utf8')) : [];
+  if (!Array.isArray(nrRaw)) throw new RecordError('results/not-run.yaml: expected a list');
+  const notRun: NotRun[] = nrRaw.map((x, i) => {
+    const o = obj(x, `not-run[${i}]`);
+    return { model: str(o.model, `not-run[${i}].model`), class: str(o.class, `not-run[${i}].class`), label: str(o.label, `not-run[${i}].label`), reason: str(o.reason, `not-run[${i}].reason`) };
+  });
   const suites = loadSuites();
   const allBoards = boards(runs);
   const category = new Map(suites.map((s) => [s.name, s.category]));
   return {
     generated_at: new Date().toISOString(), repo: REPO, engines_repo: ENGINES_REPO,
-    suites, subjects, runs: runs.sort(latestFirst), boards: allBoards, matrices: matrices(runs, subjects, references),
+    suites, subjects, runs: runs.sort(latestFirst), boards: allBoards, matrices: matrices(runs, subjects, references, notRun),
     overall: overall(runs, allBoards, (suite) => category.get(suite) ?? null),
     suite_groups: Object.fromEntries(suites.map((s) => [s.name, groupOfCategory(s.category)])),
   };

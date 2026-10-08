@@ -1,0 +1,14 @@
+# Model × machine combinations that were asked for but cannot run, with the reason. The site shows
+# these in the model matrix instead of leaving the cell blank. Add a line only after checking.
+- model: clef
+  class: "p100:p100"
+  label: NVIDIA P100 · 16 GB
+  reason: "27B: 54.7 GB in bf16. bitsandbytes NF4 needs about 13.7 GB for the backbone plus about 5 GB for the unquantized embeddings and lm_head (the joint head reads lm_head rows), which exceeds 16 GB."
+- model: gev-26b-decide
+  class: "p100:p100"
+  label: NVIDIA P100 · 16 GB
+  reason: "26B MoE: 51 GB in bf16. bitsandbytes quantizes nn.Linear only, and transformers stores the routed experts (about 46 GB) as fused tensors, so they stay 16-bit. vLLM (the official path) and FP4/Marlin kernels need sm_80+. No route without a custom llama.cpp build plus a hand-applied decision head."
+- model: jev-27b-vl
+  class: "p100:p100"
+  label: NVIDIA P100 · 16 GB
+  reason: "27B: 56 GB in bf16. NF4 would need about 14-14.5 GB only with the embeddings on the CPU and a hand-sliced head; vLLM (the official path) does not support Pascal. Not attempted: too close to 16 GB to be a fair, reproducible run."

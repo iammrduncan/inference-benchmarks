@@ -15,7 +15,7 @@ export default function Models() {
         {manifest.matrices.map((m) => (
           <li key={m.checkpoint}>
             <Link href={modelHref(m.model)}><b>{m.model}</b> <span className="mono small muted">{m.checkpoint}</span></Link>
-            <span className="small muted">{m.variants.length} variants × {m.hardware.length} machines · {m.suite}</span>
+            <span className="small muted">{m.variants.length} variants × {m.hardware.length} machines · {m.suite}{Object.keys(m.not_run).length ? ` · ${Object.keys(m.not_run).length} machine(s) it does not fit` : ''}</span>
           </li>
         ))}
       </ul>

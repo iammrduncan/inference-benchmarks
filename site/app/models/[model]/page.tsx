@@ -8,6 +8,7 @@ import { MatrixTable } from '../../../components/Matrix.tsx';
 import { DimChart, runLabel } from '../../../components/DimChart.tsx';
 import { EmbeddingsSpeed } from '../../../components/Boards.tsx';
 import { DeltaCell, Section, SubjectName } from '../../../components/ui.tsx';
+import { DecisionModel } from '../../../components/DecisionModel.tsx';
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -25,6 +26,9 @@ export default async function ModelPage({ params }: Props) {
   const { model } = await params;
   const m = manifest.matrices.find((x) => x.model === model);
   if (!m) notFound();
+  if (m.suite !== 'embeddings') {
+    return (<><div className="crumbs"><Link href="/models/">Model matrix</Link> /</div><DecisionModel m={m} /></>);
+  }
   const runs = Object.values(m.cells).flatMap((row) => Object.values(row)).map((c) => findRun(c.run)).filter((r): r is EmbeddingsRun => r?.kind === 'embeddings');
   const ordered = [...runs].sort((a, b) => Number(b.is_reference) - Number(a.is_reference) || (b.dims[0]?.score.value ?? 0) - (a.dims[0]?.score.value ?? 0));
   const tasks = Object.keys(ordered[0]?.dims[0]?.tasks ?? {});

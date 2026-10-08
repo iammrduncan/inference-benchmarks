@@ -68,6 +68,10 @@ export type DecisionsRun = RunBase & {
     accuracy_by_workflow: Record<string, Interval>;
   };
   invalid_reasons: Record<string, number>;
+  /** The checkpoint's reference run on the same suite and tier (results/references.yaml), if any. */
+  reference: string | null;
+  /** Accuracy minus the reference's, in points; null for the reference itself or without one. */
+  delta_accuracy: number | null;
 };
 
 export type ConformanceCheck = { passed: number; total: number; failures: string[] };
@@ -135,6 +139,8 @@ export type Matrix = {
   variants: { key: string; quant: string; family: string }[];
   hardware: { class: string; label: string }[];
   cells: Record<string, Record<string, MatrixCell>>;
+  /** Machines this checkpoint could not run on, with the reason (results/not-run.yaml). */
+  not_run: Record<string, string>;
 };
 
 /** A category column on the home page. `suites` are the ranked suites that feed it. */
