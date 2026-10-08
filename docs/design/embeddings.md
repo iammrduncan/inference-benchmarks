@@ -124,11 +124,11 @@ throughput first.
 | P0 | **embedding-fidelity** | 2,000 texts (+ images / audio) | Catches broken quants and engines in minutes |
 | P0 | **MTEB(eng, v2)** | the official 41-task English benchmark, already downsampled by its authors | The standard text comparison. The card reports 68.46 |
 | P1 | **MTEB(Code, v1)** | official code retrieval tasks | The card's headline gain (78.68). Code search is a common local use |
-| P1 | **MTEB(Multilingual, v2)** | official downsampled set, 250+ languages | The card reports 61.36. Heaviest text suite, so P1 |
-| P1 *(vision)* | **MIEB(lite)** | 51 tasks | The card reports 64.64 |
-| P1 *(audio)* | **MAEB** | 30 tasks | The card reports 49.39 |
-| P2 | MMEB v2, MSEB, MVEB (video), visual-document retrieval | — | `full` tier only |
 | P1 | **perf-embed** | 1k / 8k-token texts at batch 1, 8 and 64; images and clips | Inputs per second, latency per input, **peak memory**. On-device claims like "567 MB RAM" get measured, not quoted |
+| P2 | **MTEB(Multilingual, v2)** | official downsampled set, 250+ languages | The card reports 61.36. Heaviest text suite, so P2 |
+| P2 *(vision)* | **MIEB(lite)** | 51 tasks | The card reports 64.64 |
+| P2 *(audio)* | **MAEB** | 30 tasks | The card reports 49.39 |
+| P2 | MMEB v2, MSEB, MVEB (video), visual-document retrieval | — | `full` tier only |
 
 All MTEB sets are pinned by `mteb` version and task revision, and scored with MTEB's
 own aggregation (mean over tasks, or over task types for MIEB) so they line up with

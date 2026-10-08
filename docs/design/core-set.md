@@ -152,8 +152,9 @@ categories 1–8.
 | --- | --- | --- | --- |
 | P0 | **embedding-fidelity** | 2,000 texts (+ images, audio) | Cosine and top-10 neighbor overlap vs. the reference; catches broken quants and engines |
 | P0 | **MTEB(eng, v2)** | official 41-task set | The standard text comparison |
-| P1 | **MTEB(Code, v1)**, **MTEB(Multilingual, v2)** | official sets | Code search; multilingual |
-| P1 *(by modality)* | **MIEB(lite)** for vision, **MAEB** for audio | official sets | Only when the subject has those encoders |
+| P1 | **MTEB(Code, v1)** | official set | Code search |
+| P2 | **MTEB(Multilingual, v2)** | official set | Multilingual; the heaviest text set |
+| P2 *(by modality)* | **MIEB(lite)** for vision, **MAEB** for audio | official sets | Only when the subject has those encoders |
 
 ### The `think` slice (thinking models only; ranked separately)
 
