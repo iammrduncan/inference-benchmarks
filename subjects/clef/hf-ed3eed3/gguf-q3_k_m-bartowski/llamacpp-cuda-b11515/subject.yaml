@@ -1,0 +1,19 @@
+key: clef/hf-ed3eed3/gguf-q3_k_m-bartowski/llamacpp-cuda-b11515
+target: recipe
+model: clef
+checkpoint:
+  hf: Cloudflare/clef
+  revision: ed3eed331870db2eff4b0db01237128ede8a00ce
+quant:
+  format: gguf-q3_k_m
+  producer: bartowski
+  repo: bartowski/Cloudflare_clef-GGUF
+  revision: 9d3b28af7cfe8b3575e9f06ea42f12ed4ccf3f3c
+engine:
+  name: llamacpp-cuda
+  version: b11515
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

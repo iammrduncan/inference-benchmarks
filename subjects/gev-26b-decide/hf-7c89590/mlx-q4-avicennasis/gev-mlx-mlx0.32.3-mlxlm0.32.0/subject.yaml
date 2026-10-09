@@ -1,0 +1,19 @@
+key: gev-26b-decide/hf-7c89590/mlx-q4-avicennasis/gev-mlx-mlx0.32.3-mlxlm0.32.0
+target: recipe
+model: gev-26b-decide
+checkpoint:
+  hf: autotrust/GEV-26B-Decide
+  revision: 7c89590ead085bf77630b4bf68264ea30b6ddc78
+quant:
+  format: mlx-q4
+  producer: avicennasis
+  repo: Avicennasis/GEV-26B-Decide-mlx-4bit
+  revision: d5952828e0da69a61eaf3ea9011d5c234dd0fc48
+engine:
+  name: gev-mlx
+  version: mlx0.32.3-mlxlm0.32.0
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

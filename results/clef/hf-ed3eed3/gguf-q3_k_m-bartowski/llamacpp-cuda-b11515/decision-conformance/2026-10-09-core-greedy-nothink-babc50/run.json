@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-09-core-greedy-nothink-babc50",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "decision-conformance",
+    "tier": "core",
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "ids": 17
+  },
+  "subject": {
+    "model": "clef",
+    "checkpoint": {
+      "hf": "Cloudflare/clef",
+      "revision": "ed3eed331870db2eff4b0db01237128ede8a00ce"
+    },
+    "quant": {
+      "format": "gguf-q3_k_m",
+      "producer": "bartowski",
+      "repo": "bartowski/Cloudflare_clef-GGUF",
+      "revision": "9d3b28af7cfe8b3575e9f06ea42f12ed4ccf3f3c"
+    },
+    "engine": {
+      "name": "llamacpp-cuda",
+      "version": "b11515"
+    },
+    "key": "clef/hf-ed3eed3/gguf-q3_k_m-bartowski/llamacpp-cuda-b11515",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "6bd226094d13219ff130444804950b6713316ee9",
+    "dirty": false,
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "scorer": {
+      "name": "bench/decision-conformance",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/systemone",
+  "dataset": null,
+  "request_settings": {
+    "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 17,
+  "completed": 17,
+  "started_at": "2026-10-09T04:31:33.551Z",
+  "finished_at": "2026-10-09T04:32:12.047Z",
+  "observed_models": {
+    "clef": 17
+  },
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "clef/p100/llamacpp",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-09T03-53-43-676Z",
+    "profile": "gguf-q3_k_m",
+    "params": {
+      "gguf_repo": "bartowski/Cloudflare_clef-GGUF",
+      "gguf_rev": "9d3b28af7cfe8b3575e9f06ea42f12ed4ccf3f3c",
+      "gguf_file": "Cloudflare_clef-Q3_K_M.gguf",
+      "quant_from": "",
+      "quant_type": "Q3_K_M",
+      "llama_commit": "3d65c90d04d337e88f2b1f7f0061f40a5324e662",
+      "llama_patch_url": "",
+      "llama_patch_sha256": "",
+      "map": "none",
+      "model_name": "clef",
+      "ctx": "8192",
+      "ubatch": "4096",
+      "ngl": "999",
+      "precision": "gguf-q3_k_m",
+      "producer": "bartowski",
+      "engine_name": "llamacpp-cuda",
+      "engine_version": "b11515"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "19c607f766af5a7787089365eb45406c66f45b6c",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-09-core-greedy-nothink-724797",
+  "status": "partial",
+  "stop_reason": "running",
+  "suite": {
+    "name": "typed-decisions",
+    "tier": "core",
+    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "ids": 400
+  },
+  "subject": {
+    "model": "jev-27b-vl",
+    "checkpoint": {
+      "hf": "autotrust/JEV-27B-VL",
+      "revision": "ba3f0d584994b37998f235c0a3f6f1beff32ba1e"
+    },
+    "quant": {
+      "format": "gguf-q3_k_m",
+      "producer": "iammrduncan",
+      "repo": "Atlas3D/JEV-27B-VL-GGUF",
+      "revision": "dbad4de75fea83f1985470644f3e1bc15710cef6"
+    },
+    "engine": {
+      "name": "llamacpp-cuda",
+      "version": "b11370+jev"
+    },
+    "key": "jev-27b-vl/hf-ba3f0d5/gguf-q3_k_m-iammrduncan/llamacpp-cuda-b11370-jev",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "harness": {
+    "name": "bench",
+    "commit": "6bd226094d13219ff130444804950b6713316ee9",
+    "dirty": false,
+    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "scorer": {
+      "name": "bench/typed-decisions",
+      "version": "1"
+    },
+    "agent": null
+  },
+  "endpoint": "http://mbox03:8000/v1/systemone",
+  "dataset": {
+    "repo": "LocalLLaMA/typed-decisions",
+    "revision": "d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18",
+    "workflows": [
+      "agent_trace_observability",
+      "customer_service",
+      "invoice_processing",
+      "security_incidents"
+    ],
+    "files": {
+      "agent_trace_observability/test-00000-of-00001.parquet": "833ad1364237b9a3fe05be2c62e632f0cb34ba372284b975140d362ab246f70d",
+      "customer_service/test-00000-of-00001.parquet": "b4e6e23b3c2add197dda74008f2ce42ff996511ff1bf9c93e8b0e6d84ac9c275",
+      "invoice_processing/test-00000-of-00001.parquet": "ce2adfb5201dba910b23bda6ab9678c385b580edaabbf8348b4e024c120d4b75",
+      "security_incidents/test-00000-of-00001.parquet": "4d8bc1879a0b67e5d275edea21a694b06136ca2a2c3355215a7d8adea6b0c75f"
+    },
+    "train_files": {
+      "agent_trace_observability/train-00000-of-00001.parquet": "e7b2f78fe539517c6a66a90c68ed671c6133194a88d27dbff5d84713af46b901",
+      "customer_service/train-00000-of-00001.parquet": "3e3abc2a9307bc641f60a6f9042627897ca01c145c3206211dfa9c926ba8721c",
+      "invoice_processing/train-00000-of-00001.parquet": "6a5cfcd12e77e707cd9861107868a5adbb7df566ced3162bb9472cd3e348a598",
+      "security_incidents/train-00000-of-00001.parquet": "3aae379ac25fc6434d5f5675f04b06f4310d1aac3056a0e30bb0f779aa2f0a99"
+    }
+  },
+  "request_settings": {
+    "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
+  },
+  "dispatch": {
+    "concurrency": 2,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 0,
+  "completed": 0,
+  "started_at": "2026-10-09T05:00:56.823Z",
+  "finished_at": null,
+  "observed_models": {},
+  "hardware": {
+    "host": "mbox03",
+    "recipe": "jev-27b-vl/p100/llamacpp",
+    "placements": [
+      {
+        "host": "mbox03",
+        "devices": [
+          {
+            "kind": "gpu",
+            "label": "p100",
+            "model": "P100",
+            "vendor": "nvidia",
+            "vram_gb": 16
+          }
+        ]
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-09T04-57-59-346Z",
+    "profile": "gguf-q3_k_m",
+    "params": {
+      "gguf_repo": "Atlas3D/JEV-27B-VL-GGUF",
+      "gguf_rev": "dbad4de75fea83f1985470644f3e1bc15710cef6",
+      "gguf_file": "JEV-27B-VL-Q3_K_M.gguf",
+      "quant_from": "JEV-27B-VL-BF16.gguf",
+      "quant_type": "Q3_K_M",
+      "llama_commit": "bed0a856606ee4a24a164066f73d2379447033f5",
+      "llama_patch_url": "https://huggingface.co/Atlas3D/JEV-27B-VL-GGUF/resolve/dbad4de75fea83f1985470644f3e1bc15710cef6/llama.cpp-jev.patch",
+      "llama_patch_sha256": "adb6c8a5bfcf88d9fce7a7f529cfaee0ca140caa41462af83e715324915f0c91",
+      "map": "jev",
+      "model_name": "jev-27b-vl",
+      "ctx": "4096",
+      "ubatch": "4096",
+      "ngl": "999",
+      "aux_repo": "",
+      "aux_rev": "",
+      "aux_include": "",
+      "lora_dir": "",
+      "llama_args": "",
+      "precision": "gguf-q3_k_m",
+      "producer": "iammrduncan",
+      "engine_name": "llamacpp-cuda",
+      "engine_version": "b11370+jev"
+    },
+    "source": {
+      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "commit": "3058df4561e5d459b065ea0eda4f2c9464510413",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  }
+}

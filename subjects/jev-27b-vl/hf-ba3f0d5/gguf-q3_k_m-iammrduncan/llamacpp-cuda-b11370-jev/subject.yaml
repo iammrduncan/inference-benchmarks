@@ -1,0 +1,19 @@
+key: jev-27b-vl/hf-ba3f0d5/gguf-q3_k_m-iammrduncan/llamacpp-cuda-b11370-jev
+target: recipe
+model: jev-27b-vl
+checkpoint:
+  hf: autotrust/JEV-27B-VL
+  revision: ba3f0d584994b37998f235c0a3f6f1beff32ba1e
+quant:
+  format: gguf-q3_k_m
+  producer: iammrduncan
+  repo: Atlas3D/JEV-27B-VL-GGUF
+  revision: dbad4de75fea83f1985470644f3e1bc15710cef6
+engine:
+  name: llamacpp-cuda
+  version: b11370+jev
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

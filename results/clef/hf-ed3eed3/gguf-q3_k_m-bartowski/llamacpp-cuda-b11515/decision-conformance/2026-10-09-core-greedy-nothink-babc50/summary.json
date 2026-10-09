@@ -1,0 +1,72 @@
+{
+  "run_id": "2026-10-09-core-greedy-nothink-babc50",
+  "suite": "decision-conformance",
+  "tier": "core",
+  "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+  "subject": "clef/hf-ed3eed3/gguf-q3_k_m-bartowski/llamacpp-cuda-b11515",
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "status": "complete",
+  "label": null,
+  "items": {
+    "planned": 17,
+    "attempted": 17,
+    "succeeded": 17,
+    "failed": 0,
+    "failed_by_status": {}
+  },
+  "metrics": {
+    "checks": {
+      "invariants": {
+        "passed": 33,
+        "total": 33,
+        "failures": []
+      },
+      "batched_vs_separate": {
+        "passed": 3,
+        "total": 6,
+        "failures": [
+          "support/team: differs by 0.140516",
+          "invoice/disposition: differs by 0.056242",
+          "invoice/severity: differs by 0.961764"
+        ],
+        "max_abs_diff": 0.961764
+      },
+      "repeat_stability": {
+        "passed": 6,
+        "total": 6,
+        "failures": [],
+        "max_std": 0
+      },
+      "option_order": {
+        "passed": 2,
+        "total": 2,
+        "failures": [],
+        "max_confidence_delta": 0
+      },
+      "monotonic": {
+        "passed": 2,
+        "total": 2,
+        "failures": [],
+        "expected_scores": [
+          0.91194,
+          1.471348,
+          2.970911
+        ]
+      }
+    },
+    "passed": 46,
+    "total": 49
+  },
+  "latency_ms": {
+    "p50": 4490.445167,
+    "p95": 4902.952417,
+    "p99": 4902.952417,
+    "note": "successful requests, nearest rank, measured from America/Chicago"
+  },
+  "usage": {
+    "input_tokens": 5562,
+    "output_tokens": 0,
+    "cost_usd": 0
+  }
+}
