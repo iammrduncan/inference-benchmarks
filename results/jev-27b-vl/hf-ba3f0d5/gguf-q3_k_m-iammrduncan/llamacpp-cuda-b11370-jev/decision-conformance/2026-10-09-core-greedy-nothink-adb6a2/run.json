@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "run_id": "2026-10-09-core-greedy-nothink-724797",
+  "run_id": "2026-10-09-core-greedy-nothink-adb6a2",
   "status": "complete",
   "stop_reason": null,
   "suite": {
-    "name": "typed-decisions",
+    "name": "decision-conformance",
     "tier": "core",
-    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
-    "ids": 400
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
+    "ids": 17
   },
   "subject": {
     "model": "jev-27b-vl",
@@ -35,38 +35,17 @@
   "profile": "greedy-nothink",
   "harness": {
     "name": "bench",
-    "commit": "6bd226094d13219ff130444804950b6713316ee9",
+    "commit": "df0f513922794b143677bb65b0a8fe44e0608399",
     "dirty": false,
-    "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+    "suite_hash": "554e796a858218e48bcb83da003554769782a4a32d3e061da87510d7f9cea490",
     "scorer": {
-      "name": "bench/typed-decisions",
+      "name": "bench/decision-conformance",
       "version": "1"
     },
     "agent": null
   },
   "endpoint": "http://mbox03:8000/v1/systemone",
-  "dataset": {
-    "repo": "LocalLLaMA/typed-decisions",
-    "revision": "d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18",
-    "workflows": [
-      "agent_trace_observability",
-      "customer_service",
-      "invoice_processing",
-      "security_incidents"
-    ],
-    "files": {
-      "agent_trace_observability/test-00000-of-00001.parquet": "833ad1364237b9a3fe05be2c62e632f0cb34ba372284b975140d362ab246f70d",
-      "customer_service/test-00000-of-00001.parquet": "b4e6e23b3c2add197dda74008f2ce42ff996511ff1bf9c93e8b0e6d84ac9c275",
-      "invoice_processing/test-00000-of-00001.parquet": "ce2adfb5201dba910b23bda6ab9678c385b580edaabbf8348b4e024c120d4b75",
-      "security_incidents/test-00000-of-00001.parquet": "4d8bc1879a0b67e5d275edea21a694b06136ca2a2c3355215a7d8adea6b0c75f"
-    },
-    "train_files": {
-      "agent_trace_observability/train-00000-of-00001.parquet": "e7b2f78fe539517c6a66a90c68ed671c6133194a88d27dbff5d84713af46b901",
-      "customer_service/train-00000-of-00001.parquet": "3e3abc2a9307bc641f60a6f9042627897ca01c145c3206211dfa9c926ba8721c",
-      "invoice_processing/train-00000-of-00001.parquet": "6a5cfcd12e77e707cd9861107868a5adbb7df566ced3162bb9472cd3e348a598",
-      "security_incidents/train-00000-of-00001.parquet": "3aae379ac25fc6434d5f5675f04b06f4310d1aac3056a0e30bb0f779aa2f0a99"
-    }
-  },
+  "dataset": null,
   "request_settings": {
     "note": "recipe engine speaking the decision protocol natively; no sampling parameters"
   },
@@ -86,12 +65,12 @@
     "arch": "arm64",
     "location": "America/Chicago"
   },
-  "attempted": 400,
-  "completed": 400,
-  "started_at": "2026-10-09T05:00:56.823Z",
-  "finished_at": "2026-10-09T06:15:24.851Z",
+  "attempted": 17,
+  "completed": 17,
+  "started_at": "2026-10-09T06:15:24.979Z",
+  "finished_at": "2026-10-09T06:16:19.262Z",
   "observed_models": {
-    "jev-27b-vl": 400
+    "jev-27b-vl": 17
   },
   "hardware": {
     "host": "mbox03",

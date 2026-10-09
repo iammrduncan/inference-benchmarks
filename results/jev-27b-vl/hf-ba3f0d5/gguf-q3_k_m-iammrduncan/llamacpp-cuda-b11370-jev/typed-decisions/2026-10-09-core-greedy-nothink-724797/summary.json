@@ -1,0 +1,104 @@
+{
+  "run_id": "2026-10-09-core-greedy-nothink-724797",
+  "suite": "typed-decisions",
+  "tier": "core",
+  "suite_hash": "a61fd6482f71efc15b9df59e6c7e94fd6133558e0f2dd5e6fe7c2ad58a3f860f",
+  "subject": "jev-27b-vl/hf-ba3f0d5/gguf-q3_k_m-iammrduncan/llamacpp-cuda-b11370-jev",
+  "mode": "native",
+  "profile": "greedy-nothink",
+  "status": "complete",
+  "label": null,
+  "items": {
+    "planned": 400,
+    "attempted": 400,
+    "succeeded": 400,
+    "failed": 0,
+    "failed_by_status": {}
+  },
+  "metrics": {
+    "decisions": 2000,
+    "valid": 2000,
+    "accuracy": {
+      "value": 0.697,
+      "low": 0.676498,
+      "high": 0.716747,
+      "n": 2000
+    },
+    "kl_from_gold": {
+      "value": 0.467544,
+      "low": 0.445973,
+      "high": 0.490709,
+      "n": 2000
+    },
+    "brier": {
+      "value": 0.161035,
+      "low": 0.152172,
+      "high": 0.169809,
+      "n": 2000
+    },
+    "ece": 0.070173,
+    "accuracy_by_type": {
+      "choice": {
+        "value": 0.646667,
+        "low": 0.607596,
+        "high": 0.683871,
+        "n": 600
+      },
+      "noul": {
+        "value": 0.803333,
+        "low": 0.769642,
+        "high": 0.833165,
+        "n": 600
+      },
+      "score": {
+        "value": 0.655,
+        "low": 0.621389,
+        "high": 0.68713,
+        "n": 800
+      }
+    },
+    "accuracy_by_workflow": {
+      "agent_trace_observability": {
+        "value": 0.542,
+        "low": 0.498174,
+        "high": 0.585185,
+        "n": 500
+      },
+      "customer_service": {
+        "value": 0.758,
+        "low": 0.718584,
+        "high": 0.793482,
+        "n": 500
+      },
+      "invoice_processing": {
+        "value": 0.774,
+        "low": 0.735332,
+        "high": 0.80849,
+        "n": 500
+      },
+      "security_incidents": {
+        "value": 0.714,
+        "low": 0.672877,
+        "high": 0.75186,
+        "n": 500
+      }
+    }
+  },
+  "invalid_reasons": {},
+  "notes": [
+    "accuracy counts every dispatched decision; kl_from_gold, brier and ece use valid decisions only",
+    "ece uses 10-bin top-label confidence; the dataset card does not define its ECE, so ece is not comparable with the card",
+    "intervals treat decisions as independent; each case contributes five related decisions, so true uncertainty is somewhat wider"
+  ],
+  "latency_ms": {
+    "p50": 22476.655666,
+    "p95": 28113.911958,
+    "p99": 33754.803375,
+    "note": "successful requests, nearest rank, measured from America/Chicago"
+  },
+  "usage": {
+    "input_tokens": 596740,
+    "output_tokens": 0,
+    "cost_usd": 0
+  }
+}
