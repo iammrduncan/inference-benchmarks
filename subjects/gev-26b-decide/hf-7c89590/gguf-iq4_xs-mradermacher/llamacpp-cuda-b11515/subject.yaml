@@ -1,0 +1,19 @@
+key: gev-26b-decide/hf-7c89590/gguf-iq4_xs-mradermacher/llamacpp-cuda-b11515
+target: recipe
+model: gev-26b-decide
+checkpoint:
+  hf: autotrust/GEV-26B-Decide
+  revision: 7c89590ead085bf77630b4bf68264ea30b6ddc78
+quant:
+  format: gguf-iq4_xs
+  producer: mradermacher
+  repo: mradermacher/GEV-26B-Decide-GGUF
+  revision: 6a97ccdaccdbdb0bbbe274f8f92d5771009e314f
+engine:
+  name: llamacpp-cuda
+  version: b11515
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []
