@@ -1,3 +1,14 @@
 # Model × machine combinations that were asked for but cannot run, with the reason. The site shows
 # these in the model matrix instead of leaving the cell blank. Add a line only after checking.
-[]
+- model: clef
+  class: "apple-m:m4-pro"
+  label: Apple M4 Pro · 24 GB
+  reason: "Skipped 2026-10-09. The 4-bit MLX build peaks at 15-17 GB; with normal apps open the 24 GB Mac had about 4.5 GB available, and an earlier GEV-26B attempt there swapped (37 GB) until requests timed out. Not measured on this Mac; a run needs about 18 GB free."
+- model: gev-26b-decide
+  class: "apple-m:m4-pro"
+  label: Apple M4 Pro · 24 GB
+  reason: "Skipped 2026-10-09. The 4-bit MLX build peaks at 15-17 GB; with normal apps open the 24 GB Mac had about 4.5 GB available, and an earlier GEV-26B attempt there swapped (37 GB) until requests timed out. Not measured on this Mac; a run needs about 18 GB free."
+- model: jev-27b-vl
+  class: "apple-m:m4-pro"
+  label: Apple M4 Pro · 24 GB
+  reason: "Skipped 2026-10-09. The 4-bit MLX build peaks at 15-17 GB; with normal apps open the 24 GB Mac had about 4.5 GB available, and an earlier GEV-26B attempt there swapped (37 GB) until requests timed out. Not measured on this Mac; a run needs about 18 GB free."
