@@ -1,0 +1,142 @@
+{
+  "run_id": "2026-10-09-quick-card-prompts-ef2a44",
+  "suite": "embeddings",
+  "tier": "quick",
+  "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+  "subject": "lfm2.5-embedding-350m/hf-f35ae2c/fp32-liquidai/sentence-transformers-torch-mps-st5.1.1-tf4.56.2-torch2.14.1",
+  "mode": "native",
+  "profile": "card-prompts",
+  "status": "complete",
+  "label": null,
+  "items": {
+    "planned": 66939,
+    "attempted": 2092,
+    "succeeded": 2092,
+    "failed": 0,
+    "failed_by_status": {}
+  },
+  "metrics": {
+    "mteb": "2.22.5",
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "by_dim": {
+      "1024": {
+        "tasks": {
+          "NanoArguAnaRetrieval": {
+            "main_score": 0.50434,
+            "revision": "63ac9f026e8f6b85dc0622f3d630ed7a1758e9ec"
+          },
+          "NanoClimateFeverRetrieval": {
+            "main_score": 0.4507,
+            "revision": "ccb5552bc17e87afe0f9479fb4346898213a71db"
+          },
+          "NanoDBPediaRetrieval": {
+            "main_score": 0.64703,
+            "revision": "2d088f80d7a640eac0be5c66408d68c3f782baa1"
+          },
+          "NanoFEVERRetrieval": {
+            "main_score": 0.95311,
+            "revision": "a6490dfeed0f13c2a052e39c6ddaeb6086afd4a8"
+          },
+          "NanoFiQA2018Retrieval": {
+            "main_score": 0.55721,
+            "revision": "ede84da4793cd2d4e61bba0dd08fc58de90f3681"
+          },
+          "NanoHotpotQARetrieval": {
+            "main_score": 0.85234,
+            "revision": "a38a2615f29adba8b47a42905031aa9c137d8fae"
+          },
+          "NanoMSMARCORetrieval": {
+            "main_score": 0.64288,
+            "revision": "5a5aa0c3df65d6883d85c8f5cdc88e679633595e"
+          },
+          "NanoNFCorpusRetrieval": {
+            "main_score": 0.36792,
+            "revision": "2eec9d63140fb9af7c75ad0fdbf6350aaf20e94e"
+          },
+          "NanoNQRetrieval": {
+            "main_score": 0.72383,
+            "revision": "e3973b405feb9e94d07fd971d690d24d7f45264a"
+          },
+          "NanoQuoraRetrieval": {
+            "main_score": 0.89568,
+            "revision": "3ee153e5710da83a7f35df0cb1db4a0ad036072a"
+          },
+          "NanoSCIDOCSRetrieval": {
+            "main_score": 0.39201,
+            "revision": "cf39b8741a6f2e984d0b8f4796b2dd5bb65390f9"
+          },
+          "NanoSciFactRetrieval": {
+            "main_score": 0.74986,
+            "revision": "8c5f7bbe90bb865f46c67710221afa7d9096251b"
+          },
+          "NanoTouche2020Retrieval": {
+            "main_score": 0.54145,
+            "revision": "ff81c0caff8b6febe1495eae9f2ca3eddad074b8"
+          },
+          "STSBenchmark": {
+            "main_score": 0.801179,
+            "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831"
+          },
+          "Banking77Classification": {
+            "main_score": 0.828896,
+            "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300"
+          }
+        },
+        "mean_main_score": 0.660562,
+        "fidelity": {
+          "n": 66939,
+          "mean_cosine": 1,
+          "p1_cosine": 1,
+          "min_cosine": 1,
+          "top10_overlap": 1,
+          "queries": 649,
+          "documents": 20000,
+          "verdict": "lossless"
+        }
+      }
+    }
+  },
+  "throughput": {
+    "texts": 66939,
+    "tokens": 9883483,
+    "batches": 2092,
+    "texts_per_s": 34.151969,
+    "tokens_per_s": 5042.507389,
+    "engine_tokens_per_s": 5060.338015,
+    "batch_latency_ms": {
+      "p50": 654.446917,
+      "p95": 2348.315958
+    },
+    "note": "batches of 32 texts in descending length order, one request at a time; wall time includes HTTP and base64"
+  },
+  "notes": [
+    "dimensions below 768 are the same vectors truncated and re-normalized (Matryoshka); fidelity compares each dimension with the reference at the same dimension"
+  ],
+  "latency_ms": {
+    "p50": 654.446917,
+    "p95": 2348.315958,
+    "p99": 2677.577458,
+    "note": "successful requests, nearest rank, measured from America/Chicago"
+  },
+  "usage": {
+    "input_tokens": 9883483,
+    "output_tokens": 0,
+    "cost_usd": 0
+  }
+}

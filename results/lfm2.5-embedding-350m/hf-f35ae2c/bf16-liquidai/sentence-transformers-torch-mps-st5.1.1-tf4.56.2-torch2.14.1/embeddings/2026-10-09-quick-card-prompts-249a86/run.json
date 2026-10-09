@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-09-quick-card-prompts-249a86",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "embeddings",
+    "tier": "quick",
+    "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+    "ids": 66939
+  },
+  "subject": {
+    "model": "lfm2.5-embedding-350m",
+    "checkpoint": {
+      "hf": "LiquidAI/LFM2.5-Embedding-350M",
+      "revision": "f35ae2c91d687658dbf1f2b449382f0b019b9808"
+    },
+    "quant": {
+      "format": "bf16",
+      "producer": "liquidai",
+      "repo": "LiquidAI/LFM2.5-Embedding-350M",
+      "revision": "f35ae2c91d687658dbf1f2b449382f0b019b9808"
+    },
+    "engine": {
+      "name": "sentence-transformers-torch-mps",
+      "version": "st5.1.1-tf4.56.2-torch2.14.1"
+    },
+    "key": "lfm2.5-embedding-350m/hf-f35ae2c/bf16-liquidai/sentence-transformers-torch-mps-st5.1.1-tf4.56.2-torch2.14.1",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "card-prompts",
+  "harness": {
+    "name": "bench",
+    "commit": "2298f0b47dd58b0105d02f723a01292461f7c3aa",
+    "dirty": false,
+    "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+    "scorer": {
+      "name": "mteb",
+      "version": "2.22.5"
+    },
+    "agent": null
+  },
+  "endpoint": "http://127.0.0.1:8000/v1/embeddings",
+  "dataset": {
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "manifest": ".artifacts/embeddings/manifests/93e2d29aafb15cd0.jsonl",
+    "manifest_sha256": "1d1c3098e932ff0e2116e75e3040ec60f31a59a7a707ba324a4219809143570c",
+    "texts": 66939,
+    "prompts_sha256": "b140335cfabe6f8375cbe89b426c0521df6bdc91bd12497c5665c86303de3d7c"
+  },
+  "request_settings": {
+    "batch_size": 32,
+    "encoding_format": "base64",
+    "order": "by text length, descending",
+    "dims_scored": [
+      1024
+    ],
+    "width": 1024
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 2092,
+  "completed": 2092,
+  "started_at": "2026-10-09T00:36:51.830Z",
+  "finished_at": "2026-10-09T01:04:32.839Z",
+  "observed_models": {
+    "lfm2.5-embedding-350m": 2092
+  },
+  "engine": {
+    "backend": "sentence-transformers",
+    "device": "mps",
+    "dtype": "bfloat16",
+    "torch": "2.14.1",
+    "cuda_arch_list": null,
+    "device_name": "mps",
+    "sentence_transformers": "5.1.1",
+    "transformers": "4.56.2",
+    "max_seq_length": 512,
+    "dimension": 1024,
+    "trust_remote_code": true,
+    "unpadded": true,
+    "triton_overrides": null,
+    "token_budget_per_forward": 16384,
+    "python": "3.12.12",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "numpy": "2.5.3"
+  },
+  "hardware": {
+    "host": "macbook",
+    "recipe": "lfm2.5-embedding-350m/apple-m/st",
+    "placements": [
+      {
+        "host": "macbook",
+        "devices": [
+          {
+            "kind": "apple-silicon",
+            "label": "m4-pro",
+            "chip": "M4 Pro",
+            "memory_gb": 24
+          }
+        ],
+        "observed": {
+          "chip": "Apple M4 Pro",
+          "memory_gb": 24
+        }
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-09T00-36-46-149Z",
+    "profile": "st-bf16",
+    "params": {
+      "checkpoint": "LiquidAI/LFM2.5-Embedding-350M",
+      "checkpoint_rev": "f35ae2c91d687658dbf1f2b449382f0b019b9808",
+      "model_name": "lfm2.5-embedding-350m",
+      "max_len": "512",
+      "trust_remote_code": "true",
+      "unpadded": "true",
+      "stack": "tf456",
+      "engine_name": "sentence-transformers-torch-mps",
+      "engine_version": "st5.1.1-tf4.56.2-torch2.14.1",
+      "producer": "liquidai",
+      "weights_repo": "LiquidAI/LFM2.5-Embedding-350M",
+      "weights_rev": "f35ae2c91d687658dbf1f2b449382f0b019b9808",
+      "backend": "st",
+      "dims": "1024",
+      "precision": "bf16"
+    },
+    "source": {
+      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "commit": "1ef89742e6499c1f6205365b106242cbd6ab8c94",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": []
+  },
+  "reference": "/Users/josephduncan/github/inference-and-benchmarks/typesafe-ai-benchmark/results/lfm2.5-embedding-350m/hf-f35ae2c/fp32-liquidai/sentence-transformers-torch-cuda-st5.1.1-tf4.56.2-torch2.14.1-cu126/embeddings/2026-10-08-quick-card-prompts-efe68a",
+  "vectors": {
+    "path": ".artifacts/embeddings/vectors/lfm2.5-embedding-350m__hf-f35ae2c__bf16-liquidai__sentence-transformers-torch-mps-st5.1.1-tf4.56.2-torch2.14.1__embeddings__2026-10-09-quick-card-prompts-249a86.npy",
+    "sha256": "70c0d0d7058a5e3ddf5ac634155aae85c2af53e1cdc5a0909d529e93fddc89e8",
+    "shape": [
+      66939,
+      1024
+    ],
+    "dtype": "float32",
+    "uploaded": false
+  }
+}

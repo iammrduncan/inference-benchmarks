@@ -1,0 +1,19 @@
+key: embeddinggemma-300m/hf-57c266a/fp32-google/sentence-transformers-torch-mps-st6.1.0-torch2.14.1
+target: recipe
+model: embeddinggemma-300m
+checkpoint:
+  hf: google/embeddinggemma-300m
+  revision: 57c266a740f537b4dc058e1b0cda161fd15afa75
+quant:
+  format: fp32
+  producer: google
+  repo: google/embeddinggemma-300m
+  revision: 57c266a740f537b4dc058e1b0cda161fd15afa75
+engine:
+  name: sentence-transformers-torch-mps
+  version: st6.1.0-torch2.14.1
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

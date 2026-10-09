@@ -1,0 +1,19 @@
+key: lfm2.5-embedding-350m/hf-f35ae2c/bf16-liquidai/sentence-transformers-torch-mps-st5.1.1-tf4.56.2-torch2.14.1
+target: recipe
+model: lfm2.5-embedding-350m
+checkpoint:
+  hf: LiquidAI/LFM2.5-Embedding-350M
+  revision: f35ae2c91d687658dbf1f2b449382f0b019b9808
+quant:
+  format: bf16
+  producer: liquidai
+  repo: LiquidAI/LFM2.5-Embedding-350M
+  revision: f35ae2c91d687658dbf1f2b449382f0b019b9808
+engine:
+  name: sentence-transformers-torch-mps
+  version: st5.1.1-tf4.56.2-torch2.14.1
+engine_visibility: public
+verified_identity: true
+label: null
+trained_on: []
+overlap: []

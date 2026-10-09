@@ -1,0 +1,191 @@
+{
+  "schema": 1,
+  "run_id": "2026-10-09-quick-card-prompts-081a23",
+  "status": "complete",
+  "stop_reason": null,
+  "suite": {
+    "name": "embeddings",
+    "tier": "quick",
+    "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+    "ids": 66939
+  },
+  "subject": {
+    "model": "embeddinggemma-300m",
+    "checkpoint": {
+      "hf": "google/embeddinggemma-300m",
+      "revision": "57c266a740f537b4dc058e1b0cda161fd15afa75"
+    },
+    "quant": {
+      "format": "bf16",
+      "producer": "google",
+      "repo": "google/embeddinggemma-300m",
+      "revision": "57c266a740f537b4dc058e1b0cda161fd15afa75"
+    },
+    "engine": {
+      "name": "sentence-transformers-torch-mps",
+      "version": "st6.1.0-torch2.14.1"
+    },
+    "key": "embeddinggemma-300m/hf-57c266a/bf16-google/sentence-transformers-torch-mps-st6.1.0-torch2.14.1",
+    "target": "recipe",
+    "engine_visibility": "public",
+    "verified_identity": true,
+    "label": null
+  },
+  "mode": "native",
+  "profile": "card-prompts",
+  "harness": {
+    "name": "bench",
+    "commit": "2298f0b47dd58b0105d02f723a01292461f7c3aa",
+    "dirty": false,
+    "suite_hash": "4c216f567e7755fcba7cd61c6ffe3e6ea2c399c52c3d2a2a6aedefb20066cf05",
+    "scorer": {
+      "name": "mteb",
+      "version": "2.22.5"
+    },
+    "agent": null
+  },
+  "endpoint": "http://127.0.0.1:8000/v1/embeddings",
+  "dataset": {
+    "tasks": [
+      "NanoArguAnaRetrieval",
+      "NanoClimateFeverRetrieval",
+      "NanoDBPediaRetrieval",
+      "NanoFEVERRetrieval",
+      "NanoFiQA2018Retrieval",
+      "NanoHotpotQARetrieval",
+      "NanoMSMARCORetrieval",
+      "NanoNFCorpusRetrieval",
+      "NanoNQRetrieval",
+      "NanoQuoraRetrieval",
+      "NanoSCIDOCSRetrieval",
+      "NanoSciFactRetrieval",
+      "NanoTouche2020Retrieval",
+      "STSBenchmark",
+      "Banking77Classification"
+    ],
+    "manifest": ".artifacts/embeddings/manifests/670f8d38974312e2.jsonl",
+    "manifest_sha256": "2d2ce7c3195335d3917cd3675666232777a4bdf38c110da28a72cac316470566",
+    "texts": 66939,
+    "prompts_sha256": "3d60d338d6b690bbd1eae200c329bfea91f1f669c5333ababdf2ffd41aa5d9b0"
+  },
+  "request_settings": {
+    "batch_size": 32,
+    "encoding_format": "base64",
+    "order": "by text length, descending",
+    "dims_scored": [
+      768,
+      512,
+      256,
+      128
+    ],
+    "width": 768
+  },
+  "dispatch": {
+    "concurrency": 1,
+    "requests_per_minute": null,
+    "retries": 0
+  },
+  "budget": {
+    "cap_usd": null,
+    "spent_usd": 0,
+    "price": null
+  },
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "location": "America/Chicago"
+  },
+  "attempted": 2092,
+  "completed": 2092,
+  "started_at": "2026-10-09T01:34:54.210Z",
+  "finished_at": "2026-10-09T01:59:35.587Z",
+  "observed_models": {
+    "embeddinggemma-300m": 2092
+  },
+  "engine": {
+    "backend": "sentence-transformers",
+    "device": "mps",
+    "dtype": "bfloat16",
+    "torch": "2.14.1",
+    "cuda_arch_list": null,
+    "device_name": "mps",
+    "sentence_transformers": "6.1.0",
+    "transformers": "5.19.0",
+    "max_seq_length": 2048,
+    "dimension": 768,
+    "trust_remote_code": false,
+    "unpadded": false,
+    "triton_overrides": null,
+    "token_budget_per_forward": 16384,
+    "python": "3.12.12",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "machine": "arm64",
+    "numpy": "2.5.3"
+  },
+  "hardware": {
+    "host": "macbook",
+    "recipe": "embeddinggemma-300m/apple-m/st",
+    "placements": [
+      {
+        "host": "macbook",
+        "devices": [
+          {
+            "kind": "apple-silicon",
+            "label": "m4-pro",
+            "chip": "M4 Pro",
+            "memory_gb": 24
+          }
+        ],
+        "observed": {
+          "chip": "Apple M4 Pro",
+          "memory_gb": 24
+        }
+      }
+    ]
+  },
+  "launcher": {
+    "run_id": "2026-10-09T01-34-47-320Z",
+    "profile": "st-bf16",
+    "params": {
+      "checkpoint": "google/embeddinggemma-300m",
+      "checkpoint_rev": "57c266a740f537b4dc058e1b0cda161fd15afa75",
+      "model_name": "embeddinggemma-300m",
+      "max_len": "2048",
+      "trust_remote_code": "false",
+      "unpadded": "false",
+      "stack": "",
+      "engine_name": "sentence-transformers-torch-mps",
+      "engine_version": "st6.1.0-torch2.14.1",
+      "producer": "google",
+      "weights_repo": "google/embeddinggemma-300m",
+      "weights_rev": "57c266a740f537b4dc058e1b0cda161fd15afa75",
+      "backend": "st",
+      "precision": "bf16"
+    },
+    "source": {
+      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "commit": "1ef89742e6499c1f6205365b106242cbd6ab8c94",
+      "override": false,
+      "mirror": "https://github.com/iammrduncan/inference-engines"
+    },
+    "acknowledgments": [
+      {
+        "component": "google/embeddinggemma-300m",
+        "hash": "f58fc42228e4ba242f03b95234afcfb7ca13fa57e5d757d02807a8b6f4508a34",
+        "at": "2026-10-09T01:34:47.319Z"
+      }
+    ]
+  },
+  "reference": "/Users/josephduncan/github/inference-and-benchmarks/typesafe-ai-benchmark/results/embeddinggemma-300m/hf-57c266a/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126/embeddings/2026-10-08-quick-card-prompts-2e5238",
+  "vectors": {
+    "path": ".artifacts/embeddings/vectors/embeddinggemma-300m__hf-57c266a__bf16-google__sentence-transformers-torch-mps-st6.1.0-torch2.14.1__embeddings__2026-10-09-quick-card-prompts-081a23.npy",
+    "sha256": "8ff17efa06537c53b5e930727e1c3adcb8640d0d1fb14d8e67877bfad79a8098",
+    "shape": [
+      66939,
+      768
+    ],
+    "dtype": "float32",
+    "uploaded": false
+  }
+}
