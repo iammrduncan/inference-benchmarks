@@ -42,7 +42,7 @@
     },
     "agent": null
   },
-  "endpoint": "http://mbox03:8000/v1/systemone",
+  "endpoint": "http://gpu-host-2/v1/systemone",
   "dataset": {
     "repo": "LocalLLaMA/typed-decisions",
     "revision": "d0e2f0c42fef86cc15d1688d25a19f5ba7c85b18",
@@ -92,11 +92,11 @@
     "laya": 400
   },
   "hardware": {
-    "host": "mbox03",
+    "host": "gpu-host-2",
     "recipe": "laya/p100/decide",
     "placements": [
       {
-        "host": "mbox03",
+        "host": "gpu-host-2",
         "devices": [
           {
             "kind": "gpu",
@@ -126,11 +126,17 @@
       "engine_version": "tf5.19.0-torch2.14.1+cu126"
     },
     "source": {
-      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "repo": "local mirror",
       "commit": "e6ceae95a5303653a7abbd1dff06d7ce6ce6d878",
       "override": false,
       "mirror": "https://github.com/iammrduncan/inference-engines"
     },
     "acknowledgments": []
-  }
+  },
+  "edits": [
+    {
+      "date": "2026-10-17",
+      "note": "Edited for publication: lab host names replaced with aliases; engine ports and local file paths removed. Measurements, request bodies and outputs are unchanged."
+    }
+  ]
 }

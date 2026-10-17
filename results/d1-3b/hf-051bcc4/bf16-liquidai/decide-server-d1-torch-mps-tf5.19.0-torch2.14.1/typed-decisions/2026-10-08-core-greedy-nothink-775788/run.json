@@ -129,11 +129,17 @@
       "engine_version": "tf5.19.0-torch2.14.1"
     },
     "source": {
-      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "repo": "local mirror",
       "commit": "6490e6f0d5317bbcc02d053d77f6c965b8ec3a53",
       "override": false,
       "mirror": "https://github.com/iammrduncan/inference-engines"
     },
     "acknowledgments": []
-  }
+  },
+  "edits": [
+    {
+      "date": "2026-10-17",
+      "note": "Edited for publication: lab host names replaced with aliases; engine ports and local file paths removed. Measurements, request bodies and outputs are unchanged."
+    }
+  ]
 }
