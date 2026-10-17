@@ -16,6 +16,7 @@ import type {
 } from '../lib/types.ts';
 import { engineFamily } from './engines.ts';
 import { groupOfCategory, overall } from './overall.ts';
+import { fetchStars, readSubmission } from './provenance.ts';
 import { hardwareHostProblems, textProblems } from './publishable.ts';
 import { bootstrapMean, rankBands } from './stats.ts';
 
@@ -283,6 +284,7 @@ function loadRun(id: string): Loaded | null {
     files: walkFiles(dir).map((p) => posix(relative(dir, p))).sort(),
     notes: Array.isArray(summary.notes) ? summary.notes.map(String) : [],
     reproduce: reproduce(subject, suiteName, tier, profile, mode, recipe, hardware, reference),
+    submission: readSubmission(ROOT, id),
   };
   const metrics = obj(summary.metrics, `${where} metrics`);
 
@@ -511,7 +513,7 @@ function build(): Manifest {
   const allBoards = boards(runs);
   const category = new Map(suites.map((s) => [s.name, s.category]));
   return {
-    generated_at: new Date().toISOString(), repo: REPO, engines_repo: ENGINES_REPO,
+    generated_at: new Date().toISOString(), repo: REPO, engines_repo: ENGINES_REPO, stars: null,
     suites, subjects, runs: runs.sort(latestFirst), boards: allBoards, matrices: matrices(runs, subjects, references, notRun),
     overall: overall(runs, allBoards, (suite) => category.get(suite) ?? null),
     suite_groups: Object.fromEntries(suites.map((s) => [s.name, groupOfCategory(s.category)])),
@@ -520,6 +522,8 @@ function build(): Manifest {
 
 try {
   const manifest = build();
+  // Stars come from GitHub only in the Pages build, so local builds and tests stay offline.
+  if (!checkOnly && process.env.CF_PAGES === '1') manifest.stars = await fetchStars(REPO);
   if (!checkOnly) {
     writeFileSync(join(SITE, 'lib', 'manifest.generated.json'), `${JSON.stringify(manifest)}\n`);
     const pub = join(SITE, 'public', 'results');
