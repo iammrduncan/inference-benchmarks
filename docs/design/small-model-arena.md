@@ -5,6 +5,7 @@ model card, whose headline chart puts five 2–4B models on one plot of "win rat
 against size. The arena does the same on our harness, with our records. It adds
 what the card leaves out:
 - intervals on every score;
+- agentic coding (SWE-bench and Terminal-Bench);
 - a cost axis;
 - the tokens each model spends to solve each benchmark;
 - the effect of quant and engine.
@@ -87,6 +88,31 @@ fixed ID lists, as in [core-set.md](core-set.md#fixing-the-item-sets).
 | BFCL | tool-calling | 200: the core set's four categories | bfcl-eval | core P0 |
 | Global MMLU | knowledge | 600: 6 languages × 100 | MC extractor | new |
 | *MMLU-Pro (if MixEval Hard is dropped)* | knowledge | the core list, 280 | MC extractor | core P0 |
+
+### Agentic coding: SWE-bench and Terminal-Bench
+
+The card stops at single-turn coding. The arena also runs the agentic suites from
+[core-set.md](core-set.md#4-coding), because tokens and cost per task matter most
+here. Can a 3B model fix a real issue at all, and how many tokens and turns does it
+burn trying?
+
+| Benchmark | Arena items | Run through | Reported |
+| --- | --- | --- | --- |
+| **Terminal-Bench 2.x** | the core list, 20 tasks | the frozen agent harness in Harbor, with `bench` as the recording proxy ([harness.md](harness.md#the-agent-harness)) | pass rate; tokens, turns and $ per task and per *solved* task; prefix-cache hit rate |
+| **SWE-bench Pro** | the core list, 10 tasks | same | same |
+| *SWE-bench Verified* (optional) | a fixed 50-task subset | same | same. Its value is that many small-model numbers are published against it, but it is more contaminated than Pro |
+
+Notes:
+- These depend on M5 (the recording proxy, Harbor and the agent-harness bake-off).
+  They join the arena after the single-turn suites, without blocking them.
+- Small models have 32K–64K context. The harness's compaction is set relative to
+  each subject's context, and a task that can't fit records `skipped: context`.
+  The cell stays blank, as everywhere else.
+- Expect very low pass rates at 3–4B. With 10–20 tasks the intervals are wide, so
+  most agentic pairs will be ties in the win rate. The useful signals are tokens
+  and turns per attempt, and whether a model solves anything at all.
+- Agentic results get their own rows on the boards, and win rate is shown with and
+  without them, because the agent harness is part of what's measured.
 
 Pin every dataset revision at implementation, as the decision suites do. The card
 doesn't state its BFCL version, its Global MMLU languages or its shot counts for
@@ -206,7 +232,9 @@ the no-think board only. The time planner replaces these with measured rates.
    the card fixture (mean ranks 4.625 / 3.875 / 2.5 / 2.375 / 1.75) and paired
    win/tie cases. *Done when* both boards compute from committed records.
 4. **The site**: the arena tab, the four charts and the card-check page.
-5. **Variants and roster v2**: quant and engine subjects on the P100, M4 Pro and
+5. **Agentic coding** (after M5): Terminal-Bench 2.x and SWE-bench Pro for the
+   roster, with tokens, turns and $ per task.
+6. **Variants and roster v2**: quant and engine subjects on the P100, M4 Pro and
    B70, then the v2 candidates as arena version 2.
 
 ## Open decisions
