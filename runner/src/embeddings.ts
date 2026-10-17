@@ -8,7 +8,7 @@ import { join, relative } from 'node:path';
 import YAML from 'yaml';
 import { postJsonReachable, TRANSPORT_BACKOFF_MS } from './client.ts';
 import { sha256, type Subject } from './identity.ts';
-import { buildSummary, harnessCommit, REPO_ROOT, runDirFor, ensureSubject, writeRaw, type RunJson } from './record.ts';
+import { buildSummary, harnessCommit, renameHost, REPO_ROOT, runDirFor, ensureSubject, writeRaw, type HostRename, type RunJson } from './record.ts';
 import { percentile, round6 } from './stats.ts';
 import type { RawRow, SuiteModule, Tier } from './suite.ts';
 
@@ -77,7 +77,7 @@ export function writeNpy(path: string, data: Float32Array, rows: number, cols: n
   return sha256(buf);
 }
 
-export type EmbedRun = { dims?: number[]; subject: Subject; baseUrl: string; tier: Tier; profile: string; reference?: string; hardware: unknown; launcher?: unknown; root?: string; log?: (m: string) => void };
+export type EmbedRun = { dims?: number[]; subject: Subject; baseUrl: string; tier: Tier; profile: string; reference?: string; hardware: unknown; launcher?: unknown; rename?: HostRename; root?: string; log?: (m: string) => void };
 
 /**
  * Which output widths to score. A recipe that names its dims wins (e.g. [1024] for a model
@@ -122,9 +122,10 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
     budget: { cap_usd: null, spent_usd: 0, price: null },
     environment: { node: process.version, platform: process.platform, arch: process.arch, location: process.env.BENCH_LOCATION ?? Intl.DateTimeFormat().resolvedOptions().timeZone },
     attempted: 0, completed: 0, started_at: started.toISOString(), finished_at: null, observed_models: {},
-    engine, hardware: o.hardware, launcher: o.launcher ?? null, reference: o.reference ?? null,
+    // The reference run is recorded relative to the repo, not as a path on this machine.
+    engine, hardware: o.hardware, launcher: o.launcher ?? null, reference: o.reference ? relative(root, o.reference) : null,
   };
-  const save = () => writeFileSync(join(dir, 'run.json'), JSON.stringify(run, null, 2) + '\n');
+  const save = () => writeFileSync(join(dir, 'run.json'), renameHost(JSON.stringify(run, null, 2) + '\n', o.rename));
   save();
 
   // Embed longest first (less padding, and memory limits surface in the first batches); store in manifest order.
@@ -158,7 +159,7 @@ export async function runEmbeddings(o: EmbedRun): Promise<string> {
   const retried = rows.filter((r) => r.transport_failures?.length).length;
   if (retried) (run.dispatch as RunJson['dispatch']).transport_retry = { backoff_ms: [...TRANSPORT_BACKOFF_MS], retried_requests: retried };
   run.observed_models = rows.reduce<Record<string, number>>((m, r) => { if (r.model) m[r.model] = (m[r.model] ?? 0) + 1; return m; }, {});
-  writeRaw(dir, rows, root);
+  writeRaw(dir, rows, root, o.rename);
   if (!failed) {
     const vpath = artifacts(root, 'vectors', `${relative(join(root, 'results'), dir).replace(/\//g, '__')}.npy`);
     run.vectors = { path: relative(root, vpath), sha256: writeNpy(vpath, vectors, manifest.length, DIM), shape: [manifest.length, DIM], dtype: 'float32', uploaded: false };

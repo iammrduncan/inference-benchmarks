@@ -5,12 +5,12 @@ import YAML from 'yaml';
 import { cloudSubject, endpointSubject, type Identity, type Subject } from './identity.ts';
 import { TRANSPORT_BACKOFF_MS } from './client.ts';
 import { cost, decisionEndpoint, gatewayJsonSchema, priceFor, typesafe, type DecisionProvider, type Price } from './providers.ts';
-import { buildSummary, ensureSubject, harnessCommit, REPO_ROOT, runDirFor, suiteHash, writeRaw, type RunJson } from './record.ts';
+import { buildSummary, ensureSubject, harnessCommit, renameHost, REPO_ROOT, runDirFor, suiteHash, writeRaw, type HostRename, type RunJson } from './record.ts';
 import type { RawRow, SuiteModule, Tier, Usage } from './suite.ts';
 import { typedDecisions, suiteDef } from './suites/typed-decisions.ts';
 import { decisionConformance } from './suites/decision-conformance.ts';
 import { embeddingsSuite, runEmbeddings } from './embeddings.ts';
-import { recipeDown, recipeSubject, recipeUp, type RecipeTarget } from './launcher.ts';
+import { hostRename, publicSource, recipeDown, recipeSubject, recipeUp, type RecipeTarget } from './launcher.ts';
 
 export const SUITES: Record<string, SuiteModule> = {
   'typed-decisions': typedDecisions,
@@ -26,7 +26,7 @@ export type Target =
 export type RunOptions = { suites: string[]; tier: Tier; profile: string; budgetUsd: number | null; concurrency: number; rpm?: number | null; reference?: string; root?: string; log?: (m: string) => void };
 
 /** expectModel: for engines we started, the model name the server must echo; any other answer is a failed row. */
-type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown>; hardware?: unknown; launcher?: unknown; expectModel?: string };
+type Resolved = { subject: Subject; provider: DecisionProvider; price: Price | undefined; settings: Record<string, unknown>; hardware?: unknown; launcher?: unknown; expectModel?: string; rename?: HostRename };
 
 /** Map a target to its subject and a decision client. */
 export async function resolveTarget(t: Exclude<Target, { kind: 'recipe' }>): Promise<Resolved> {
@@ -81,7 +81,7 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
     attempted: 0, completed: 0, started_at: started.toISOString(), finished_at: null, observed_models: {},
     ...(r.hardware !== undefined ? { hardware: r.hardware } : {}), ...(r.launcher !== undefined ? { launcher: r.launcher } : {}),
   };
-  const save = () => writeFileSync(join(dir, 'run.json'), JSON.stringify(run, null, 2) + '\n');
+  const save = () => writeFileSync(join(dir, 'run.json'), renameHost(JSON.stringify(run, null, 2) + '\n', r.rename));
   save();
   log(`${suite.name} ${o.tier}: ${items.length} item(s) -> ${r.subject.key} (${run.mode})`);
 
@@ -127,7 +127,7 @@ export async function runSuite(r: Resolved, suite: SuiteModule, o: RunOptions): 
     run.status = rows.length === items.length ? 'complete' : 'partial';
     run.stop_reason = stop ?? (rows.length === items.length ? null : 'interrupted');
     run.finished_at = new Date().toISOString();
-    writeRaw(dir, rows, root);
+    writeRaw(dir, rows, root, r.rename);
     save();
     writeFileSync(join(dir, 'summary.json'), buildSummary(run, rows, suite));
   }
@@ -168,8 +168,10 @@ async function runRecipe(t: RecipeTarget, o: RunOptions): Promise<string[]> {
   try {
     const subject = recipeSubject(up);
     log(`${subject.key} at ${up.base_url}`);
-    const hardware = { host: t.on ?? null, recipe: up.id, placements: up.hardware ?? [] };
-    const launcher = { run_id: up.run_id, profile: up.profile, params: up.params, source: up.source, acknowledgments: up.acknowledgments };
+    // The head placement's inventory name: an alias when the inventory names hosts by alias.
+    const hardware = { host: up.hardware?.[0]?.host ?? t.on ?? null, recipe: up.id, placements: up.hardware ?? [] };
+    const launcher = { run_id: up.run_id, profile: up.profile, params: up.params, source: publicSource(up.source), acknowledgments: up.acknowledgments };
+    const rename = hostRename(up);
     for (const name of o.suites) {
       log(`${name} ${o.tier}`);
       const suite = SUITES[name];
@@ -178,12 +180,12 @@ async function runRecipe(t: RecipeTarget, o: RunOptions): Promise<string[]> {
         const r: Resolved = {
           subject, provider: decisionEndpoint(up.base_url, up.endpoint.model ?? subject.model), price: undefined,
           settings: { note: 'recipe engine speaking the decision protocol natively; no sampling parameters' }, hardware, launcher,
-          expectModel: up.endpoint.model ?? subject.model,
+          expectModel: up.endpoint.model ?? subject.model, ...(rename ? { rename } : {}),
         };
         dirs.push((await runSuite(r, suite, o)).dir);
       } else {
         const recipeDims = typeof up.params.dims === 'string' ? up.params.dims.split(',').map(Number) : undefined;
-        dirs.push(await runEmbeddings({ ...(recipeDims ? { dims: recipeDims } : {}), subject, baseUrl: up.base_url, tier: o.tier, profile: o.profile, ...(o.reference ? { reference: o.reference } : {}), hardware, launcher, log }));
+        dirs.push(await runEmbeddings({ ...(recipeDims ? { dims: recipeDims } : {}), ...(rename ? { rename } : {}), subject, baseUrl: up.base_url, tier: o.tier, profile: o.profile, ...(o.reference ? { reference: o.reference } : {}), hardware, launcher, log }));
       }
     }
   } finally {

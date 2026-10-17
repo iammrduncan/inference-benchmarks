@@ -45,6 +45,7 @@ results/<subject-key>/<suite>/<date>-<tier>-<profile>[-<mode>]-<id>/
 
 - **No retries, no repairs, no fallbacks.** A failed request is a row with `ok: false`, and it counts against the subject.
 - **Credentials never reach a record.** Keys travel only in request headers, and the client does not capture headers.
+- **Lab machines appear by alias.** Records are published on the site. A recipe run records the engine under its inventory host name (without the port), never the address the launcher reached it at, and local engine-source paths as `local mirror` or `local checkout`. Name lab hosts by alias in your launcher inventory (`name: gpu-host-2`, `address:` the real machine). The site build refuses run files with other host names, private addresses or home directory paths.
 - **Cloud subjects** are keyed `<model>/<provider>-<YYYY-MM>/opaque/<provider>`. Providers change what serves a model id, so each month is its own subject. The models the API actually reported are counted in `run.json` under `observed_models`.
 
 ## Suites
