@@ -16,7 +16,7 @@
     "@decision/decisions": "0.0.0",
     "@decision/gateway": "0.0.0",
     "fastify": "5.12.5",
-    "next": "16.3.5",
+    "next": "16.3.8",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "server-only": "0.0.1",
