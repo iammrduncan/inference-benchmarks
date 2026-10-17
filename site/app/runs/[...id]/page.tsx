@@ -6,6 +6,7 @@ import { findRun, manifest, runHref, subject as getSubject, subjectHref, suiteHr
 import { duration, fixed, int, ms, pct, usd } from '../../../lib/format.ts';
 import type { ConformanceRun, DecisionsRun, EmbeddingsRun } from '../../../lib/types.ts';
 import { FidelitySummary } from '../../../components/Boards.tsx';
+import { Submitter } from '../../../components/Submission.tsx';
 import { Code, DeltaCell, IntervalBar, KeyValues, Labels, Section } from '../../../components/ui.tsx';
 
 export const dynamicParams = false;
@@ -46,6 +47,7 @@ export default async function RunPage({ params }: Props) {
           ['Items', `${int(r.items.succeeded)} succeeded of ${int(r.items.attempted)} attempted (${int(r.items.planned)} planned)${r.items.failed ? `, ${int(r.items.failed)} failed` : ''}`],
           ['When', `${r.started_at.replace('T', ' ').slice(0, 19)} UTC · ${duration(r.started_at, r.finished_at)}`],
           ['Hardware', r.hardware ? <span key="hw">{r.hardware.label}{r.hardware.note && <><br /><span className="small muted">{r.hardware.note}</span></>}</span> : 'provider-hosted'],
+          ['Submitted by', r.submission ? <Submitter key="sb" s={r.submission} /> : '—'],
           ['Harness', <span key="h"><a href={`${manifest.repo}/tree/${r.harness.commit}`} className="mono">bench @ {r.harness.commit.slice(0, 7)}</a>{r.harness.dirty ? ' (with local changes)' : ''} · scorer {r.harness.scorer}</span>],
           ['Suite hash', <span key="sh" className="mono small">{r.harness.suite_hash}</span>],
           ...(r.recipe ? [['Recipe', <span key="rc"><a href={`${r.recipe.repo}/tree/${r.recipe.commit}`} className="mono">{r.recipe.id}</a> · profile {r.recipe.profile ?? 'default'} · inference-engines @ {r.recipe.commit.slice(0, 7)}</span>] as [string, ReactNode]] : []),

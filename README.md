@@ -77,6 +77,10 @@ sentence-transformers fp32 on the P100; fidelity compares each run's vectors wit
   [inference-engines](https://github.com/iammrduncan/inference-engines). `bench`
   drives its launcher.
 
+## Contribute
+
+Run a benchmark on your hardware and send it as a pull request from a fork: see [CONTRIBUTING.md](CONTRIBUTING.md). Merged runs show who submitted them and whether GitHub verified the commit's signature.
+
 ## Run it
 
 Node 24 (`nvm use`). API keys come from 1Password, never from files.

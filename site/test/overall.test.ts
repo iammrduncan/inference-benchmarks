@@ -10,7 +10,7 @@ function decisions(subject: string, accuracy: number, tier = 'quick', mode = 'na
     kind: 'decisions', id: `${subject}/typed-decisions/${tier}-${mode}`, run_id: 'r', subject, suite: 'typed-decisions', tier, profile: 'p', mode,
     status: 'complete', label: null, started_at: '2026-10-06T00:00:00Z', finished_at: '2026-10-06T00:01:00Z',
     items: { planned: 1, attempted: 1, succeeded: 1, failed: 0 }, harness: { commit: 'c', dirty: false, scorer: 's', suite_hash: 'h' },
-    latency_ms: { p50: 150, p95: 200, p99: 250 }, usage: null, hardware: null, recipe: null, endpoint: null, files: [], notes: [], reproduce: '',
+    latency_ms: { p50: 150, p95: 200, p99: 250 }, usage: null, hardware: null, recipe: null, endpoint: null, files: [], notes: [], reproduce: '', submission: null,
     metrics: { decisions: 1, valid: 1, accuracy: iv(accuracy), kl_from_gold: iv(1), brier: iv(0.1), ece: 0.01, accuracy_by_type: {}, accuracy_by_workflow: {} },
     invalid_reasons: {}, reference: null, delta_accuracy: null, concurrency: 1, throughput: null,
   };
