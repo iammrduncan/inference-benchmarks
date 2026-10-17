@@ -41,6 +41,7 @@ knows **what to measure** and **what the results were**.
 | [benchmarks.md](benchmarks.md) | 1. Which benchmarks do we run, on which subjects, at which tiers? |
 | [harness.md](harness.md) | The premise, and the one harness: `bench` generates every request; pinned official packages only score the captured outputs offline. Also covers chat-template checks and calibrating the harness against official harnesses. |
 | [core-set.md](core-set.md) | The ranked `core` tier: ten categories (0–9), the priority benchmarks in each, a time budget that fits in about 24 hours on slow cards like the P100, and the time planner. |
+| [small-model-arena.md](small-model-arena.md) | Proposal: the Small Model Arena category (prompted by SmolLM3). A pinned roster of ≤ 4B models on the SmolLM3 card's 8 benchmarks, in no-think and think modes, with win rate (clear wins only), tokens to solve and cost per 1K items; what the card's "win rate" actually is; open decisions. |
 | [embeddings.md](embeddings.md) | The embeddings category (prompted by EmbeddingGemma 2): identity with output dimension and modules, the protocol, the bench-embeds / MTEB-scores harness, fidelity, core suites per modality, first run set. |
 | [subjects-and-results.md](subjects-and-results.md) | What exactly is a "subject", what a run records, where results live, and how the site ranks them. (Shared by 1 and 2.) |
 | [repo-shift.md](repo-shift.md) | 2. How `typesafe-ai-benchmark` becomes `inference-benchmarks`: what we keep, move, split or retire, file by file. |
