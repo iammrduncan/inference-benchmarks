@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "run": "clef/hf-ed3eed3/gguf-q3_k_m-bartowski/llamacpp-cuda-b11515/typed-decisions/2026-10-09-core-greedy-nothink-126d07",
+  "submitted_by": "shadowcodex",
+  "pr": 2,
+  "commit": {
+    "sha": "df0f513922794b143677bb65b0a8fe44e0608399",
+    "author": "shadowcodex",
+    "signature": {
+      "verified": false,
+      "reason": "unsigned",
+      "type": null
+    }
+  },
+  "landed_in": "df0f513922794b143677bb65b0a8fe44e0608399",
+  "recorded_at": "2026-10-17T23:16:37.228Z"
+}

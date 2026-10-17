@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "run": "clef-flash/hf-fde727a/bnb-nf4-iammrduncan/decide-server-clef-torch-cuda-tf5.19.0-torch2.14.1-cu126/typed-decisions/2026-10-08-core-greedy-nothink-01f387",
+  "submitted_by": "shadowcodex",
+  "pr": 2,
+  "commit": {
+    "sha": "94fb4a772543d93ecd39823e60ba6bff370e3af6",
+    "author": "shadowcodex",
+    "signature": {
+      "verified": false,
+      "reason": "unsigned",
+      "type": null
+    }
+  },
+  "landed_in": "94fb4a772543d93ecd39823e60ba6bff370e3af6",
+  "recorded_at": "2026-10-17T23:16:37.228Z"
+}

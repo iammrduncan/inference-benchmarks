@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "run": "embeddinggemma-2/hf-914f7f8/fp32-google/sentence-transformers-torch-mps-st6.1.0-torch2.14.1/embeddings/2026-10-07-quick-card-prompts-96892c",
+  "submitted_by": "shadowcodex",
+  "pr": 2,
+  "commit": {
+    "sha": "c4e579ca6783389c4f7e40689896c959a910ddcd",
+    "author": "shadowcodex",
+    "signature": {
+      "verified": false,
+      "reason": "unsigned",
+      "type": null
+    }
+  },
+  "landed_in": "c4e579ca6783389c4f7e40689896c959a910ddcd",
+  "recorded_at": "2026-10-17T23:16:37.228Z"
+}
