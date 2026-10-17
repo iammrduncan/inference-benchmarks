@@ -16,6 +16,7 @@ import type {
 } from '../lib/types.ts';
 import { engineFamily } from './engines.ts';
 import { groupOfCategory, overall } from './overall.ts';
+import { hardwareHostProblems, textProblems } from './publishable.ts';
 import { bootstrapMean, rankBands } from './stats.ts';
 
 const SITE = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -227,11 +228,24 @@ function decisionThroughput(rawPath: string, elapsedMs: number, concurrency: num
   };
 }
 
+/** The whole run folder is copied to the public site, so every file in it must pass. */
+function assertPublishable(dir: string, where: string, run: Obj): void {
+  const problems = [
+    ...hardwareHostProblems(run).map((p) => `run.json: ${p}`),
+    ...walkFiles(dir).flatMap((f) => textProblems(readFileSync(f, 'utf8')).map((p) => `${posix(relative(dir, f))}: ${p}`)),
+  ];
+  if (problems.length) {
+    const more = problems.length > 5 ? ` (and ${problems.length - 5} more)` : '';
+    throw new RecordError(`${where} can't be published: ${problems.slice(0, 5).join('; ')}${more}`);
+  }
+}
+
 function loadRun(id: string): Loaded | null {
   const dir = join(RESULTS, id);
   if (!existsSync(join(dir, 'summary.json'))) return null; // still running, or failed before summarizing
   const where = `results/${id}`;
   const run = obj(readJson(join(dir, 'run.json')), `${where}/run.json`);
+  assertPublishable(dir, where, run);
   const summary = obj(readJson(join(dir, 'summary.json')), `${where}/summary.json`);
   const subject = obj(run.subject, `${where}/run.json subject`);
   const suite = obj(run.suite, `${where}/run.json suite`);
