@@ -1,0 +1,10 @@
+# A pull request runs its own copy of the checks, so a change to the checks themselves
+# needs an owner's review before it can merge (the ruleset on main requires code-owner
+# review). Everything else, results included, merges once the checks pass.
+/.github/                          @shadowcodex
+/runner/src/contribution.ts        @shadowcodex
+/runner/src/check-contribution.ts  @shadowcodex
+/runner/src/submissions.ts         @shadowcodex
+/runner/src/record-submissions.ts  @shadowcodex
+/site/scripts/publishable.ts       @shadowcodex
+/site/scripts/provenance.ts        @shadowcodex
