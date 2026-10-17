@@ -44,7 +44,7 @@
     },
     "agent": null
   },
-  "endpoint": "http://mbox03:8000/v1/embeddings",
+  "endpoint": "http://gpu-host-2/v1/embeddings",
   "dataset": {
     "tasks": [
       "NanoArguAnaRetrieval",
@@ -129,11 +129,11 @@
     "numpy": "2.5.3"
   },
   "hardware": {
-    "host": "mbox03",
+    "host": "gpu-host-2",
     "recipe": "lfm2.5-embedding-350m/p100/st",
     "placements": [
       {
-        "host": "mbox03",
+        "host": "gpu-host-2",
         "devices": [
           {
             "kind": "gpu",
@@ -167,7 +167,7 @@
       "precision": "fp32"
     },
     "source": {
-      "repo": "/home/mbox03/.cache/ie-mirror/inference-engines.git",
+      "repo": "local mirror",
       "commit": "e6ceae95a5303653a7abbd1dff06d7ce6ce6d878",
       "override": false,
       "mirror": "https://github.com/iammrduncan/inference-engines"
@@ -184,5 +184,11 @@
     ],
     "dtype": "float32",
     "uploaded": false
-  }
+  },
+  "edits": [
+    {
+      "date": "2026-10-17",
+      "note": "Edited for publication: lab host names replaced with aliases; engine ports and local file paths removed. Measurements, request bodies and outputs are unchanged."
+    }
+  ]
 }

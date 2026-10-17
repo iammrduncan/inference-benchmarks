@@ -164,7 +164,7 @@
       "precision": "fp32"
     },
     "source": {
-      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "repo": "local mirror",
       "commit": "1ef89742e6499c1f6205365b106242cbd6ab8c94",
       "override": false,
       "mirror": "https://github.com/iammrduncan/inference-engines"
@@ -177,7 +177,7 @@
       }
     ]
   },
-  "reference": "/Users/josephduncan/github/inference-and-benchmarks/typesafe-ai-benchmark/results/embeddinggemma-300m/hf-57c266a/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126/embeddings/2026-10-08-quick-card-prompts-2e5238",
+  "reference": "results/embeddinggemma-300m/hf-57c266a/fp32-google/sentence-transformers-torch-cuda-st6.1.0-torch2.14.1-cu126/embeddings/2026-10-08-quick-card-prompts-2e5238",
   "vectors": {
     "path": ".artifacts/embeddings/vectors/embeddinggemma-300m__hf-57c266a__fp32-google__sentence-transformers-torch-mps-st6.1.0-torch2.14.1__embeddings__2026-10-09-quick-card-prompts-78820b.npy",
     "sha256": "05605976a74590af2958400d85947aa3c12a7e3cc041a9a40ba3085ccd92e7d9",
@@ -187,5 +187,11 @@
     ],
     "dtype": "float32",
     "uploaded": false
-  }
+  },
+  "edits": [
+    {
+      "date": "2026-10-17",
+      "note": "Edited for publication: lab host names replaced with aliases; engine ports and local file paths removed. Measurements, request bodies and outputs are unchanged."
+    }
+  ]
 }

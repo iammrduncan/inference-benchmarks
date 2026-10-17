@@ -162,14 +162,14 @@
       "precision": "fp32"
     },
     "source": {
-      "repo": "/Users/josephduncan/github/inference-and-benchmarks/inference-engines",
+      "repo": "local mirror",
       "commit": "1ef89742e6499c1f6205365b106242cbd6ab8c94",
       "override": false,
       "mirror": "https://github.com/iammrduncan/inference-engines"
     },
     "acknowledgments": []
   },
-  "reference": "/Users/josephduncan/github/inference-and-benchmarks/typesafe-ai-benchmark/results/lfm2.5-embedding-350m/hf-f35ae2c/fp32-liquidai/sentence-transformers-torch-cuda-st5.1.1-tf4.56.2-torch2.14.1-cu126/embeddings/2026-10-08-quick-card-prompts-efe68a",
+  "reference": "results/lfm2.5-embedding-350m/hf-f35ae2c/fp32-liquidai/sentence-transformers-torch-cuda-st5.1.1-tf4.56.2-torch2.14.1-cu126/embeddings/2026-10-08-quick-card-prompts-efe68a",
   "vectors": {
     "path": ".artifacts/embeddings/vectors/lfm2.5-embedding-350m__hf-f35ae2c__fp32-liquidai__sentence-transformers-torch-mps-st5.1.1-tf4.56.2-torch2.14.1__embeddings__2026-10-09-quick-card-prompts-ef2a44.npy",
     "sha256": "1b0a69e4312bbdf1598d67980d6a0330f2562bf437bfd5ee697b30511b5aaf5e",
@@ -179,5 +179,11 @@
     ],
     "dtype": "float32",
     "uploaded": false
-  }
+  },
+  "edits": [
+    {
+      "date": "2026-10-17",
+      "note": "Edited for publication: lab host names replaced with aliases; engine ports and local file paths removed. Measurements, request bodies and outputs are unchanged."
+    }
+  ]
 }
