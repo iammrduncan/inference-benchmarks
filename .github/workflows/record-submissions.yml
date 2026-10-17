@@ -1,0 +1,44 @@
+# After results land on main, record who submitted each new run and GitHub's verdict on
+# the signature of the commit that added it (submissions/<run>.json). The site shows it.
+# Runs only code already on main; pull requests can't change what it writes (see check.yml).
+name: record-submissions
+
+on:
+  push:
+    branches: [main]
+    paths: ['results/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: record-submissions
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # the history says which commit added each run
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - name: Record new submissions (Node built-ins only; no npm install)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node runner/src/record-submissions.ts
+      - name: Commit them
+        run: |
+          set -euo pipefail
+          git add submissions
+          if git diff --cached --quiet; then echo "Nothing new to record."; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Submissions: record who submitted new runs"
+          git pull --rebase origin main
+          git push origin HEAD:main
