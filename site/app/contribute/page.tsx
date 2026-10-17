@@ -35,9 +35,12 @@ git add results subjects && git commit -S -m "Results: <model> on <hardware>"
 git push && gh pr create`}</Code>
 
       <h2>What the checks require</h2>
+      <p>Every pull request runs two checks, and it can&apos;t merge until both pass. Neither reruns a benchmark.</p>
       <ul>
         <li>The records validate, and every <code>summary.json</code> recomputes byte for byte from its <code>run.json</code> and <code>raw.jsonl</code>.</li>
         <li>Nothing in a run folder names a private machine, address or home directory: name your machines by alias (<code>gpu-host-1</code>, <code>cpu-host-1</code>) in your launcher inventory.</li>
+        <li>A pull request with results changes only <code>results/</code> and <code>subjects/</code>, adds new run folders (each with <code>run.json</code>, <code>summary.json</code> and <code>raw.jsonl</code>), and never changes an existing run.</li>
+        <li>The run was made by a published, unmodified <code>bench</code>: its harness commit is in main&apos;s history.</li>
         <li>Every commit that adds results carries a signature GitHub verifies.</li>
         <li>No changes under <code>submissions/</code>. Those records are written after merge, by a workflow, from GitHub&apos;s own data.</li>
       </ul>

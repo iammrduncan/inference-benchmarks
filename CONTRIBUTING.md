@@ -43,7 +43,7 @@ Check it before you push: the pull request's commit list should show **Verified*
 
 ## What the checks require
 
-The `check` workflow runs on every pull request with a read-only token and no secrets:
+Two checks run on every pull request, with a read-only token and no secrets: `types, lint, tests, builds` and `contribution rules`. Neither reruns a benchmark. `main` only accepts changes through pull requests, and a pull request can't merge until both pass. Changes to the checks themselves also need an owner's review (`.github/CODEOWNERS`).
 
 - **Records validate.** Types, lint and tests pass, the site builds, and every
   `summary.json` recomputes byte for byte from its records.
@@ -53,6 +53,14 @@ The `check` workflow runs on every pull request with a read-only token and no se
   and hardware host names other than aliases (`gpu-host-N`, `cpu-host-N`). Name
   your machines by alias in your launcher inventory, and keep the real address in
   `address:`.
+- **Results come alone.** A pull request that adds results changes only `results/`
+  and `subjects/`. Send code, suite or site changes in a separate pull request.
+- **New runs only.** Add new run folders; never change, rename or delete an existing
+  run file. Each new folder has `run.json`, `summary.json` and `raw.jsonl` (raw data
+  behind a `raw.pointer.json` isn't in the pull request, so nobody could check it),
+  and its subject has `subjects/<key>/subject.yaml`.
+- **A published, unmodified `bench`.** The run's `harness.commit` must be in main's
+  history and `harness.dirty` must be false: pull main and run from a clean checkout.
 - **Signed results.** Every commit that adds files under `results/` carries a
   signature GitHub verifies.
 - **No edits to `submissions/`.** After merge, the `record-submissions` workflow
