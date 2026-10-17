@@ -11,8 +11,12 @@ export type Fidelity = {
   top10_overlap: number; queries: number; documents: number; verdict: Verdict;
 };
 
-/** `note` says when device facts were added after the run instead of recorded by it. */
-export type Hardware = { class: string; label: string; host: string; note?: string };
+/**
+ * `note` says when device facts were added after the run instead of recorded by it.
+ * The run's host name is left out on purpose: the site is public, and lab machines are
+ * shown by hardware class only. The raw run files still carry it.
+ */
+export type Hardware = { class: string; label: string; note?: string };
 
 export type RecipeRef = {
   id: string; profile: string | null; commit: string; repo: string;

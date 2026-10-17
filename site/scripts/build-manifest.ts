@@ -130,7 +130,6 @@ function hardwareOf(run: Obj): Hardware | null {
   const h = obj(run.hardware, 'run.hardware');
   const recipe = optStr(h.recipe, 'run.hardware.recipe');
   const family = recipe?.split('/')[1] ?? 'unknown';
-  const host = optStr(h.host, 'run.hardware.host') ?? 'unknown';
   const placements = Array.isArray(h.placements) ? h.placements.map((p, i) => obj(p, `run.hardware.placements[${i}]`)) : [];
   const devices = placements.flatMap((p) => {
     const observed = p.observed ? obj(p.observed, 'run.hardware.observed') : null;
@@ -138,7 +137,7 @@ function hardwareOf(run: Obj): Hardware | null {
   });
   if (devices.length === 0) {
     // Older records name only the recipe's hardware family.
-    return { class: family, label: HARDWARE[family] ?? family, host };
+    return { class: family, label: HARDWARE[family] ?? family };
   }
   const labels = devices.map((x) => deviceLabel(x.d, x.observed));
   const counted = [...new Set(labels)].map((l) => {
@@ -147,7 +146,7 @@ function hardwareOf(run: Obj): Hardware | null {
   });
   const ids = devices.map((x) => String(x.d.label ?? x.d.kind));
   const note = optStr(h.backfilled, 'run.hardware.backfilled');
-  return { class: `${family}:${[...new Set(ids)].join('+')}`, label: counted.join(' + '), host, ...(note ? { note } : {}) };
+  return { class: `${family}:${[...new Set(ids)].join('+')}`, label: counted.join(' + '), ...(note ? { note } : {}) };
 }
 
 function recipeOf(run: Obj): RecipeRef | null {

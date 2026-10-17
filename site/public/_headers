@@ -1,10 +1,20 @@
-# Cloudflare Pages response headers. The site is static: no third-party scripts, styles,
-# fonts or connections. Next's inline bootstrap script needs 'unsafe-inline'.
+# Cloudflare Pages response headers. The site is static. The only third party is Fathom
+# analytics: its script loads from cdn.usefathom.com and reports page views there (an image
+# request, and a beacon for time on page). Next's inline bootstrap script needs 'unsafe-inline'.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.usefathom.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cdn.usefathom.com; font-src 'self'; connect-src 'self' https://cdn.usefathom.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: same-origin
   X-Frame-Options: DENY
+  Strict-Transport-Security: max-age=31536000
+
+# Only the custom domain is for search engines; the pages.dev copies (production and
+# per-deployment previews) are not.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
 
 /results/*
   Content-Type: text/plain; charset=utf-8

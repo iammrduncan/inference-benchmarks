@@ -13,6 +13,12 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* Fathom analytics: its own site for benchmarks.iammrduncan.com. data-spa counts page
+            changes made in the browser; data-included-domains keeps pages.dev and local
+            builds out of the counts. The CSP in public/_headers allows cdn.usefathom.com. */}
+        <script src="https://cdn.usefathom.com/script.js" data-site="KMNVZZFL" data-spa="auto" data-included-domains="benchmarks.iammrduncan.com" defer />
+      </head>
       <body>
         <header className="top">
           <div className="wrap top-inner">
