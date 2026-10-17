@@ -69,8 +69,16 @@ export function ensureSubject(root: string, subject: Subject): string {
   return file;
 }
 
-export function writeRaw(dir: string, rows: RawRow[], root = REPO_ROOT): void {
-  const text = rows.map((r) => JSON.stringify(r)).join('\n') + (rows.length ? '\n' : '');
+/**
+ * How records name a recipe engine's host. The launcher reaches the engine at the inventory
+ * host's address; records use the inventory host name instead, without the port, so public
+ * results name lab machines by alias. `hostRename` in launcher.ts builds it.
+ */
+export type HostRename = { from: string; to: string };
+export const renameHost = (text: string, r: HostRename | undefined): string => (r ? text.split(r.from).join(r.to) : text);
+
+export function writeRaw(dir: string, rows: RawRow[], root = REPO_ROOT, rename?: HostRename): void {
+  const text = renameHost(rows.map((r) => JSON.stringify(r)).join('\n') + (rows.length ? '\n' : ''), rename);
   if (Buffer.byteLength(text) <= RAW_LIMIT_BYTES) { writeFileSync(join(dir, 'raw.jsonl'), text); return; }
   // ponytail: large raw data stays in the ignored .artifacts/raw until the Hub dataset upload exists (M4+).
   const local = join(root, '.artifacts', 'raw', `${relative(join(root, 'results'), dir).replace(/\//g, '__')}.jsonl`);

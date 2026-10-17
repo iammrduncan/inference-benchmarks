@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { subjectKey, type Identity, type Subject } from './identity.ts';
-import { REPO_ROOT } from './record.ts';
+import { REPO_ROOT, type HostRename } from './record.ts';
 
 /** `source` is a mirror of the pinned commit (a path the target host can clone); the launcher still records the pin. */
 /** `accept` names license-gated components the operator has accepted (the launcher records each acknowledgment). */
@@ -45,6 +45,29 @@ export function recipeUp(t: RecipeTarget): UpResult {
 
 export function recipeDown(id: string): void {
   launcher(['down', id, '--json']);
+}
+
+const LOOPBACK = new Set(['127.0.0.1', 'localhost', '[::1]']);
+
+/**
+ * Records name a lab engine by its inventory host name, not the address the launcher used to
+ * reach it. Name hosts by alias in the inventory (`name: gpu-host-2`, `address:` the real
+ * machine) and records never carry the real one; the site refuses records that do. Engines on
+ * this machine (loopback) are recorded as they are.
+ */
+export function hostRename(u: Pick<UpResult, 'base_url' | 'hardware'>): HostRename | undefined {
+  const name = u.hardware?.[0]?.host;
+  const url = new URL(u.base_url);
+  if (!name || LOOPBACK.has(url.hostname) || url.host === name) return undefined;
+  return { from: url.host, to: name };
+}
+
+/** A local engine-source path shows a machine's user and layout and adds nothing to the pinned commit and mirror URL, so records name it instead. */
+export function publicSource(source: unknown): unknown {
+  if (!source || typeof source !== 'object') return source;
+  const s = source as Record<string, unknown>;
+  if (typeof s.repo !== 'string' || !/^[/~]/.test(s.repo)) return source;
+  return { ...s, repo: s.override === true ? 'local checkout' : 'local mirror' };
 }
 
 /** A recipe subject: identity declared by the recipe, resolved for this profile. Verified, unlike bare endpoints. */
