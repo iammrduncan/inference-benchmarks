@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "run": "jev-latest/typesafe-2026-10/opaque/typesafe/decision-conformance/2026-10-06-quick-greedy-nothink-51698a",
+  "submitted_by": "shadowcodex",
+  "pr": 2,
+  "commit": {
+    "sha": "0beb9d2b42b2290c61e9bb4fd92bedaae2ca9025",
+    "author": "shadowcodex",
+    "signature": {
+      "verified": false,
+      "reason": "unsigned",
+      "type": null
+    }
+  },
+  "landed_in": "0beb9d2b42b2290c61e9bb4fd92bedaae2ca9025",
+  "recorded_at": "2026-10-17T23:16:37.228Z"
+}

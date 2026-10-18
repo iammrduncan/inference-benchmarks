@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "run": "gev-26b-decide/hf-7c89590/gguf-iq4_xs-mradermacher/llamacpp-cuda-b11515/decision-conformance/2026-10-09-core-greedy-nothink-163cc5",
+  "submitted_by": "shadowcodex",
+  "pr": 2,
+  "commit": {
+    "sha": "6b44a4795850b046670428bc8aec848128c2a3c1",
+    "author": "shadowcodex",
+    "signature": {
+      "verified": false,
+      "reason": "unsigned",
+      "type": null
+    }
+  },
+  "landed_in": "6b44a4795850b046670428bc8aec848128c2a3c1",
+  "recorded_at": "2026-10-17T23:16:37.228Z"
+}

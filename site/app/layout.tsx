@@ -29,6 +29,10 @@ export default function Layout({ children }: { children: ReactNode }) {
               <Link href="/models/">Model matrix</Link>
               <Link href="/subjects/">Subjects</Link>
               <Link href="/methodology/">Methodology</Link>
+              <Link href="/contribute/" className="nav-cta">Contribute</Link>
+              <a href={manifest.repo} className="nav-github" aria-label={manifest.stars !== null ? `inference-benchmarks on GitHub, ${manifest.stars} stars` : 'inference-benchmarks on GitHub'}>
+                <span aria-hidden="true">★</span>{manifest.stars !== null && <span className="nav-stars">{manifest.stars.toLocaleString('en-US')}</span>}<span>GitHub</span>
+              </a>
             </nav>
           </div>
         </header>

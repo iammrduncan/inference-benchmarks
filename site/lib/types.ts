@@ -61,6 +61,19 @@ type RunBase = {
   files: string[];
   notes: string[];
   reproduce: string;
+  /** Who submitted the run and GitHub's verdict on the commit's signature; null until recorded after merge. */
+  submission: Submission | null;
+};
+
+/** From submissions/<run>.json: written after merge by the record-submissions workflow, never by a pull request. */
+export type Submission = {
+  /** GitHub login: the pull request's author, or the commit's author for a direct push. */
+  by: string | null;
+  pr: number | null;
+  /** The contributor's commit that added the run. */
+  commit: string;
+  author: string | null;
+  signature: { verified: boolean; reason: string; type: 'ssh' | 'gpg' | 'x509' | null };
 };
 
 export type DecisionsRun = RunBase & {
@@ -184,6 +197,8 @@ export type OverallGroup = { id: string; label: string; description: string; buc
 export type Manifest = {
   generated_at: string;
   repo: string;
+  /** GitHub stars at build time (Cloudflare Pages builds only); null when unknown. */
+  stars: number | null;
   engines_repo: string;
   suites: Suite[];
   subjects: Subject[];

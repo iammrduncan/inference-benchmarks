@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { runHref, subject as getSubject, suiteHref } from '../lib/data.ts';
 import { date, fixed, pct } from '../lib/format.ts';
 import type { Run } from '../lib/types.ts';
+import { Submitter } from './Submission.tsx';
 import { DeltaCell, Labels, SubjectName, VerdictPill } from './ui.tsx';
 
 function Headline({ r }: { r: Run }) {
@@ -21,7 +22,7 @@ export function RunsTable({ runs }: { runs: Run[] }) {
   return (
     <div className="table-scroll">
       <table>
-        <thead><tr><th>Date</th><th>Subject</th><th>Suite</th><th>Hardware</th><th className="num">Headline</th><th></th></tr></thead>
+        <thead><tr><th>Date</th><th>Subject</th><th>Suite</th><th>Hardware</th><th className="num">Headline</th><th>Submitted by</th><th></th></tr></thead>
         <tbody>
           {runs.map((r) => (
             <tr key={r.id}>
@@ -30,6 +31,7 @@ export function RunsTable({ runs }: { runs: Run[] }) {
               <td className="small nowrap"><Link href={suiteHref(r.suite)}>{r.suite}</Link><span className="muted"> · {r.tier}</span></td>
               <td className="small">{r.hardware?.label ?? <span className="muted">provider-hosted</span>}</td>
               <td className="num nowrap">{<Headline r={r} />}</td>
+              <td className="small nowrap">{r.submission ? <Submitter s={r.submission} compact /> : null}</td>
               <td className="num"><Link href={runHref(r.id)} className="small">View →</Link></td>
             </tr>
           ))}

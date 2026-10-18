@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "run": "embeddinggemma-2/hf-914f7f8/fp32-onnx-community/onnxruntime-cpu-ort1.30.0/embeddings/2026-10-07-quick-card-prompts-65bf4d",
+  "submitted_by": "shadowcodex",
+  "pr": 2,
+  "commit": {
+    "sha": "753c0c27b16b7542a79c23c61eb664492f4546af",
+    "author": "shadowcodex",
+    "signature": {
+      "verified": false,
+      "reason": "unsigned",
+      "type": null
+    }
+  },
+  "landed_in": "753c0c27b16b7542a79c23c61eb664492f4546af",
+  "recorded_at": "2026-10-17T23:16:37.228Z"
+}

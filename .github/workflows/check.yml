@@ -1,0 +1,59 @@
+# Checks for every pull request (forks included) and every push to main.
+# Read-only token, no secrets: pull request code never gets credentials.
+name: check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: types, lint, tests, builds
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Every run summary recomputes from its records
+        run: node runner/src/cli.ts summarize results --check
+
+  contribution:
+    # Baseline rules, cheap enough for every pull request (nothing is rerun): see
+    # runner/src/contribution.ts. Results come alone, add only new complete run folders,
+    # come from a published bench, and are signed; nobody edits submissions/. The ruleset on
+    # main requires this check, and CODEOWNERS requires a review of any change to it.
+    name: contribution rules
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # main's history: was the run made by a published bench?
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - name: Check the pull request (git and gh only; no npm install)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: node runner/src/check-contribution.ts
